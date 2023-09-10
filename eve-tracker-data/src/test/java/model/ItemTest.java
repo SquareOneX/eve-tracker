@@ -1,6 +1,7 @@
 package model;
 
 import org.junit.jupiter.api.Test;
+import squareonex.evetrackerdata.model.Item;
 
 import static org.junit.jupiter.api.Assertions.*;
 

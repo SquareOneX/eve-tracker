@@ -1,4 +1,4 @@
-package model;
+package squareonex.evetrackerdata.model;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
