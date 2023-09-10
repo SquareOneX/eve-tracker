@@ -8,8 +8,12 @@ import java.util.Map;
 
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true)
-public class Blueprint extends Item{
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+public class Blueprint{
+    @EqualsAndHashCode.Include
+    Item itemInfo;
+    @EqualsAndHashCode.Include
+    Activity activity;
     Item product;
     Map<Item, Integer> materials;
     Long time;
