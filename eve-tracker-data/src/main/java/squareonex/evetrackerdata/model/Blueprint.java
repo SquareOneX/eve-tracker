@@ -1,6 +1,9 @@
 package squareonex.evetrackerdata.model;
 
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Map;
 import java.util.Set;
@@ -16,15 +19,19 @@ public class Blueprint extends BaseItem {
     Integer quantity;
     Integer maxRuns;
 
-    public Blueprint(Long id, String name, Activity activity) {
+    public Blueprint(Long id, String name, Activity activity, Integer quantity, Integer maxRuns) {
         super(id, name);
         this.activity = activity;
+        this.quantity = quantity;
+        this.maxRuns = maxRuns;
     }
 
-    public Blueprint(Long id, String name, Activity activity, Set<Item> products, Map<Item, Integer> materials) {
+    public Blueprint(Long id, String name, Activity activity, Set<Product> products, Map<Product, Integer> materials, Integer quantity, Integer maxRuns) {
         super(id, name);
         this.activity = activity;
         this.products = products;
         this.materials = materials;
+        this.quantity = quantity;
+        this.maxRuns = maxRuns;
     }
 }
