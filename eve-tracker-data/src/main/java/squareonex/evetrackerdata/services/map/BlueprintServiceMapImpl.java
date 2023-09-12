@@ -41,6 +41,7 @@ public class BlueprintServiceMapImpl extends AbstractMapService<Blueprint, Long>
         if (object.getItemInfo() == null || object.getActivity() == null)
             return null;
         else {
+            activityService.save(object.getActivity());
             return super.save(object.getItemInfo().getId(), object);
         }
     }
