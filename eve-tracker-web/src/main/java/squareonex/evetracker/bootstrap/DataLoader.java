@@ -10,6 +10,7 @@ import squareonex.evetrackerdata.services.BlueprintService;
 import squareonex.evetrackerdata.services.ItemService;
 
 import java.util.Map;
+import java.util.Set;
 
 @Component
 public class DataLoader implements CommandLineRunner {
@@ -30,7 +31,10 @@ public class DataLoader implements CommandLineRunner {
         Activity activity = new Activity(1, "activity1");
         Item product1 = new Item(4L, "product1");
 
-        Blueprint blueprint = new Blueprint(blueprintItem, activity, product1, Map.of(material1, 100), null);
+        //Blueprint blueprint = new Blueprint(blueprintItem, activity, Set.of(product1), Map.of(material1, 100));
+        Blueprint blueprint = new Blueprint(
+                blueprintItem.getId(), blueprintItem.getName(), activity, Set.of(product1), Map.of(material1, 100)
+        );
         itemService.save(material1);
         itemService.save(blueprintItem);
         activityService.save(activity);

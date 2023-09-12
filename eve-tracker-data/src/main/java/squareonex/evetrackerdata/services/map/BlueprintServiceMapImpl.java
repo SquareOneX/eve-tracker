@@ -12,7 +12,6 @@ import java.util.Set;
 public class BlueprintServiceMapImpl extends AbstractMapService<Blueprint, Long> implements BlueprintService {
     private final ItemService itemService;
     private final ActivityService activityService;
-    private Long key = 0L;
 
     public BlueprintServiceMapImpl(ItemService itemService, ActivityService activityService) {
         this.itemService = itemService;
@@ -32,17 +31,17 @@ public class BlueprintServiceMapImpl extends AbstractMapService<Blueprint, Long>
 
     @Override
     public void delete(Blueprint object) {
-        itemService.delete(object.getItemInfo());
+        itemService.deleteById(object.getId());
         super.delete(object);
     }
 
     @Override
     public Blueprint save(Blueprint object) {
-        if (object.getItemInfo() == null || object.getActivity() == null)
+        if (object.getId() == null || object.getActivity() == null)
             return null;
         else {
             activityService.save(object.getActivity());
-            return super.save(object.getItemInfo().getId(), object);
+            return super.save(object.getId(), object);
         }
     }
 
