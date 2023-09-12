@@ -4,17 +4,17 @@ import org.springframework.stereotype.Service;
 import squareonex.evetrackerdata.model.Blueprint;
 import squareonex.evetrackerdata.services.ActivityService;
 import squareonex.evetrackerdata.services.BlueprintService;
-import squareonex.evetrackerdata.services.ItemService;
+import squareonex.evetrackerdata.services.ProductService;
 
 import java.util.Set;
 
 @Service
 public class BlueprintServiceMapImpl extends AbstractMapService<Blueprint, Long> implements BlueprintService {
-    private final ItemService itemService;
+    private final ProductService productService;
     private final ActivityService activityService;
 
-    public BlueprintServiceMapImpl(ItemService itemService, ActivityService activityService) {
-        this.itemService = itemService;
+    public BlueprintServiceMapImpl(ProductService productService, ActivityService activityService) {
+        this.productService = productService;
         this.activityService = activityService;
     }
 
@@ -25,13 +25,13 @@ public class BlueprintServiceMapImpl extends AbstractMapService<Blueprint, Long>
 
     @Override
     public void deleteById(Long id) {
-        itemService.deleteById(id);
+        productService.deleteById(id);
         super.deleteById(id);
     }
 
     @Override
     public void delete(Blueprint object) {
-        itemService.deleteById(object.getId());
+        productService.deleteById(object.getId());
         super.delete(object);
     }
 

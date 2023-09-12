@@ -8,11 +8,13 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Blueprint extends Item{
+public class Blueprint extends BaseItem {
     @EqualsAndHashCode.Include
     Activity activity;
-    Set<Item> products;
-    Map<Item, Integer> materials;
+    Set<Product> products;
+    Map<Product, Integer> materials;
+    Integer quantity;
+    Integer maxRuns;
 
     public Blueprint(Long id, String name, Activity activity) {
         super(id, name);

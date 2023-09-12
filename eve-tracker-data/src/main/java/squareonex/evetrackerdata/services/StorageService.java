@@ -1,10 +1,10 @@
 package squareonex.evetrackerdata.services;
 
-import squareonex.evetrackerdata.model.Item;
+import squareonex.evetrackerdata.model.BaseItem;
 
 public interface StorageService{
-    void add(Item item, int amount);
-    void remove(Item item, int amount);
-    boolean isAvailable(Item item, Integer amount);
-    Integer getStorageLevel(Item item);
+    void add(BaseItem item, int amount);
+    void remove(BaseItem item, int amount);
+    boolean isAvailable(BaseItem item, Integer amount);
+    Integer getStorageLevel(BaseItem item);
 }

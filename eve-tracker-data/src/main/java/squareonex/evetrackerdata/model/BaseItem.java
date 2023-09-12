@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Item {
+public abstract class BaseItem {
     @EqualsAndHashCode.Include
     Long id;
     String name;
