@@ -2,19 +2,17 @@ package squareonex.evetrackerdata.services.map;
 
 import org.springframework.stereotype.Service;
 import squareonex.evetrackerdata.model.Blueprint;
+import squareonex.evetrackerdata.model.BlueprintKey;
 import squareonex.evetrackerdata.services.ActivityService;
 import squareonex.evetrackerdata.services.BlueprintService;
-import squareonex.evetrackerdata.services.ProductService;
 
 import java.util.Set;
 
 @Service
-public class BlueprintServiceMapImpl extends AbstractMapService<Blueprint, Long> implements BlueprintService {
-    private final ProductService productService;
+public class BlueprintServiceMapImpl extends AbstractMapService<Blueprint, BlueprintKey> implements BlueprintService {
     private final ActivityService activityService;
 
-    public BlueprintServiceMapImpl(ProductService productService, ActivityService activityService) {
-        this.productService = productService;
+    public BlueprintServiceMapImpl(ActivityService activityService) {
         this.activityService = activityService;
     }
 
@@ -24,14 +22,12 @@ public class BlueprintServiceMapImpl extends AbstractMapService<Blueprint, Long>
     }
 
     @Override
-    public void deleteById(Long id) {
-        productService.deleteById(id);
+    public void deleteById(BlueprintKey id) {
         super.deleteById(id);
     }
 
     @Override
     public void delete(Blueprint object) {
-        productService.deleteById(object.getId());
         super.delete(object);
     }
 
@@ -40,13 +36,14 @@ public class BlueprintServiceMapImpl extends AbstractMapService<Blueprint, Long>
         if (object.getId() == null || object.getActivity() == null)
             return null;
         else {
-            activityService.save(object.getActivity());
-            return super.save(object.getId(), object);
+            if (activityService.findById(object.getActivity().getId()) == null)
+                activityService.save(object.getActivity());
+            return super.save(new BlueprintKey(object.getActivity(), object.getId()), object);
         }
     }
 
     @Override
-    public Blueprint findById(Long id) {
+    public Blueprint findById(BlueprintKey id) {
         return super.findById(id);
     }
 }
