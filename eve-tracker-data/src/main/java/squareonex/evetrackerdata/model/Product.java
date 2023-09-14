@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -11,7 +12,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class Product extends BaseItem {
     Blueprint blueprint;
-    Set<Transaction> transactions;
+    Set<Transaction> transactions = new HashSet<>();
 
     public Product(Long id, String name, Blueprint blueprint) {
         super(id, name);
@@ -19,7 +20,17 @@ public class Product extends BaseItem {
     }
 
     public Float getAvgCost(){
-        //TODO Issue #7
-        return null;
+        float cost = 0.0f;
+        int count = 0;
+        for (Transaction transaction : transactions) {
+            if (transaction.isBuy) {
+                cost += transaction.getPrice() / transaction.getQuantity();
+                count++;
+            }
+        }
+        if(count == 0)
+            return null;
+        else
+            return cost / count;
     }
 }
