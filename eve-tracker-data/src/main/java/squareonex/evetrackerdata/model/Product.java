@@ -3,6 +3,7 @@ package squareonex.evetrackerdata.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -10,6 +11,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString(callSuper = true, exclude = {"transactions"})
 public class Product extends BaseItem {
     Blueprint blueprint;
     Set<Transaction> transactions = new HashSet<>();

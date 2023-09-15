@@ -1,9 +1,6 @@
 package squareonex.evetrackerdata.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Map;
 import java.util.Set;
@@ -11,6 +8,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString(callSuper = true, exclude = {"products", "materials"})
 public class Blueprint extends BaseItem {
     @EqualsAndHashCode.Include
     Activity activity;
