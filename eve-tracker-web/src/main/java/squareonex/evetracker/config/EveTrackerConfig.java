@@ -2,12 +2,8 @@ package squareonex.evetracker.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import squareonex.evetrackerdata.services.ActivityService;
-import squareonex.evetrackerdata.services.BlueprintService;
-import squareonex.evetrackerdata.services.ItemService;
-import squareonex.evetrackerdata.services.map.ActivityServiceMapImpl;
-import squareonex.evetrackerdata.services.map.BlueprintServiceMapImpl;
-import squareonex.evetrackerdata.services.map.ItemServiceMapImpl;
+import squareonex.evetrackerdata.services.*;
+import squareonex.evetrackerdata.services.map.*;
 
 @Configuration
 public class EveTrackerConfig {
@@ -15,14 +11,24 @@ public class EveTrackerConfig {
     ActivityService activityService(){
         return new ActivityServiceMapImpl();
     }
-
     @Bean
-    BlueprintService blueprintService(ActivityService activityService, ItemService itemService){
-        return new BlueprintServiceMapImpl(itemService, activityService);
+    BlueprintService blueprintService(ActivityService activityService){
+        return new BlueprintServiceMapImpl(activityService);
     }
-
     @Bean
-    ItemService itemService(){
-        return new ItemServiceMapImpl();
+    ProductService itemService(){
+        return new ProductServiceMapImpl();
+    }
+    @Bean
+    StorageService storageService() {
+        return new StorageServiceMapImpl();
+    }
+    @Bean
+    ProductionCostService productionCostService(StorageService storageService) {
+        return new ProductionCostServiceImpl(storageService);
+    }
+    @Bean
+    TransactionService transactionService(){
+        return new TransactionServiceMapImpl();
     }
 }
