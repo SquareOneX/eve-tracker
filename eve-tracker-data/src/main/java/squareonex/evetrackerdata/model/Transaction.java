@@ -16,6 +16,6 @@ public class Transaction {
     LocalDateTime time;
     boolean isBuy;
     Integer quantity;
-    BaseItem item;
+    Product item;
     float price;
 }

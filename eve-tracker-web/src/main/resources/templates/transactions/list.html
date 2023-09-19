@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Transaction Index</title>
+</head>
+<body>
+    <h2 th:text="'List of Transactions'">List of Transactions</h2>
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Item</th>
+            <th>Is Buy</th>
+            <th>Quantity</th>
+            <th>Total Price</th>
+            <th>Price</th>
+        </tr>
+        <tr th:each="t: ${transactions}">
+            <td th:text="${t.id}"></td>
+            <td th:text="${t.item.name}"></td>
+            <td th:text="${t.isBuy}"></td>
+            <td th:text="${t.quantity}"></td>
+            <td th:text="${#numbers.formatCurrency(t.price)}"></td>
+            <td th:text="${#numbers.formatCurrency(t.price / t.quantity)}"></td>
+        </tr>
+    </table>
+</body>
+</html>
