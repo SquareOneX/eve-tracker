@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>List of Blueprints</title>
+</head>
+<body>
+<h2 th:text="'List of Blueprints'">List of Blueprints</h2>
+<table>
+    <thead>
+
+    </thead>
+    <tr>
+        <th>Id</th>
+        <th>Activity</th>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Max Runs</th>
+    </tr>
+    <tr th:each="bp: ${blueprints}">
+        <td th:text="${bp.id}"></td>
+        <td th:text="${bp.activity.name}"></td>
+        <td>
+            <div th:each="prod: ${bp.products}">
+                <div th:text="${prod.name}"></div>
+            </div>
+        </td>
+        <td th:text="${bp.quantity}"></td>
+        <td th:text="${bp.maxRuns}"></td>
+    </tr>
+</table>
+</body>
+</html>
