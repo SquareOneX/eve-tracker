@@ -1,0 +1,5 @@
+<groups xmlns="http://www.isdc.ro/wro">
+    <group name="eve-tracker">
+        <css>classpath:META-INF/resources/webjars/bootstrap/3.4.0/less/bootstrap.less</css>
+    </group>
+</groups>
