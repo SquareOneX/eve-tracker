@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Product Index</title>
+</head>
+<body>
+    <h2 th:text="'List of Products'">List of Products</h2>
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Blueprint Name</th>
+            <th>Blueprint Activity</th>
+        </tr>
+        <tr th:each="p: ${products}">
+            <td th:text="${p.id}"></td>
+            <td th:text="${p.name}"></td>
+            <td th:text="${p.blueprint?.name} ?: '(no blueprint)'"></td>
+            <td th:text="${p.blueprint?.activity?.name} ?: '(no blueprint)'"></td>
+        </tr>
+    </table>
+</body>
+</html>
