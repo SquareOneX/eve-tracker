@@ -1,0 +1,30 @@
+<!doctype html>
+<html th:fragment="layout (template, menu)" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" th:href="@{/resources/css/eve-tracker.css}" />
+
+    <title>Eve Tracker</title>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="container xd-container">
+
+            <th:block th:insert="${template}" />
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <!-- Placeholder Footer -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
