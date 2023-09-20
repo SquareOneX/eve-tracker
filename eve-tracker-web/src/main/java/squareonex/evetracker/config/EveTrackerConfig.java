@@ -31,4 +31,12 @@ public class EveTrackerConfig {
     TransactionService transactionService(){
         return new TransactionServiceMapImpl();
     }
+    @Bean
+    JobService jobService() {
+        return new JobServiceImpl();
+    }
+    @Bean
+    UserService userService() {
+        return new UserServiceImpl();
+    }
 }

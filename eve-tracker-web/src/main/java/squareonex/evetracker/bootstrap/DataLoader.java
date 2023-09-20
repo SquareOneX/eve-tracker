@@ -2,16 +2,11 @@ package squareonex.evetracker.bootstrap;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import squareonex.evetrackerdata.model.Activity;
-import squareonex.evetrackerdata.model.Blueprint;
-import squareonex.evetrackerdata.model.Product;
-import squareonex.evetrackerdata.model.Transaction;
-import squareonex.evetrackerdata.services.ActivityService;
-import squareonex.evetrackerdata.services.BlueprintService;
-import squareonex.evetrackerdata.services.ProductService;
-import squareonex.evetrackerdata.services.TransactionService;
+import squareonex.evetrackerdata.model.*;
+import squareonex.evetrackerdata.services.*;
 
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -22,13 +17,17 @@ public class DataLoader implements CommandLineRunner {
     private final BlueprintService blueprintService;
     private final ProductService productService;
     private final TransactionService transactionService;
+    private final UserService userService;
+    private final JobService jobService;
 
     public DataLoader(ActivityService activityService, BlueprintService blueprintService, ProductService productService,
-                      TransactionService transactionService) {
+                      TransactionService transactionService, UserService userService, JobService jobService) {
         this.activityService = activityService;
         this.blueprintService = blueprintService;
         this.productService = productService;
         this.transactionService = transactionService;
+        this.userService = userService;
+        this.jobService = jobService;
     }
 
     @Override
@@ -73,6 +72,11 @@ public class DataLoader implements CommandLineRunner {
         Transaction transaction4 = new Transaction(3L, LocalDateTime.MIN, true, 1_000, material4, 465_000);
         material4.setTransactions(Set.of(transaction4));
 
+        User user1 = new User(0L, "Sonni Cooper", null);
+
+        Job job1 = new Job(0L, product1, 10L, user1, LocalDateTime.of(2023, Month.SEPTEMBER, 20, 13, 28), LocalDateTime.now().plusHours(2), false);
+        Job job2 = new Job(1L, product2, 10L, user1, null, null, false);
+
         activityService.save(activity1);
 
         productService.save(product1);
@@ -89,6 +93,11 @@ public class DataLoader implements CommandLineRunner {
         transactionService.save(transaction2);
         transactionService.save(transaction3);
         transactionService.save(transaction4);
+
+        userService.save(user1);
+
+        jobService.save(job1);
+        jobService.save(job2);
 
         System.out.println("............Bootstrap data loaded............");
     }
