@@ -17,5 +17,6 @@ public class Job {
     private Long quantity;
     private User user;
     private LocalDateTime startedTime;
-    private LocalDateTime finished;
+    private LocalDateTime finishedTime;
+    private boolean isInternal;
 }
