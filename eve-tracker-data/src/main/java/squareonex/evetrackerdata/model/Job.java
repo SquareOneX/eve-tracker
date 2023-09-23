@@ -1,22 +1,20 @@
 package squareonex.evetrackerdata.model;
 
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString
 public class Job {
     @EqualsAndHashCode.Include
     private Long id;
-    private Product product;
-    private Long quantity;
-    private User user;
+    @NonNull private Product product;
+    @NonNull private Long quantity;
+    @NonNull private User user;
     private LocalDateTime startedTime;
     private LocalDateTime finishedTime;
-    private boolean isInternal;
+    @NonNull private Boolean isInternal;
 }

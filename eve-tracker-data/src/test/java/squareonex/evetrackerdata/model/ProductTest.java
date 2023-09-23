@@ -29,24 +29,27 @@ class ProductTest {
 
     @Test
     void getAvgCost() {
-        Transaction transaction1 = new Transaction(0L,
+        Transaction transaction1 = new Transaction(
                 LocalDateTime.of(2023, Month.SEPTEMBER, 14, 22, 32),
                 true,
                 10,
                 item,
                 100.0f);
-        Transaction transaction2 = new Transaction(1L,
+        transaction1.setId(0L);
+        Transaction transaction2 = new Transaction(
                 LocalDateTime.of(2023, Month.SEPTEMBER, 14, 22, 32),
                 true,
                 10,
                 item,
                 50.0f);
-        Transaction transaction3 = new Transaction(2L,
+        transaction2.setId(1L);
+        Transaction transaction3 = new Transaction(
                 LocalDateTime.of(2023, Month.SEPTEMBER, 14, 22, 32),
                 false,
                 10,
                 item,
                 50000.0f);
+        transaction3.setId(2L);
         this.unit.setTransactions(
                 Set.of(transaction1, transaction2, transaction3)
         );

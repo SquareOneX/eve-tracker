@@ -1,9 +1,8 @@
 package squareonex.evetrackerdata.services;
 
 import squareonex.evetrackerdata.model.Blueprint;
+import squareonex.evetrackerdata.model.BlueprintMaterial;
 import squareonex.evetrackerdata.model.Product;
-
-import java.util.Map;
 
 public class ProductionCostServiceImpl implements ProductionCostService {
     private final StorageService storageService;
@@ -17,10 +16,10 @@ public class ProductionCostServiceImpl implements ProductionCostService {
             return null;
         else{
             double cost = 0;
-            for (Map.Entry<Product, Integer> materialEntry : blueprint.getMaterials().entrySet()) {
-                if(!storageService.isAvailable(materialEntry.getKey(), materialEntry.getValue()))
+            for (BlueprintMaterial material : product.getBlueprint().getMaterials()) {
+                if(!storageService.isAvailable(material.getMaterial(), material.getQuantity()))
                     return null;
-                cost += materialEntry.getValue() * materialEntry.getKey().getAvgCost();
+                cost += material.getQuantity() * material.getMaterial().getAvgCost();
             }
             return cost;
         }

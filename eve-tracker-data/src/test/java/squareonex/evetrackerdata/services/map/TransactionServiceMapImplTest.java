@@ -2,7 +2,11 @@ package squareonex.evetrackerdata.services.map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import squareonex.evetrackerdata.model.Product;
 import squareonex.evetrackerdata.model.Transaction;
+
+import java.time.LocalDateTime;
+import java.time.Month;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -13,7 +17,13 @@ class TransactionServiceMapImplTest {
 
     @BeforeEach
     void setUp() {
-        this.dummyTransaction = new squareonex.evetrackerdata.model.Transaction();
+        this.dummyTransaction = new squareonex.evetrackerdata.model.Transaction(
+                LocalDateTime.of(2023, Month.SEPTEMBER, 23, 10, 15),
+                true,
+                1,
+                new Product(),
+                1.0f
+        );
         this.unit = new TransactionServiceMapImpl();
     }
 
@@ -55,11 +65,10 @@ class TransactionServiceMapImplTest {
 
     @Test
     void saveWithoutAnIdShouldNotOverride(){
-        dummyTransaction.setId(null);
-
         assertTrue(unit.map.isEmpty());
-        unit.map.put(0L, new Transaction());
+        unit.map.put(0L, dummyTransaction);
 
+        dummyTransaction.setId(null);
         Transaction save = unit.save(dummyTransaction);
 
         assertNotNull(save.getId());
@@ -69,10 +78,9 @@ class TransactionServiceMapImplTest {
 
     @Test
     void saveWithAnIdShouldOverride(){
-        Transaction item = new Transaction();
-        item.setQuantity(100);
-        unit.map.put(0L, item);
+        unit.map.put(0L, dummyTransaction);
 
+        dummyTransaction.setQuantity(100);
         unit.save(dummyTransaction);
         assertEquals(100, unit.map.get(0L).getQuantity());
     }

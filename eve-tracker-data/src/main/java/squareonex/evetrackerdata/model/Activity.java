@@ -1,13 +1,10 @@
 package squareonex.evetrackerdata.model;
 
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString
 public class Activity {
     @EqualsAndHashCode.Include
     Integer id;

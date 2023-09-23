@@ -7,7 +7,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import squareonex.evetrackerdata.model.Activity;
 import squareonex.evetrackerdata.model.Blueprint;
-import squareonex.evetrackerdata.model.BlueprintKey;
 import squareonex.evetrackerdata.services.ActivityService;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,27 +24,32 @@ class BlueprintServiceMapImplTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         this.unit = new BlueprintServiceMapImpl(activityService);
-        this.dummyItem = new Blueprint(0L, "blueprint", new Activity(), 10, 10);
+        this.dummyItem = new Blueprint();
+        dummyItem.setId(0L);
+        dummyItem.setName("blueprint");
+        dummyItem.setActivity(new Activity());
+        dummyItem.setMaxRuns(10);
+        dummyItem.setQuantity(10);
     }
 
     @Test
     void findAll() {
-        this.unit.map.put(new BlueprintKey(dummyItem.getActivity(), dummyItem.getId()), dummyItem);
+        this.unit.map.put(dummyItem.getKey(), dummyItem);
 
         assertTrue(unit.findAll().contains(dummyItem));
     }
 
     @Test
     void deleteById() {
-        this.unit.map.put(new BlueprintKey(dummyItem.getActivity(), dummyItem.getId()), dummyItem);
+        this.unit.map.put(dummyItem.getKey(), dummyItem);
 
-        unit.deleteById(new BlueprintKey(dummyItem.getActivity(), dummyItem.getId()));
+        unit.deleteById(dummyItem.getKey());
         assertFalse(unit.findAll().contains(dummyItem));
     }
 
     @Test
     void delete() {
-        this.unit.map.put(new BlueprintKey(dummyItem.getActivity(), dummyItem.getId()), dummyItem);
+        this.unit.map.put(dummyItem.getKey(), dummyItem);
 
         unit.delete(dummyItem);
         assertFalse(unit.findAll().contains(dummyItem));
@@ -81,9 +85,9 @@ class BlueprintServiceMapImplTest {
 
     @Test
     void findById() {
-        this.unit.map.put(new BlueprintKey(dummyItem.getActivity(), dummyItem.getId()), dummyItem);
+        this.unit.map.put(dummyItem.getKey(), dummyItem);
 
-        Blueprint byId = unit.findById(new BlueprintKey(dummyItem.getActivity(), dummyItem.getId()));
+        Blueprint byId = unit.findById(dummyItem.getKey());
         assertEquals(dummyItem, byId);
     }
 }

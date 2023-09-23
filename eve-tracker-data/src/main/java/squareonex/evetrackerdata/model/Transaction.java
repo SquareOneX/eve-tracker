@@ -1,21 +1,19 @@
 package squareonex.evetrackerdata.model;
 
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
+@Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Transaction {
     @EqualsAndHashCode.Include
-    Long id;
-    LocalDateTime time;
-    boolean isBuy;
-    Integer quantity;
-    Product item;
-    float price;
+    private Long id;
+    @NonNull private LocalDateTime time;
+    @NonNull private Boolean isBuy;
+    @NonNull private Integer quantity;
+    @NonNull private Product item;
+    @NonNull private Float price;
 }

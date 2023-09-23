@@ -1,17 +1,15 @@
 package squareonex.evetrackerdata.model;
 
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@Getter
-@Setter
+@Data
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @NoArgsConstructor
-@ToString(callSuper = true, exclude = {"transactions"})
 public class Product extends BaseItem {
     Blueprint blueprint;
     Set<Transaction> transactions = new HashSet<>();
@@ -22,17 +20,15 @@ public class Product extends BaseItem {
     }
 
     public Float getAvgCost(){
+        if (transactions.isEmpty())
+            return null;
+
         float cost = 0.0f;
-        int count = 0;
         for (Transaction transaction : transactions) {
-            if (transaction.isBuy) {
+            if (transaction.getIsBuy()) {
                 cost += transaction.getPrice() / transaction.getQuantity();
-                count++;
             }
         }
-        if(count == 0)
-            return null;
-        else
-            return cost / count;
+        return cost / transactions.size();
     }
 }

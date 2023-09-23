@@ -1,17 +1,15 @@
 package squareonex.evetrackerdata.model;
 
-import lombok.*;
-import org.springframework.data.repository.cdi.Eager;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString(of = {"id", "name", "playerId"})
 public class User {
     @EqualsAndHashCode.Include
     private Long id;
+    @NonNull
     private String name;
     private Long playerId;
 }

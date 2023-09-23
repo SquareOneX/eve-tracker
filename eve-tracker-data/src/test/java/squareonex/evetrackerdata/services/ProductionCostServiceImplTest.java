@@ -6,14 +6,14 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import squareonex.evetrackerdata.model.Activity;
 import squareonex.evetrackerdata.model.Blueprint;
+import squareonex.evetrackerdata.model.BlueprintMaterial;
 import squareonex.evetrackerdata.model.Product;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class ProductionCostServiceImplTest {
@@ -22,23 +22,27 @@ class ProductionCostServiceImplTest {
     private Blueprint blueprintDummy;
     private Product productDummy;
     private ProductionCostServiceImpl unit;
-    private Product material1;
-    private Product material2;
+    @Mock private Product material1;
+    @Mock private Product material2;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         this.unit = new ProductionCostServiceImpl(storageServiceMock);
-        this.blueprintDummy = new Blueprint(0L, "blueprint", new Activity(), 10, 10);
+        this.blueprintDummy = new Blueprint();
+        blueprintDummy.setId(0L);
+        blueprintDummy.setName("blueprint");
+        blueprintDummy.setActivity(new Activity());
+        blueprintDummy.setQuantity(10);
+        blueprintDummy.setMaxRuns(10);
         this.productDummy = new Product(1L, "product", blueprintDummy);
 
-        material1 = mock(Product.class);
         when(material1.getAvgCost()).thenReturn(100.0f);
-        material2 = mock(Product.class);
         when(material2.getAvgCost()).thenReturn(10.0f);
-        Map<Product, Integer> materials = new HashMap<>();
-        materials.put(material1, 1);
-        materials.put(material2, 5);
+        Set<BlueprintMaterial> materials = Set.of(
+                new BlueprintMaterial(blueprintDummy, material1, 1),
+                new BlueprintMaterial(blueprintDummy, material2, 5)
+        );
         blueprintDummy.setMaterials(materials);
 
         when(storageServiceMock.getStorageLevel(material1)).thenReturn(1);
@@ -59,7 +63,7 @@ class ProductionCostServiceImplTest {
     @Test
     void getCostShouldReturnNullIfMissingData() {
         //arrange
-        blueprintDummy.setMaterials(new HashMap<>());
+        blueprintDummy.setMaterials(new HashSet<>());
 
         //act
         Double cost = unit.getCost(productDummy);

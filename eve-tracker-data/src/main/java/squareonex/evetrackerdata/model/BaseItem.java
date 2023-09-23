@@ -2,12 +2,10 @@ package squareonex.evetrackerdata.model;
 
 import lombok.*;
 
-@Getter
-@Setter
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString
 public abstract class BaseItem {
     @EqualsAndHashCode.Include
     Long id;
