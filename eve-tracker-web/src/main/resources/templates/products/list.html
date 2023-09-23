@@ -16,8 +16,8 @@
         <tr th:each="p: ${products}">
             <td th:text="${p.id}"></td>
             <td th:text="${p.name}"></td>
-            <td th:text="${p.blueprint?.name} ?: '(no blueprint)'"></td>
-            <td th:text="${p.blueprint?.activity?.name} ?: '(no blueprint)'"></td>
+            <td th:text="${p.blueprint?.itemInfo?.name} ?: '-'"></td>
+            <td th:text="${p.blueprint?.activity?.name} ?: '-'"></td>
         </tr>
     </table>
 </body>

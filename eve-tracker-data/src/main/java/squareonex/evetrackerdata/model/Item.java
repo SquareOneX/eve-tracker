@@ -3,20 +3,26 @@ package squareonex.evetrackerdata.model;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Data
-@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
-public class Product extends BaseItem {
-    Blueprint blueprint;
-    Set<Transaction> transactions = new HashSet<>();
+@ToString(exclude = {"transactions"})
+public class Item {
+    @EqualsAndHashCode.Include
+    private Long id;
+    private String name;
+    private Boolean published;
+    private Blueprint blueprint;
+    private Set<Transaction> transactions = new HashSet<>();
 
-    public Product(Long id, String name, Blueprint blueprint) {
-        super(id, name);
-        this.blueprint = blueprint;
+    public Item(Long id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
     public Float getAvgCost(){
@@ -24,11 +30,13 @@ public class Product extends BaseItem {
             return null;
 
         float cost = 0.0f;
+        int buyCount = 0;
         for (Transaction transaction : transactions) {
             if (transaction.getIsBuy()) {
                 cost += transaction.getPrice() / transaction.getQuantity();
+                buyCount++;
             }
         }
-        return cost / transactions.size();
+        return cost / buyCount;
     }
 }

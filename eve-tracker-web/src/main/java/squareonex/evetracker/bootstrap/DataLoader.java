@@ -31,23 +31,29 @@ public class DataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        Item blueprintItem2 = new Item(955L, "Atron Blueprint");
+        blueprintItem2.setPublished(true);
         Blueprint blueprint1 = new Blueprint();
         Blueprint blueprint2 = new Blueprint();
-        blueprint2.setId(955L);
-        blueprint2.setName("Atron Blueprint");
+        blueprint2.setItemInfo(blueprintItem2);
         blueprint2.setQuantity(1);
         blueprint2.setMaxRuns(100);
 
-        Product product1 = new Product(585L, "Slasher", blueprint1);
-        Product product2 = new Product(608L, "Atron", blueprint2);
+        Item item1 = new Item(585L, "Slasher");
+        item1.setPublished(true);
+        item1.setBlueprint(blueprint1);
+        Item item2 = new Item(608L, "Atron");
+        item2.setPublished(true);
+        item2.setBlueprint(blueprint2);
 
-        blueprint1.setId(689L);
-        blueprint1.setName("Slasher Blueprint");
+        Item blueprintItem1 = new Item(689L, "Slasher Blueprint");
+        blueprintItem1.setPublished(true);
+        blueprint1.setItemInfo(blueprintItem1);
         blueprint1.setMaxRuns(100);
         blueprint1.setQuantity(1);
-        blueprint1.setProducts(Set.of(product1));
+        blueprint1.setProducts(Set.of(item1));
 
-        blueprint2.setProducts(Set.of(product2));
+        blueprint2.setProducts(Set.of(item2));
 
         Activity activity1 = new Activity();
         activity1.setId(1);
@@ -59,10 +65,14 @@ public class DataLoader implements CommandLineRunner {
         Set<BlueprintMaterial> materialSet1 = new HashSet<>();
         Set<BlueprintMaterial> materialSet2 = new HashSet<>();
 
-        Product material1 = new Product(34L, "Tritanium",  null);
-        Product material2 = new Product(35L, "Pyerite", null);
-        Product material3 = new Product(36L, "Mexallon", null);
-        Product material4 = new Product(37L, "Isogen", null);
+        Item material1 = new Item(34L, "Tritanium");
+        material1.setPublished(true);
+        Item material2 = new Item(35L, "Pyerite");
+        material2.setPublished(true);
+        Item material3 = new Item(36L, "Mexallon");
+        material3.setPublished(true);
+        Item material4 = new Item(37L, "Isogen");
+        material4.setPublished(true);
 
         materialSet1.add(new BlueprintMaterial(blueprint1, material1, 32_000));
         materialSet1.add(new BlueprintMaterial(blueprint1, material2, 6_000));
@@ -93,18 +103,21 @@ public class DataLoader implements CommandLineRunner {
         User user1 = new User("Sonni Cooper");
         user1.setId(0L);
 
-        Job job1 = new Job(product1, 10L, user1, false);
+        Job job1 = new Job(item1, 10L, user1, false);
         job1.setId(0L);
         job1.setStartedTime(LocalDateTime.of(2023, Month.SEPTEMBER, 20, 13, 28));
         job1.setFinishedTime(LocalDateTime.now().plusHours(2));
 
-        Job job2 = new Job(product2, 10L, user1, false);
+        Job job2 = new Job(item2, 10L, user1, false);
         job2.setId(1L);
 
         activityService.save(activity1);
 
-        productService.save(product1);
-        productService.save(product2);
+        productService.save(blueprintItem1);
+        productService.save(blueprintItem2);
+
+        productService.save(item1);
+        productService.save(item2);
         productService.save(material1);
         productService.save(material2);
         productService.save(material3);

@@ -7,7 +7,7 @@ import org.mockito.MockitoAnnotations;
 import squareonex.evetrackerdata.model.Activity;
 import squareonex.evetrackerdata.model.Blueprint;
 import squareonex.evetrackerdata.model.BlueprintMaterial;
-import squareonex.evetrackerdata.model.Product;
+import squareonex.evetrackerdata.model.Item;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -20,22 +20,23 @@ class ProductionCostServiceImplTest {
     @Mock
     private StorageService storageServiceMock;
     private Blueprint blueprintDummy;
-    private Product productDummy;
+    private Item productDummy;
     private ProductionCostServiceImpl unit;
-    @Mock private Product material1;
-    @Mock private Product material2;
+    @Mock private Item material1;
+    @Mock private Item material2;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         this.unit = new ProductionCostServiceImpl(storageServiceMock);
         this.blueprintDummy = new Blueprint();
-        blueprintDummy.setId(0L);
-        blueprintDummy.setName("blueprint");
+        blueprintDummy.getItemInfo().setId(0L);
+        blueprintDummy.getItemInfo().setName("blueprint");
         blueprintDummy.setActivity(new Activity());
         blueprintDummy.setQuantity(10);
         blueprintDummy.setMaxRuns(10);
-        this.productDummy = new Product(1L, "product", blueprintDummy);
+        this.productDummy = new Item(1L, "product");
+        this.productDummy.setBlueprint(blueprintDummy);
 
         when(material1.getAvgCost()).thenReturn(100.0f);
         when(material2.getAvgCost()).thenReturn(10.0f);

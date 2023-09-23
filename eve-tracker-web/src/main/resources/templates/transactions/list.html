@@ -10,18 +10,18 @@
         <tr>
             <th>Id</th>
             <th>Item</th>
-            <th>Is Buy</th>
             <th>Quantity</th>
             <th>Total Price</th>
             <th>Price</th>
+            <th>Is Buy</th>
         </tr>
         <tr th:each="t: ${transactions}">
             <td th:text="${t.id}"></td>
             <td th:text="${t.item.name}"></td>
-            <td th:text="${t.isBuy}"></td>
             <td th:text="${t.quantity}"></td>
             <td th:text="${#numbers.formatCurrency(t.price)}"></td>
             <td th:text="${#numbers.formatCurrency(t.price / t.quantity)}"></td>
+            <td th:text="${t.isBuy}"></td>
         </tr>
     </table>
 </body>

@@ -1,7 +1,7 @@
 package squareonex.evetrackerdata.services;
 
-import squareonex.evetrackerdata.model.Product;
+import squareonex.evetrackerdata.model.Item;
 
 public interface ProductionCostService {
-    Double getCost(Product product);
+    Double getCost(Item product);
 }

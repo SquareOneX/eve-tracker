@@ -2,7 +2,7 @@ package squareonex.evetrackerdata.services.map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import squareonex.evetrackerdata.model.Product;
+import squareonex.evetrackerdata.model.Item;
 import squareonex.evetrackerdata.model.Transaction;
 
 import java.time.LocalDateTime;
@@ -21,7 +21,7 @@ class TransactionServiceMapImplTest {
                 LocalDateTime.of(2023, Month.SEPTEMBER, 23, 10, 15),
                 true,
                 1,
-                new Product(),
+                new Item(),
                 1.0f
         );
         this.unit = new TransactionServiceMapImpl();

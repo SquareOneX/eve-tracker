@@ -11,20 +11,20 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class ProductTest {
-    private Product unit;
+class ItemTest {
+    private Item unit;
     @Mock
     private Blueprint blueprint;
     @Mock
-    private Product item;
+    private Item item;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        this.unit = new Product();
+        this.unit = new Item();
         this.unit.setBlueprint(blueprint);
         this.unit.setId(0L);
-        this.unit.setName("product0");
+        this.unit.setName("product");
     }
 
     @Test

@@ -14,6 +14,6 @@ public class Transaction {
     @NonNull private LocalDateTime time;
     @NonNull private Boolean isBuy;
     @NonNull private Integer quantity;
-    @NonNull private Product item;
+    @NonNull private Item item;
     @NonNull private Float price;
 }

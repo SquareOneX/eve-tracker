@@ -33,12 +33,12 @@ public class BlueprintServiceMapImpl extends AbstractMapService<Blueprint, Bluep
 
     @Override
     public Blueprint save(Blueprint object) {
-        if (object.getId() == null || object.getActivity() == null)
+        if (object.getItemInfo().getId() == null || object.getActivity() == null)
             return null;
         else {
             if (activityService.findById(object.getActivity().getId()) == null)
                 activityService.save(object.getActivity());
-            return super.save(new BlueprintKey(object.getId(), object.getName(), object.getActivity()), object);
+            return super.save(new BlueprintKey(object.getItemInfo(), object.getActivity()), object);
         }
     }
 

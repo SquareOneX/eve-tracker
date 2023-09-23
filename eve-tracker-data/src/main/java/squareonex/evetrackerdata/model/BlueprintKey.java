@@ -1,31 +1,19 @@
 package squareonex.evetrackerdata.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
-public class BlueprintKey extends BaseItem{
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString
+@NoArgsConstructor
+public class BlueprintKey{
+    @EqualsAndHashCode.Include
+    Item item;
     @EqualsAndHashCode.Include
     Activity activity;
-
-    public BlueprintKey() {
-        super();
-    }
-
-    public BlueprintKey(Long id, String name, Activity activity) {
-        super(id, name);
+    public BlueprintKey(Item item, Activity activity) {
+        this.item = item;
         this.activity = activity;
-    }
-
-    @Override
-    public String toString() {
-        return "BlueprintKey{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                "activity=" + activity +
-                '}';
     }
 }

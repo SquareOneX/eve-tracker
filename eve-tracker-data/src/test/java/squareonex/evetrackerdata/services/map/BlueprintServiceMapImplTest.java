@@ -25,8 +25,8 @@ class BlueprintServiceMapImplTest {
         MockitoAnnotations.openMocks(this);
         this.unit = new BlueprintServiceMapImpl(activityService);
         this.dummyItem = new Blueprint();
-        dummyItem.setId(0L);
-        dummyItem.setName("blueprint");
+        dummyItem.getItemInfo().setId(0L);
+        dummyItem.getItemInfo().setName("blueprint");
         dummyItem.setActivity(new Activity());
         dummyItem.setMaxRuns(10);
         dummyItem.setQuantity(10);
@@ -58,7 +58,7 @@ class BlueprintServiceMapImplTest {
 
     @Test
     void saveWithUndefinedIdShouldFailSilently() {
-        this.dummyItem.setId(null);
+        this.dummyItem.getItemInfo().setId(null);
 
         assertNull(unit.save(dummyItem));
         assertTrue(unit.map.isEmpty());

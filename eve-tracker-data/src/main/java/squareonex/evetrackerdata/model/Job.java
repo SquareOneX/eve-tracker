@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class Job {
     @EqualsAndHashCode.Include
     private Long id;
-    @NonNull private Product product;
+    @NonNull private Item product;
     @NonNull private Long quantity;
     @NonNull private User user;
     private LocalDateTime startedTime;

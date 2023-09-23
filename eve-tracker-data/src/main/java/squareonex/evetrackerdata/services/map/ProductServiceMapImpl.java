@@ -1,14 +1,14 @@
 package squareonex.evetrackerdata.services.map;
 
-import squareonex.evetrackerdata.model.Product;
+import squareonex.evetrackerdata.model.Item;
 import squareonex.evetrackerdata.services.ProductService;
 
 import java.util.Set;
 
-public class ProductServiceMapImpl extends AbstractMapService<Product, Long> implements ProductService {
+public class ProductServiceMapImpl extends AbstractMapService<Item, Long> implements ProductService {
     private Long key = 0L;
     @Override
-    public Set<Product> findAll() {
+    public Set<Item> findAll() {
         return super.findAll();
     }
 
@@ -18,12 +18,12 @@ public class ProductServiceMapImpl extends AbstractMapService<Product, Long> imp
     }
 
     @Override
-    public void delete(Product object) {
+    public void delete(Item object) {
         super.delete(object);
     }
 
     @Override
-    public Product save(Product object) {
+    public Item save(Item object) {
         if (object.getId() == null){
             while (map.containsKey(key))
                 key++;
@@ -35,7 +35,7 @@ public class ProductServiceMapImpl extends AbstractMapService<Product, Long> imp
     }
 
     @Override
-    public Product findById(Long id) {
+    public Item findById(Long id) {
         return super.findById(id);
     }
 }

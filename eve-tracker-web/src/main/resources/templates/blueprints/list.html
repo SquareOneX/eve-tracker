@@ -16,8 +16,8 @@
         <th>Max Runs</th>
     </tr>
     <tr th:each="bp: ${blueprints}">
-        <td th:text="${bp.id}"></td>
-        <td th:text="${bp.name}"></td>
+        <td th:text="${bp.itemInfo.id}"></td>
+        <td th:text="${bp.itemInfo.name}"></td>
         <td th:text="${bp.activity.name}"></td>
         <td>
             <div th:each="prod: ${bp.products}">

@@ -1,17 +1,17 @@
 package squareonex.evetrackerdata.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class BlueprintMaterial {
     @NonNull
+    @EqualsAndHashCode.Include
     private Blueprint blueprint;
     @NonNull
-    private Product material;
+    @EqualsAndHashCode.Include
+    private Item material;
     private Integer quantity;
 }

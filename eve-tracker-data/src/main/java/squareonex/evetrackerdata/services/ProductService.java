@@ -1,6 +1,6 @@
 package squareonex.evetrackerdata.services;
 
-import squareonex.evetrackerdata.model.Product;
+import squareonex.evetrackerdata.model.Item;
 
-public interface ProductService extends CrudService<Product,Long> {
+public interface ProductService extends CrudService<Item,Long> {
 }

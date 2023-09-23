@@ -2,7 +2,7 @@ package squareonex.evetrackerdata.services;
 
 import squareonex.evetrackerdata.model.Blueprint;
 import squareonex.evetrackerdata.model.BlueprintMaterial;
-import squareonex.evetrackerdata.model.Product;
+import squareonex.evetrackerdata.model.Item;
 
 public class ProductionCostServiceImpl implements ProductionCostService {
     private final StorageService storageService;
@@ -10,7 +10,7 @@ public class ProductionCostServiceImpl implements ProductionCostService {
         this.storageService = storageService;
     }
     @Override
-    public Double getCost(Product product) {
+    public Double getCost(Item product) {
         Blueprint blueprint = product.getBlueprint();
         if (blueprint == null || blueprint.getMaterials() == null || blueprint.getMaterials().isEmpty())
             return null;

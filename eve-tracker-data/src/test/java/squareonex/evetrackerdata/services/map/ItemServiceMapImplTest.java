@@ -2,19 +2,18 @@ package squareonex.evetrackerdata.services.map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import squareonex.evetrackerdata.model.BaseItem;
-import squareonex.evetrackerdata.model.Product;
+import squareonex.evetrackerdata.model.Item;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ProductServiceMapImplTest {
+class ItemServiceMapImplTest {
     private ProductServiceMapImpl unit;
-    private Product dummyItem;
+    private Item dummyItem;
 
     @BeforeEach
     void setUp() {
         this.unit = new ProductServiceMapImpl();
-        dummyItem = new Product();
+        dummyItem = new Item();
         dummyItem.setId(0L);
         dummyItem.setName("name");
     }
@@ -60,9 +59,9 @@ class ProductServiceMapImplTest {
         dummyItem.setId(null);
 
         assertTrue(unit.map.isEmpty());
-        unit.map.put(0L, new Product());
+        unit.map.put(0L, new Item());
 
-        BaseItem save = unit.save(dummyItem);
+        Item save = unit.save(dummyItem);
 
         assertNotNull(save.getId());
         assertNotEquals(0L, save.getId());
@@ -71,7 +70,7 @@ class ProductServiceMapImplTest {
 
     @Test
     void saveWithAnIdShouldOverride(){
-        Product item = new Product();
+        Item item = new Item();
         item.setName("not a book");
         unit.map.put(0L, item);
 
@@ -83,7 +82,7 @@ class ProductServiceMapImplTest {
     void findById() {
         unit.map.put(dummyItem.getId(), dummyItem);
 
-        BaseItem item = unit.findById(dummyItem.getId());
+        Item item = unit.findById(dummyItem.getId());
         assertEquals(dummyItem, item);
     }
 }
