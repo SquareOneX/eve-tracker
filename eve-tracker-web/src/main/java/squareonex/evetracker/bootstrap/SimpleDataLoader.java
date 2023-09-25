@@ -1,8 +1,6 @@
 package squareonex.evetracker.bootstrap;
 
 import jakarta.transaction.Transactional;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
 import squareonex.evetrackerdata.model.*;
 import squareonex.evetrackerdata.services.*;
 
@@ -11,8 +9,7 @@ import java.time.Month;
 import java.util.HashSet;
 import java.util.Set;
 
-@Component
-public class DataLoader implements CommandLineRunner {
+public class SimpleDataLoader implements BootstrapLoader {
     private final ActivityService activityService;
     private final BlueprintService blueprintService;
     private final ProductService productService;
@@ -20,8 +17,8 @@ public class DataLoader implements CommandLineRunner {
     private final UserService userService;
     private final JobService jobService;
 
-    public DataLoader(ActivityService activityService, BlueprintService blueprintService, ProductService productService,
-                      TransactionService transactionService, UserService userService, JobService jobService) {
+    public SimpleDataLoader(ActivityService activityService, BlueprintService blueprintService, ProductService productService,
+                            TransactionService transactionService, UserService userService, JobService jobService) {
         this.activityService = activityService;
         this.blueprintService = blueprintService;
         this.productService = productService;
@@ -30,8 +27,8 @@ public class DataLoader implements CommandLineRunner {
         this.jobService = jobService;
     }
 
-    @Override
     @Transactional
+    @Override
     public void run(String... args) throws Exception {
         System.out.println("............Attempting to load boostrap data............");
         /*
