@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 public class Job {
     @EqualsAndHashCode.Include
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
     @JoinColumn(name = "product_id")

@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 public class Transaction {
     @EqualsAndHashCode.Include
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NonNull private LocalDateTime time;
     @NonNull private Boolean isBuy;

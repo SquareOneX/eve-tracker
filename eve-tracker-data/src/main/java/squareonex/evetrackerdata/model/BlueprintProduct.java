@@ -14,8 +14,8 @@ public class BlueprintProduct {
     @EqualsAndHashCode.Include
     @Id
     @ManyToOne
-    @JoinColumn(name = "blueprint_id")
-    @JoinColumn(name = "activity_id")
+    @JoinColumn(name = "blueprint_id", referencedColumnName = "blueprint_id")
+    @JoinColumn(name = "activity_id", referencedColumnName = "activity_id")
     private Blueprint blueprint;
     @NonNull
     @EqualsAndHashCode.Include
