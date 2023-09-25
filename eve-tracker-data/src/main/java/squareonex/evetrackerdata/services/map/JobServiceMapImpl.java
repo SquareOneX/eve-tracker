@@ -1,25 +1,25 @@
 package squareonex.evetrackerdata.services.map;
 
-import squareonex.evetrackerdata.model.User;
-import squareonex.evetrackerdata.services.UserService;
+import squareonex.evetrackerdata.model.Job;
+import squareonex.evetrackerdata.services.JobService;
 
 import java.util.Set;
 
-public class UserServiceImpl extends AbstractMapService<User, Long> implements UserService {
+public class JobServiceMapImpl extends AbstractMapService<Job, Long> implements JobService {
     private Long key = 0L;
 
     @Override
-    public Set<User> findAll() {
+    public Set<Job> findAll() {
         return super.findAll();
     }
 
     @Override
-    public User findById(Long id) {
+    public Job findById(Long id) {
         return super.findById(id);
     }
 
     @Override
-    public User save(User object) {
+    public Job save(Job object) {
         if (object.getId() == null){
             while (map.containsKey(key))
                 key++;
@@ -31,7 +31,7 @@ public class UserServiceImpl extends AbstractMapService<User, Long> implements U
     }
 
     @Override
-    public void delete(User object) {
+    public void delete(Job object) {
         super.delete(object);
     }
 
