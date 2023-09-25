@@ -51,9 +51,10 @@ public class DataLoader implements CommandLineRunner {
         blueprint1.setItemInfo(blueprintItem1);
         blueprint1.setMaxRuns(100);
         blueprint1.setQuantity(1);
-        blueprint1.setProducts(Set.of(item1));
 
-        blueprint2.setProducts(Set.of(item2));
+        blueprint1.setProducts(Set.of(new BlueprintProduct(blueprint1, item1, 1)));
+
+        blueprint2.setProducts(Set.of(new BlueprintProduct(blueprint2, item2, 1)));
 
         Activity activity1 = new Activity();
         activity1.setId(1);

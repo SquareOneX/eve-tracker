@@ -8,8 +8,8 @@ import lombok.*;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name = "blueprint_materials")
-public class BlueprintMaterial {
+@Table(name = "blueprint_products")
+public class BlueprintProduct {
     @NonNull
     @EqualsAndHashCode.Include
     @Id
@@ -21,7 +21,7 @@ public class BlueprintMaterial {
     @EqualsAndHashCode.Include
     @Id
     @ManyToOne
-    @JoinColumn(name = "material_id")
-    private Item material;
+    @JoinColumn(name = "product_id")
+    private Item product;
     private Integer quantity;
 }

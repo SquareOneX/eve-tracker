@@ -1,5 +1,6 @@
 package squareonex.evetrackerdata.model;
 
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -9,15 +10,26 @@ import java.util.Set;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(exclude = {"products", "materials"})
+@Entity
+@Table(name = "blueprints")
+@IdClass(BlueprintKey.class)
 public class Blueprint {
     @EqualsAndHashCode.Include
+    @Id
+    @OneToOne
+    @JoinColumn(name = "blueprint_id")
     private Item itemInfo;
     @EqualsAndHashCode.Include
+    @Id
+    @ManyToOne
+    @JoinColumn(name = "activity_id")
     private Activity activity;
-    Set<Item> products;
-    Set<BlueprintMaterial> materials;
-    Integer quantity;
-    Integer maxRuns;
+    @OneToMany(mappedBy = "blueprint", cascade = CascadeType.ALL)
+    private Set<BlueprintProduct> products;
+    @OneToMany(mappedBy = "blueprint", cascade = CascadeType.ALL)
+    private Set<BlueprintMaterial> materials;
+    private Integer quantity;
+    private Integer maxRuns;
 
     public Blueprint() {
         this.itemInfo = new Item();
