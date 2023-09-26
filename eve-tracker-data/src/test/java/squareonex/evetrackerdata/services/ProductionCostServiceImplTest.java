@@ -33,8 +33,6 @@ class ProductionCostServiceImplTest {
         blueprintDummy.getItemInfo().setId(0L);
         blueprintDummy.getItemInfo().setName("blueprint");
         blueprintDummy.setActivity(new Activity());
-        blueprintDummy.setQuantity(10);
-        blueprintDummy.setMaxRuns(10);
         this.productDummy = new Item(1L, "product");
         this.productDummy.setBlueprint(blueprintDummy);
 

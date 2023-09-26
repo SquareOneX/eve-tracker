@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -16,7 +17,7 @@ import java.util.Set;
 public class Blueprint {
     @EqualsAndHashCode.Include
     @Id
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "blueprint_id")
     private Item itemInfo;
     @EqualsAndHashCode.Include
@@ -25,11 +26,9 @@ public class Blueprint {
     @JoinColumn(name = "activity_id")
     private Activity activity;
     @OneToMany(mappedBy = "blueprint", cascade = CascadeType.ALL)
-    private Set<BlueprintProduct> products;
+    private Set<BlueprintProduct> products = new HashSet<>();
     @OneToMany(mappedBy = "blueprint", cascade = CascadeType.ALL)
-    private Set<BlueprintMaterial> materials;
-    private Integer quantity;
-    private Integer maxRuns;
+    private Set<BlueprintMaterial> materials = new HashSet<>();
 
     public Blueprint() {
         this.itemInfo = new Item();

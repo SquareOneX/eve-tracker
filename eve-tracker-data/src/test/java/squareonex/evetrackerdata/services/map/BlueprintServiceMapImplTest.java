@@ -28,8 +28,6 @@ class BlueprintServiceMapImplTest {
         dummyItem.getItemInfo().setId(0L);
         dummyItem.getItemInfo().setName("blueprint");
         dummyItem.setActivity(new Activity());
-        dummyItem.setMaxRuns(10);
-        dummyItem.setQuantity(10);
     }
 
     @Test
