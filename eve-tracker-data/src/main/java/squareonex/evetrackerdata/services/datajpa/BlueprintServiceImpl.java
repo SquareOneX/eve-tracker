@@ -43,4 +43,9 @@ public class BlueprintServiceImpl implements BlueprintService {
     public void deleteById(BlueprintKey id) {
         blueprintRepository.deleteById(id);
     }
+
+    @Override
+    public Iterable<Blueprint> saveAll(Iterable<Blueprint> iterator) {
+        return blueprintRepository.saveAll(iterator);
+    }
 }

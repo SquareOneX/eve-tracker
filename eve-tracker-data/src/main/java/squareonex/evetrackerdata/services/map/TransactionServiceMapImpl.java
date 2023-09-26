@@ -3,6 +3,7 @@ package squareonex.evetrackerdata.services.map;
 import squareonex.evetrackerdata.model.Transaction;
 import squareonex.evetrackerdata.services.TransactionService;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class TransactionServiceMapImpl extends AbstractMapService<Transaction, Long> implements TransactionService {
@@ -20,14 +21,23 @@ public class TransactionServiceMapImpl extends AbstractMapService<Transaction, L
 
     @Override
     public Transaction save(Transaction object) {
-        if (object.getId() == null){
+        if (object.getId() == null) {
             while (map.containsKey(key))
                 key++;
             object.setId(key);
             return super.save(key, object);
-        }else {
+        } else {
             return super.save(object.getId(), object);
         }
+    }
+
+    @Override
+    public Iterable<Transaction> saveAll(Iterable<Transaction> iterator) {
+        Set<Transaction> set = new HashSet<>();
+        for (Transaction activity : iterator) {
+            set.add(this.save(activity));
+        }
+        return set;
     }
 
     @Override

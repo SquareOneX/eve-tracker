@@ -6,6 +6,7 @@ import squareonex.evetrackerdata.model.BlueprintKey;
 import squareonex.evetrackerdata.services.ActivityService;
 import squareonex.evetrackerdata.services.BlueprintService;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Service
@@ -40,6 +41,15 @@ public class BlueprintServiceMapImpl extends AbstractMapService<Blueprint, Bluep
                 activityService.save(object.getActivity());
             return super.save(new BlueprintKey(object.getItemInfo(), object.getActivity()), object);
         }
+    }
+
+    @Override
+    public Iterable<Blueprint> saveAll(Iterable<Blueprint> iterator) {
+        Set<Blueprint> set = new HashSet<>();
+        for (Blueprint blueprint : iterator) {
+            set.add(this.save(blueprint));
+        }
+        return set;
     }
 
     @Override

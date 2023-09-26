@@ -3,6 +3,7 @@ package squareonex.evetrackerdata.services.map;
 import squareonex.evetrackerdata.model.Job;
 import squareonex.evetrackerdata.services.JobService;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class JobServiceMapImpl extends AbstractMapService<Job, Long> implements JobService {
@@ -28,6 +29,14 @@ public class JobServiceMapImpl extends AbstractMapService<Job, Long> implements 
         }else {
             return super.save(object.getId(), object);
         }
+    }
+    @Override
+    public Iterable<Job> saveAll(Iterable<Job> iterator) {
+        Set<Job> set = new HashSet<>();
+        for (Job activity : iterator) {
+            set.add(this.save(activity));
+        }
+        return set;
     }
 
     @Override

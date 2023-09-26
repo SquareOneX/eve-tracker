@@ -42,4 +42,9 @@ public class UserServiceImpl implements UserService {
     public void deleteById(Long id) {
         userRepository.deleteById(id);
     }
+
+    @Override
+    public Iterable<User> saveAll(Iterable<User> iterator) {
+        return userRepository.saveAll(iterator);
+    }
 }
