@@ -1,6 +1,7 @@
 package squareonex.evetracker.bootstrap;
 
 import jakarta.transaction.Transactional;
+import squareonex.evetrackerdata.csv.BootstrapLoader;
 import squareonex.evetrackerdata.model.*;
 import squareonex.evetrackerdata.services.*;
 
@@ -73,13 +74,9 @@ public class SimpleDataLoader implements BootstrapLoader {
         Blueprint blueprint2 = new Blueprint();
 
         blueprint1.setItemInfo(blueprintItem1);
-        blueprint1.setMaxRuns(100);
-        blueprint1.setQuantity(1);
         blueprint1.setActivity(activity1);
 
         blueprint2.setItemInfo(blueprintItem2);
-        blueprint2.setMaxRuns(100);
-        blueprint2.setQuantity(1);
         blueprint2.setActivity(activity1);
 
         blueprint1 = blueprintService.save(blueprint1);
