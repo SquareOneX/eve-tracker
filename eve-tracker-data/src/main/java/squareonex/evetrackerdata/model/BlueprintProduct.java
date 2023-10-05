@@ -9,6 +9,7 @@ import lombok.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "blueprint_products")
+@ToString
 public class BlueprintProduct {
     @NonNull
     @EqualsAndHashCode.Include
@@ -24,4 +25,14 @@ public class BlueprintProduct {
     @JoinColumn(name = "product_id")
     private Item product;
     private Integer quantity;
+
+    public void setBlueprint(Blueprint blueprint) {
+        blueprint.getProducts().add(this);
+        this.blueprint = blueprint;
+    }
+
+    public void setProduct(Item product) {
+        product.getBlueprints().add(this);
+        this.product = product;
+    }
 }

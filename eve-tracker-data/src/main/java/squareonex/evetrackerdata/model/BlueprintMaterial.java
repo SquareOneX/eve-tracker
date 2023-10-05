@@ -24,4 +24,9 @@ public class BlueprintMaterial {
     @JoinColumn(name = "material_id")
     private Item material;
     private Integer quantity;
+
+    public void setBlueprint(Blueprint blueprint) {
+        blueprint.getMaterials().add(this);
+        this.blueprint = blueprint;
+    }
 }

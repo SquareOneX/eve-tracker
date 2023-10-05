@@ -12,7 +12,7 @@ import java.util.Set;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
-@ToString(exclude = {"transactions"})
+@ToString(exclude = {"transactions", "blueprints"})
 @Entity
 @Table(name = "items")
 public class Item {
@@ -21,8 +21,8 @@ public class Item {
     private Long id;
     private String name;
     private Boolean published;
-    @OneToOne(mappedBy = "itemInfo", cascade = CascadeType.ALL)
-    private Blueprint blueprint;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private Set<BlueprintProduct> blueprints = new HashSet<>();
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private Set<Transaction> transactions = new HashSet<>();
 
