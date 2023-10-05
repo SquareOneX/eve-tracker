@@ -22,7 +22,7 @@ class ItemTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         this.unit = new Item();
-        this.unit.setBlueprint(blueprint);
+        this.unit.setBlueprints(Set.of(new BlueprintProduct(blueprint, this.unit, 1)));
         this.unit.setId(0L);
         this.unit.setName("product");
     }

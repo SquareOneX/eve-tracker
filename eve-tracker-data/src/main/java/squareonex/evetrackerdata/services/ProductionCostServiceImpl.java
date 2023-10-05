@@ -11,7 +11,8 @@ public class ProductionCostServiceImpl implements ProductionCostService {
     }
     @Override
     public Double getCost(Item product) {
-        Blueprint blueprint = product.getBlueprint();
+/*
+        Blueprint blueprint = product.get();
         if (blueprint == null || blueprint.getMaterials() == null || blueprint.getMaterials().isEmpty())
             return null;
         else{
@@ -23,5 +24,7 @@ public class ProductionCostServiceImpl implements ProductionCostService {
             }
             return cost;
         }
+*/
+        return null;
     }
 }

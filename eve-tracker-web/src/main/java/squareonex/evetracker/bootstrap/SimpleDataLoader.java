@@ -73,13 +73,9 @@ public class SimpleDataLoader implements BootstrapLoader {
         Blueprint blueprint2 = new Blueprint();
 
         blueprint1.setItemInfo(blueprintItem1);
-        blueprint1.setMaxRuns(100);
-        blueprint1.setQuantity(1);
         blueprint1.setActivity(activity1);
 
         blueprint2.setItemInfo(blueprintItem2);
-        blueprint2.setMaxRuns(100);
-        blueprint2.setQuantity(1);
         blueprint2.setActivity(activity1);
 
         blueprint1 = blueprintService.save(blueprint1);
@@ -95,13 +91,13 @@ public class SimpleDataLoader implements BootstrapLoader {
         item1.setId(585L);
         item1.setName("Slasher");
         item1.setPublished(true);
-        item1.setBlueprint(blueprint1);
+        item1.setBlueprints(Set.of(new BlueprintProduct(blueprint1, item1, 1)));
 
         Item item2 = new Item();
         item2.setId(608L);
         item2.setName("Atron");
         item2.setPublished(true);
-        item2.setBlueprint(blueprint2);
+        item2.setBlueprints(Set.of(new BlueprintProduct(blueprint2, item2, 1)));
 
         item1 = productService.save(item1);
         item2 = productService.save(item2);

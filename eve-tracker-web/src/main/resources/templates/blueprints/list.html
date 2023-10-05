@@ -12,20 +12,14 @@
         <th>Name</th>
         <th>Activity</th>
         <th>Product</th>
-        <th>Quantity</th>
-        <th>Max Runs</th>
     </tr>
     <tr th:each="bp: ${blueprints}">
         <td th:text="${bp.itemInfo.id}"></td>
         <td th:text="${bp.itemInfo.name}"></td>
         <td th:text="${bp.activity.name}"></td>
         <td>
-            <div th:each="prod: ${bp.products}">
-                <div th:text="${prod.name}"></div>
-            </div>
+            <div th:each="prod: ${bp.products}" th:text="${prod.product.name}"></div>
         </td>
-        <td th:text="${bp.quantity}"></td>
-        <td th:text="${bp.maxRuns}"></td>
     </tr>
 </table>
 </body>
