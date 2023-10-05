@@ -1,12 +1,12 @@
 package squareonex.evetracker.config;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import squareonex.evetracker.bootstrap.BootstrapLoader;
 import squareonex.evetracker.bootstrap.SimpleDataLoader;
-import squareonex.evetracker.bootstrap.csv.FullDataLoader;
+import squareonex.evetrackerdata.csv.BootstrapLoader;
 import squareonex.evetrackerdata.repositories.*;
 import squareonex.evetrackerdata.services.*;
 import squareonex.evetrackerdata.services.datajpa.*;
@@ -14,6 +14,7 @@ import squareonex.evetrackerdata.services.map.*;
 
 @Configuration
 @EnableJpaRepositories(basePackages = "squareonex.evetrackerdata.repositories")
+@ComponentScan(basePackages = "squareonex.evetrackerdata")
 public class EveTrackerConfig {
     @Bean(name = "dataLoader")
     @Profile({"default", "simpleBootstrapData"})
@@ -21,12 +22,6 @@ public class EveTrackerConfig {
                                      ProductService productService, TransactionService transactionService,
                                      UserService userService, JobService jobService) {
         return new SimpleDataLoader(activityService, blueprintService, productService, transactionService, userService, jobService);
-    }
-
-    @Bean(name = "dataLoader")
-    @Profile("fullBootstrapData")
-    BootstrapLoader fullDataLoader() {
-        return new FullDataLoader();
     }
 
     @Bean(name = "activityService")
