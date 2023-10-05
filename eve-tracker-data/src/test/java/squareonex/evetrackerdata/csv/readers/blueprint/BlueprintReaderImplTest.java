@@ -9,10 +9,7 @@ import org.mockito.MockitoAnnotations;
 import squareonex.evetrackerdata.model.Activity;
 import squareonex.evetrackerdata.model.Item;
 import squareonex.evetrackerdata.repositories.ActivityRepository;
-import squareonex.evetrackerdata.repositories.BlueprintRepository;
 import squareonex.evetrackerdata.repositories.ItemRepository;
-
-import java.io.FileNotFoundException;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
@@ -26,6 +23,10 @@ class BlueprintReaderImplTest {
     private Item itemReference;
     @Mock
     private Activity activityReference;
+    @Mock
+    private ActivityRepository activityRepository;
+    @Mock
+    private ItemRepository itemRepository;
 
     @BeforeEach
     public void init() {
@@ -34,7 +35,7 @@ class BlueprintReaderImplTest {
         when(entityManager.getReference(eq(Item.class), anyLong())).thenReturn(itemReference);
         when(entityManager.getReference(eq(Activity.class), anyInt())).thenReturn(activityReference);
 
-        this.unit = new BlueprintReaderImpl(entityManager);
+        this.unit = new BlueprintReaderImpl(activityRepository, itemRepository);
     }
 
     @Test

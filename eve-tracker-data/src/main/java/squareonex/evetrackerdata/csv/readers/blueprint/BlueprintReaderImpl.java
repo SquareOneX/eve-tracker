@@ -2,100 +2,137 @@ package squareonex.evetrackerdata.csv.readers.blueprint;
 
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
-import jakarta.persistence.EntityManager;
 import squareonex.evetrackerdata.csv.readers.BlueprintReader;
 import squareonex.evetrackerdata.model.*;
+import squareonex.evetrackerdata.repositories.ActivityRepository;
+import squareonex.evetrackerdata.repositories.ItemRepository;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.net.URL;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class BlueprintReaderImpl implements BlueprintReader {
-    private final EntityManager entityManager;
+    private final ActivityRepository activityRepository;
+    private final ItemRepository itemRepository;
 
-    public BlueprintReaderImpl(EntityManager entityManager) {
-        this.entityManager = entityManager;
+    public BlueprintReaderImpl(ActivityRepository activityRepository, ItemRepository itemRepository) {
+        this.activityRepository = activityRepository;
+        this.itemRepository = itemRepository;
     }
 
     @Override
     public List<Blueprint> readAll() throws FileNotFoundException {
-        Map<BlueprintKey, BlueprintDTO> blueprints = new HashMap<>();
-        Map<BlueprintKey, List<BlueprintMaterialDTO>> materials = new HashMap<>();
-        Map<BlueprintKey, List<BlueprintProductDTO>> products = new HashMap<>();
+        Map<BlueprintKey, Blueprint> blueprints = readBlueprintsToMap(
+                new FileReader(getClass().getClassLoader().getResource("industryactivity.csv").getPath()));
 
-        URL resource = getClass().getClassLoader().getResource("industryactivity.csv");
-        FileReader reader = new FileReader(resource.getPath());
+        Map<BlueprintKey, List<BlueprintMaterialDTO>> materials = readMaterialsToMap(
+                new FileReader(getClass().getClassLoader().getResource("industryactivitymaterials.csv").getPath()));
+
+        Map<BlueprintKey, List<BlueprintProductDTO>> products = readProductsToMap(
+                new FileReader(getClass().getClassLoader().getResource("industryactivityproducts.csv").getPath()));
+
+        Map<Integer, Activity> activities= new HashMap<>();
+        activityRepository.findAll().forEach((a) -> activities.put(a.getId(), a));
+
+        Map<Long, Item> items = new HashMap<>();
+        itemRepository.findAll().forEach((i) -> items.put(i.getId(), i));
+
+        Map<BlueprintKey, Blueprint> result = new HashMap<>();
+
+        for (Map.Entry<BlueprintKey, Blueprint> entry : blueprints.entrySet()) {
+            BlueprintKey blueprintKey = entry.getKey();
+            Blueprint blueprint = entry.getValue();
+
+            Activity activity = activities.get(blueprintKey.activityId);
+            Item item = items.get(blueprintKey.id);
+
+            if (activity == null || item == null)
+                continue;
+
+            blueprint.setActivity(activity);
+            blueprint.setItemInfo(item);
+
+            List<BlueprintMaterialDTO> mats = materials.get(blueprintKey);
+            boolean valid = true;
+            if(mats != null) {
+                for (BlueprintMaterialDTO dto : mats) {
+                    Item material = items.get(dto.getMaterialId());
+                    if (material == null) {
+                        valid = false;
+                        blueprint.getMaterials().clear();
+                        break;
+                    } else {
+                        blueprint.getMaterials().add(new BlueprintMaterial(blueprint, material, dto.getQuantity()));
+                    }
+                }
+            }
+
+            List<BlueprintProductDTO> prods = products.get(blueprintKey);
+            if(prods != null) {
+                for (BlueprintProductDTO dto : prods) {
+                    Item product = items.get(dto.getProductId());
+                    if (product == null) {
+                        valid = false;
+                        blueprint.getProducts().clear();
+                        break;
+                    } else {
+                        blueprint.getProducts().add(new BlueprintProduct(blueprint, product, dto.getQuantity()));
+                    }
+                }
+            }
+
+            if(valid)
+                result.put(blueprintKey, blueprint);
+        }
+        return new LinkedList<>(result.values());
+    }
+
+    private Map<BlueprintKey, Blueprint> readBlueprintsToMap(FileReader reader) {
         CsvToBean<BlueprintDTO> csvToBean = new CsvToBeanBuilder<BlueprintDTO>(reader)
                 .withType(BlueprintDTO.class)
                 .withIgnoreLeadingWhiteSpace(true)
                 .withVerifier(new BlueprintDTO.Verifier())
                 .build();
-        for (BlueprintDTO dto : csvToBean) {
-            blueprints.put(new BlueprintKey(dto.getId(), dto.getActivityId()), dto);
-        }
 
-        resource = getClass().getClassLoader().getResource("industryactivitymaterials.csv");
-        reader = new FileReader(resource.getPath());
+        Map<BlueprintKey, Blueprint> blueprints = new HashMap<>();
+        for (BlueprintDTO dto : csvToBean) {
+            Blueprint blueprint = new Blueprint();
+
+            blueprints.put(dto.getKey(), blueprint);
+        }
+        return blueprints;
+    }
+
+    private Map<BlueprintKey, List<BlueprintMaterialDTO>> readMaterialsToMap(FileReader reader) {
         CsvToBean<BlueprintMaterialDTO> materialBean = new CsvToBeanBuilder<BlueprintMaterialDTO>(reader)
                 .withType(BlueprintMaterialDTO.class)
                 .withIgnoreLeadingWhiteSpace(true)
                 .build();
 
+        Map<BlueprintKey, List<BlueprintMaterialDTO>> materials = new HashMap<>();
         for (BlueprintMaterialDTO dto : materialBean) {
-            BlueprintDTO savedDTO = blueprints.get(dto.getKey());
-            if (savedDTO != null) {
-                if (!materials.containsKey(dto.getKey()))
-                    materials.put(dto.getKey(), new ArrayList<>());
-                materials.get(dto.getKey()).add(dto);
-            }
+            if (!materials.containsKey(dto.getKey()))
+                materials.put(dto.getKey(), new LinkedList<>());
+            materials.get(dto.getKey()).add(dto);
         }
+        return materials;
+    }
 
-        resource = getClass().getClassLoader().getResource("industryactivityproducts.csv");
-        reader = new FileReader(resource.getPath());
+    private Map<BlueprintKey, List<BlueprintProductDTO>> readProductsToMap(FileReader reader) {
         CsvToBean<BlueprintProductDTO> productBean = new CsvToBeanBuilder<BlueprintProductDTO>(reader)
                 .withType(BlueprintProductDTO.class)
                 .withIgnoreLeadingWhiteSpace(true)
                 .build();
 
+        Map<BlueprintKey, List<BlueprintProductDTO>> products = new HashMap<>();
         for (BlueprintProductDTO dto : productBean) {
-            if (blueprints.get(dto.getKey()) != null){
-                if (!products.containsKey(dto.getKey()))
-                    products.put(dto.getKey(), new ArrayList<>());
-                products.get(dto.getKey()).add(dto);
-            }
+            if (!products.containsKey(dto.getKey()))
+                products.put(dto.getKey(), new LinkedList<>());
+            products.get(dto.getKey()).add(dto);
         }
-
-        List<Blueprint> blueprintList = new LinkedList<>();
-        for (Map.Entry<BlueprintKey, BlueprintDTO> entry : blueprints.entrySet()) {
-            BlueprintDTO dto = entry.getValue();
-            Blueprint blueprint = new Blueprint();
-
-            blueprint.setActivity(entityManager.getReference(Activity.class, dto.getActivityId()));
-            blueprint.setItemInfo(entityManager.getReference(Item.class, dto.getId()));
-
-            List<BlueprintMaterialDTO> list = materials.get(dto.getKey());
-            if (list != null){
-                for (BlueprintMaterialDTO matDTO : list) {
-                    BlueprintMaterial material = new BlueprintMaterial();
-                    material.setMaterial(entityManager.getReference(Item.class, matDTO.getMaterialId()));
-                    material.setQuantity(matDTO.getQuantity());
-                    blueprint.getMaterials().add(material);
-                }
-            }
-
-            List<BlueprintProductDTO> productList = products.get(dto.getKey());
-            if (productList != null){
-                for (BlueprintProductDTO productDTO : productList) {
-                    BlueprintProduct product = new BlueprintProduct();
-                    product.setProduct(entityManager.getReference(Item.class, productDTO.getProductId()));
-                    product.setQuantity(productDTO.getQuantity());
-                    blueprint.getProducts().add(product);
-                }
-            }
-
-            blueprintList.add(blueprint);
-        }
-        return blueprintList;
+        return products;
     }
 }

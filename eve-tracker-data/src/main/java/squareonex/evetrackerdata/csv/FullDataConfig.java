@@ -10,6 +10,8 @@ import squareonex.evetrackerdata.csv.readers.ItemReader;
 import squareonex.evetrackerdata.csv.readers.activity.ActivityReaderImpl;
 import squareonex.evetrackerdata.csv.readers.blueprint.BlueprintReaderImpl;
 import squareonex.evetrackerdata.csv.readers.item.ItemReaderImpl;
+import squareonex.evetrackerdata.repositories.ActivityRepository;
+import squareonex.evetrackerdata.repositories.ItemRepository;
 import squareonex.evetrackerdata.services.ActivityService;
 import squareonex.evetrackerdata.services.BlueprintService;
 import squareonex.evetrackerdata.services.ProductService;
@@ -23,8 +25,8 @@ public class FullDataConfig {
     }
 
     @Bean
-    BlueprintReader blueprintReader(EntityManager entityManager) {
-        return new BlueprintReaderImpl(entityManager);
+    BlueprintReader blueprintReader(EntityManager entityManager, ActivityRepository activityRepository, ItemRepository itemRepository) {
+        return new BlueprintReaderImpl(activityRepository, itemRepository);
     }
 
     @Bean

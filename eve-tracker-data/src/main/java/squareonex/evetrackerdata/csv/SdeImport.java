@@ -3,14 +3,11 @@ package squareonex.evetrackerdata.csv;
 import squareonex.evetrackerdata.csv.readers.ActivityReader;
 import squareonex.evetrackerdata.csv.readers.BlueprintReader;
 import squareonex.evetrackerdata.csv.readers.ItemReader;
-import squareonex.evetrackerdata.model.Activity;
 import squareonex.evetrackerdata.model.Blueprint;
-import squareonex.evetrackerdata.model.Item;
 import squareonex.evetrackerdata.services.ActivityService;
 import squareonex.evetrackerdata.services.BlueprintService;
 import squareonex.evetrackerdata.services.ProductService;
 
-import java.io.FileNotFoundException;
 import java.util.List;
 
 public class SdeImport implements BootstrapLoader{
@@ -30,22 +27,6 @@ public class SdeImport implements BootstrapLoader{
         this.blueprintService = blueprintService;
     }
 
-    public List<Activity> readActivities() throws FileNotFoundException {
-        return activityReader.readAll();
-    }
-
-    public List<Item> readItems() throws FileNotFoundException {
-        return itemReader.readAll();
-    }
-
-    public List<Blueprint> readBlueprints(){
-        try {
-            return blueprintReader.readAll();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     @Override
     public void run(String... args) throws Exception {
         System.out.println("............Attempting to load boostrap data............");
@@ -56,7 +37,9 @@ public class SdeImport implements BootstrapLoader{
         itemService.saveAll(itemReader.readAll());
         System.out.println("Loaded Items....");
 
-        blueprintService.saveAll(blueprintReader.readAll());
+        List<Blueprint> blueprints = blueprintReader.readAll();
+        blueprintService.saveAll(blueprints);
+
         System.out.println("Loaded Blueprints....");
 
         System.out.println("............Successfully loaded boostrap data............");
