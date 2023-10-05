@@ -1,7 +1,7 @@
 package squareonex.evetrackerdata.services.datajpa;
 
 import squareonex.evetrackerdata.model.Blueprint;
-import squareonex.evetrackerdata.model.BlueprintKey;
+import squareonex.evetrackerdata.model.BlueprintId;
 import squareonex.evetrackerdata.repositories.BlueprintRepository;
 import squareonex.evetrackerdata.services.BlueprintService;
 
@@ -25,7 +25,7 @@ public class BlueprintServiceImpl implements BlueprintService {
     }
 
     @Override
-    public Blueprint findById(BlueprintKey id) {
+    public Blueprint findById(BlueprintId id) {
         return blueprintRepository.findById(id).orElse(null);
     }
 
@@ -40,7 +40,7 @@ public class BlueprintServiceImpl implements BlueprintService {
     }
 
     @Override
-    public void deleteById(BlueprintKey id) {
+    public void deleteById(BlueprintId id) {
         blueprintRepository.deleteById(id);
     }
 

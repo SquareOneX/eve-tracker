@@ -2,7 +2,7 @@ package squareonex.evetrackerdata.services.map;
 
 import org.springframework.stereotype.Service;
 import squareonex.evetrackerdata.model.Blueprint;
-import squareonex.evetrackerdata.model.BlueprintKey;
+import squareonex.evetrackerdata.model.BlueprintId;
 import squareonex.evetrackerdata.services.ActivityService;
 import squareonex.evetrackerdata.services.BlueprintService;
 
@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Service
-public class BlueprintServiceMapImpl extends AbstractMapService<Blueprint, BlueprintKey> implements BlueprintService {
+public class BlueprintServiceMapImpl extends AbstractMapService<Blueprint, BlueprintId> implements BlueprintService {
     private final ActivityService activityService;
 
     public BlueprintServiceMapImpl(ActivityService activityService) {
@@ -23,7 +23,7 @@ public class BlueprintServiceMapImpl extends AbstractMapService<Blueprint, Bluep
     }
 
     @Override
-    public void deleteById(BlueprintKey id) {
+    public void deleteById(BlueprintId id) {
         super.deleteById(id);
     }
 
@@ -39,7 +39,7 @@ public class BlueprintServiceMapImpl extends AbstractMapService<Blueprint, Bluep
         else {
             if (activityService.findById(object.getActivity().getId()) == null)
                 activityService.save(object.getActivity());
-            return super.save(new BlueprintKey(object.getItemInfo(), object.getActivity()), object);
+            return super.save(new BlueprintId(object.getItemInfo(), object.getActivity()), object);
         }
     }
 
@@ -53,7 +53,7 @@ public class BlueprintServiceMapImpl extends AbstractMapService<Blueprint, Bluep
     }
 
     @Override
-    public Blueprint findById(BlueprintKey id) {
+    public Blueprint findById(BlueprintId id) {
         return super.findById(id);
     }
 }
