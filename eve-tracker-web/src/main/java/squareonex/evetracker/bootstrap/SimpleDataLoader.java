@@ -91,19 +91,22 @@ public class SimpleDataLoader implements BootstrapLoader {
         item1.setId(585L);
         item1.setName("Slasher");
         item1.setPublished(true);
-        item1.setBlueprints(Set.of(new BlueprintProduct(blueprint1, item1, 1)));
 
         Item item2 = new Item();
         item2.setId(608L);
         item2.setName("Atron");
         item2.setPublished(true);
-        item2.setBlueprints(Set.of(new BlueprintProduct(blueprint2, item2, 1)));
 
         item1 = productService.save(item1);
         item2 = productService.save(item2);
 
-        blueprint1.setProducts(Set.of(new BlueprintProduct(blueprint1, item1, 1)));
-        blueprint2.setProducts(Set.of(new BlueprintProduct(blueprint2, item2, 1)));
+        BlueprintProduct bpProduct1 = new BlueprintProduct(blueprint1, item1, 1);
+        BlueprintProduct bpProduct2 = new BlueprintProduct(blueprint2, item2, 1);
+        item1.setBlueprints(Set.of(bpProduct1));
+        item2.setBlueprints(Set.of(bpProduct2));
+
+        blueprint1.setProducts(Set.of(bpProduct1));
+        blueprint2.setProducts(Set.of(bpProduct2));
 
         Set<BlueprintMaterial> materialSet1 = new HashSet<>();
         Set<BlueprintMaterial> materialSet2 = new HashSet<>();
@@ -141,13 +144,15 @@ public class SimpleDataLoader implements BootstrapLoader {
             Transactions
          */
 
-        Transaction transaction1 = new Transaction( LocalDateTime.MIN, true, 64_000, material1, 273_280.0f);
+        LocalDateTime time = LocalDateTime.of(2023, Month.OCTOBER, 5, 13, 8);
+
+        Transaction transaction1 = new Transaction(time, true, 64_000, material1, 273_280.0f);
         transaction1.setId(0L);
-        Transaction transaction2 = new Transaction( LocalDateTime.MIN, true, 12_000, material2, 124_320.0f);
+        Transaction transaction2 = new Transaction(time, true, 12_000, material2, 124_320.0f);
         transaction2.setId(1L);
-        Transaction transaction3 = new Transaction(LocalDateTime.MIN, true, 5_000, material3, 245_000.0f);
+        Transaction transaction3 = new Transaction(time, true, 5_000, material3, 245_000.0f);
         transaction3.setId(2L);
-        Transaction transaction4 = new Transaction(LocalDateTime.MIN, true, 1_000, material4, 465_000.0f);
+        Transaction transaction4 = new Transaction(time, true, 1_000, material4, 465_000.0f);
         transaction4.setId(3L);
 
         transaction1 = transactionService.save(transaction1);
@@ -167,12 +172,10 @@ public class SimpleDataLoader implements BootstrapLoader {
          */
 
         Job job1 = new Job(item1, 10L, user1, false);
-        job1.setId(0L);
         job1.setStartedTime(LocalDateTime.of(2023, Month.SEPTEMBER, 20, 13, 28));
         job1.setFinishedTime(LocalDateTime.now().plusHours(2));
 
         Job job2 = new Job(item2, 10L, user1, false);
-        job2.setId(1L);
 
         job1 = jobService.save(job1);
         job2 = jobService.save(job2);
