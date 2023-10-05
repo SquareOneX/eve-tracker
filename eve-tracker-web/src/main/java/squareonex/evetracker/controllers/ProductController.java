@@ -15,7 +15,7 @@ public class ProductController {
 
     @RequestMapping({"", "index", "index.html"})
     public String list(Model model){
-        model.addAttribute("products", productService.findAll());
+        model.addAttribute("items", productService.findAll());
         return "products/list";
     }
 }

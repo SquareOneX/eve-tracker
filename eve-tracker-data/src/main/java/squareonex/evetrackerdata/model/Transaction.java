@@ -16,11 +16,15 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NonNull private LocalDateTime time;
+    @Column(name = "date")
+    @NonNull private LocalDateTime date;
+    @Column(name = "is_buy")
     @NonNull private Boolean isBuy;
+    @Column(name = "qty")
     @NonNull private Integer quantity;
     @ManyToOne
-    @JoinColumn(name = "item_id")
+    @JoinColumn(name = "item_id", referencedColumnName = "id")
     @NonNull private Item item;
+    @Column(name = "price")
     @NonNull private Float price;
 }

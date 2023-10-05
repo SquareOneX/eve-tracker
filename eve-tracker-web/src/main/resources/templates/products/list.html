@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'products')}">
+<html lang="en" xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'items')}">
 <head>
     <meta charset="UTF-8">
-    <title>Product Index</title>
+    <title>Item Index</title>
 </head>
 <body>
-    <h2 th:text="'List of Products'">List of Products</h2>
+    <h2 th:text="'List of Items'">List of Items</h2>
     <table class="table table-striped">
         <tr>
             <th>Id</th>
@@ -13,11 +13,15 @@
             <th>Blueprint Name</th>
             <th>Blueprint Activity</th>
         </tr>
-        <tr th:each="p: ${products}">
-            <td th:text="${p.id}"></td>
-            <td th:text="${p.name}"></td>
-            <td th:text="${p.blueprint?.itemInfo?.name} ?: '-'"></td>
-            <td th:text="${p.blueprint?.activity?.name} ?: '-'"></td>
+        <tr th:each="i: ${items}">
+            <td th:text="${i.id}"></td>
+            <td th:text="${i.name}"></td>
+            <td>
+                <div th:each="bp: ${i.blueprints}" th:text="${bp.blueprint?.itemInfo.name}"></div>
+            </td>
+            <td>
+                <div th:each="bp: ${i.blueprints}" th:text="${bp.blueprint?.activity.name}"></div>
+            </td>
         </tr>
     </table>
 </body>
