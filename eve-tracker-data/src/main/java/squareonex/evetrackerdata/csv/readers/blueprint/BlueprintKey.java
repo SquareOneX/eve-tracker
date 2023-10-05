@@ -11,5 +11,5 @@ import lombok.Setter;
 @EqualsAndHashCode
 class BlueprintKey {
     Long id;
-    Integer activity_id;
+    Integer activityId;
 }

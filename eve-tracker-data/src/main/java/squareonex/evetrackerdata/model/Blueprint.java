@@ -17,9 +17,9 @@ public class Blueprint {
     @EqualsAndHashCode.Include
     @EmbeddedId
     private BlueprintId id = new BlueprintId();
-    @OneToMany(mappedBy = "blueprint", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "id.blueprint", cascade = CascadeType.ALL)
     private Set<BlueprintProduct> products = new HashSet<>();
-    @OneToMany(mappedBy = "blueprint", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "id.blueprint", cascade = CascadeType.ALL)
     private Set<BlueprintMaterial> materials = new HashSet<>();
 
     public Blueprint() {
@@ -49,5 +49,19 @@ public class Blueprint {
 
     public void setActivity(Activity object) {
         this.id.activity = object;
+    }
+
+    public void setProducts(Set<BlueprintProduct> products) {
+        for (BlueprintProduct product : products) {
+            product.setBlueprint(this);
+        }
+        this.products = products;
+    }
+
+    public void setMaterials(Set<BlueprintMaterial> materials) {
+        for (BlueprintMaterial material : materials) {
+            material.setBlueprint(this);
+        }
+        this.materials = materials;
     }
 }

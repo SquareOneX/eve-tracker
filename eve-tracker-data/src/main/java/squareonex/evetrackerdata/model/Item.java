@@ -21,7 +21,7 @@ public class Item {
     private Long id;
     private String name;
     private Boolean published;
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "id.product", cascade = CascadeType.ALL)
     private Set<BlueprintProduct> blueprints = new HashSet<>();
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private Set<Transaction> transactions = new HashSet<>();
