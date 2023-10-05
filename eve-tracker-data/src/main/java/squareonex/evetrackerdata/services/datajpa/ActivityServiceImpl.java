@@ -42,4 +42,9 @@ public class ActivityServiceImpl implements ActivityService {
     public void deleteById(Integer id) {
         activityRepository.deleteById(id);
     }
+
+    @Override
+    public Iterable<Activity> saveAll(Iterable<Activity> iterator) {
+        return activityRepository.saveAll(iterator);
+    }
 }

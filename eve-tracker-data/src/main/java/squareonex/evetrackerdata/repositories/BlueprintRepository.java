@@ -3,11 +3,11 @@ package squareonex.evetrackerdata.repositories;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import squareonex.evetrackerdata.model.Blueprint;
-import squareonex.evetrackerdata.model.BlueprintKey;
+import squareonex.evetrackerdata.model.BlueprintId;
 
 import java.util.Optional;
 
 @Repository
-public interface BlueprintRepository extends CrudRepository<Blueprint, BlueprintKey> {
-    Optional<Blueprint> findByActivity_IdAndItemInfo_Id(Integer activityId, Long itemId);
+public interface BlueprintRepository extends CrudRepository<Blueprint, BlueprintId> {
+    Optional<Blueprint> findBlueprintById_Activity_IdAndId_ItemInfo_Id(Integer id_activity_id, Long id_itemInfo_id);
 }

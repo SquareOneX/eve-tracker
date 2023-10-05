@@ -3,6 +3,7 @@ package squareonex.evetrackerdata.services.map;
 import squareonex.evetrackerdata.model.Item;
 import squareonex.evetrackerdata.services.ProductService;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class ProductServiceMapImpl extends AbstractMapService<Item, Long> implements ProductService {
@@ -32,6 +33,14 @@ public class ProductServiceMapImpl extends AbstractMapService<Item, Long> implem
         }else {
             return super.save(object.getId(), object);
         }
+    }
+    @Override
+    public Iterable<Item> saveAll(Iterable<Item> iterator) {
+        Set<Item> set = new HashSet<>();
+        for (Item item : iterator) {
+            set.add(this.save(item));
+        }
+        return set;
     }
 
     @Override

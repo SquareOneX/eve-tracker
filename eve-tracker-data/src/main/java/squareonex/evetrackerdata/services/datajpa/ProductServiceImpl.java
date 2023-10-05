@@ -42,4 +42,9 @@ public class ProductServiceImpl implements ProductService {
     public void deleteById(Long id) {
         itemRepository.deleteById(id);
     }
+
+    @Override
+    public Iterable<Item> saveAll(Iterable<Item> iterator) {
+        return itemRepository.saveAll(iterator);
+    }
 }

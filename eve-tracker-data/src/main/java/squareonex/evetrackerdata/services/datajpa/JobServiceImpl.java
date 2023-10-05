@@ -42,4 +42,9 @@ public class JobServiceImpl implements JobService {
     public void deleteById(Long id) {
         jobRepository.deleteById(id);
     }
+
+    @Override
+    public Iterable<Job> saveAll(Iterable<Job> iterator) {
+        return jobRepository.saveAll(iterator);
+    }
 }

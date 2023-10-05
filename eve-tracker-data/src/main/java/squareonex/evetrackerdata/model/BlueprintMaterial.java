@@ -2,31 +2,36 @@ package squareonex.evetrackerdata.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import squareonex.evetrackerdata.model.ids.BlueprintMaterialId;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "blueprint_materials")
 public class BlueprintMaterial {
-    @NonNull
-    @EqualsAndHashCode.Include
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "blueprint_id", referencedColumnName = "blueprint_id")
-    @JoinColumn(name = "activity_id", referencedColumnName = "activity_id")
-    private Blueprint blueprint;
-    @NonNull
-    @EqualsAndHashCode.Include
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "material_id")
-    private Item material;
+    @EmbeddedId
+    private BlueprintMaterialId id = new BlueprintMaterialId();
     private Integer quantity;
 
+    public BlueprintMaterial(Blueprint blueprint, Item material, Integer quantity) {
+        this.id = new BlueprintMaterialId(blueprint, material);
+        this.quantity = quantity;
+    }
+
+    public Blueprint getBlueprint() {
+        return this.id.getBlueprint();
+    }
+
     public void setBlueprint(Blueprint blueprint) {
-        blueprint.getMaterials().add(this);
-        this.blueprint = blueprint;
+        this.id.setBlueprint(blueprint);
+    }
+
+    public Item getMaterial() {
+        return this.id.getMaterial();
+    }
+
+    public void setMaterial(Item material) {
+        this.id.setMaterial(material);
     }
 }

@@ -13,33 +13,55 @@ import java.util.Set;
 @ToString(exclude = {"products", "materials"})
 @Entity
 @Table(name = "blueprints")
-@IdClass(BlueprintKey.class)
 public class Blueprint {
     @EqualsAndHashCode.Include
-    @Id
-    @OneToOne
-    @JoinColumn(name = "blueprint_id")
-    private Item itemInfo;
-    @EqualsAndHashCode.Include
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "activity_id")
-    private Activity activity;
-    @OneToMany(mappedBy = "blueprint", cascade = CascadeType.ALL)
+    @EmbeddedId
+    private BlueprintId id = new BlueprintId();
+    @OneToMany(mappedBy = "id.blueprint", cascade = CascadeType.ALL)
     private Set<BlueprintProduct> products = new HashSet<>();
-    @OneToMany(mappedBy = "blueprint", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "id.blueprint", cascade = CascadeType.ALL)
     private Set<BlueprintMaterial> materials = new HashSet<>();
 
     public Blueprint() {
-        this.itemInfo = new Item();
-        this.activity = new Activity();
+        this.id.itemInfo = new Item();
+        this.id.activity = new Activity();
     }
 
     /**
      * Convenience method to return this objects key
      * @return instance of the id class for this object
      */
-    public BlueprintKey getKey(){
-        return new BlueprintKey(itemInfo, activity);
+    public BlueprintId getKey(){
+        return this.id;
+    }
+
+    public Item getItemInfo() {
+        return this.id.itemInfo;
+    }
+
+    public Activity getActivity() {
+        return this.id.activity;
+    }
+
+    public void setItemInfo(Item object) {
+        this.id.itemInfo = object;
+    }
+
+    public void setActivity(Activity object) {
+        this.id.activity = object;
+    }
+
+    public void setProducts(Set<BlueprintProduct> products) {
+        for (BlueprintProduct product : products) {
+            product.setBlueprint(this);
+        }
+        this.products = products;
+    }
+
+    public void setMaterials(Set<BlueprintMaterial> materials) {
+        for (BlueprintMaterial material : materials) {
+            material.setBlueprint(this);
+        }
+        this.materials = materials;
     }
 }

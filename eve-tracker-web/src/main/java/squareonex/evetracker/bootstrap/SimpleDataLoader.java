@@ -1,6 +1,7 @@
 package squareonex.evetracker.bootstrap;
 
 import jakarta.transaction.Transactional;
+import squareonex.evetrackerdata.csv.BootstrapLoader;
 import squareonex.evetrackerdata.model.*;
 import squareonex.evetrackerdata.services.*;
 

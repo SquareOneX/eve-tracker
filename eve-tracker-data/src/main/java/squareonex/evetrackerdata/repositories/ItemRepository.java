@@ -6,4 +6,5 @@ import squareonex.evetrackerdata.model.Item;
 
 @Repository
 public interface ItemRepository extends CrudRepository<Item, Long> {
+    Item getItemById(Long id);
 }

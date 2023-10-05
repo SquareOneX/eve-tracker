@@ -3,6 +3,7 @@ package squareonex.evetrackerdata.services.map;
 import squareonex.evetrackerdata.model.Activity;
 import squareonex.evetrackerdata.services.ActivityService;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class ActivityServiceMapImpl extends AbstractMapService<Activity, Integer> implements ActivityService {
@@ -16,6 +17,15 @@ public class ActivityServiceMapImpl extends AbstractMapService<Activity, Integer
     @Override
     public void deleteById(Integer id) {
         super.deleteById(id);
+    }
+
+    @Override
+    public Iterable<Activity> saveAll(Iterable<Activity> iterator) {
+        Set<Activity> set = new HashSet<>();
+        for (Activity activity : iterator) {
+            set.add(this.save(activity));
+        }
+        return set;
     }
 
     @Override

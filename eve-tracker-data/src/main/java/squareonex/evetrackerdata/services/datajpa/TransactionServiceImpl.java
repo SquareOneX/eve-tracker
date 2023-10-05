@@ -42,4 +42,9 @@ public class TransactionServiceImpl implements TransactionService {
     public void deleteById(Long id) {
         transactionRepository.deleteById(id);
     }
+
+    @Override
+    public Iterable<Transaction> saveAll(Iterable<Transaction> iterator) {
+        return transactionRepository.saveAll(iterator);
+    }
 }

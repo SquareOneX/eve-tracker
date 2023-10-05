@@ -6,4 +6,5 @@ import squareonex.evetrackerdata.model.Activity;
 
 @Repository
 public interface ActivityRepository extends CrudRepository<Activity, Integer> {
+    Activity getActivityById(Integer id);
 }

@@ -2,6 +2,7 @@ package squareonex.evetrackerdata.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import squareonex.evetrackerdata.model.ids.BlueprintProductId;
 
 @Data
 @NoArgsConstructor
@@ -11,28 +12,28 @@ import lombok.*;
 @Table(name = "blueprint_products")
 @ToString
 public class BlueprintProduct {
-    @NonNull
-    @EqualsAndHashCode.Include
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "blueprint_id", referencedColumnName = "blueprint_id")
-    @JoinColumn(name = "activity_id", referencedColumnName = "activity_id")
-    private Blueprint blueprint;
-    @NonNull
-    @EqualsAndHashCode.Include
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Item product;
+    @EmbeddedId
+    private BlueprintProductId id = new BlueprintProductId();
     private Integer quantity;
 
+    public BlueprintProduct(Blueprint blueprint, Item item, int qty) {
+        this.id = new BlueprintProductId(blueprint, item);
+        this.quantity = qty;
+    }
+
+    public Blueprint getBlueprint() {
+        return this.id.getBlueprint();
+    }
+
     public void setBlueprint(Blueprint blueprint) {
-        blueprint.getProducts().add(this);
-        this.blueprint = blueprint;
+        this.id.setBlueprint(blueprint);
+    }
+
+    public Item getProduct() {
+        return this.id.getProduct();
     }
 
     public void setProduct(Item product) {
-        product.getBlueprints().add(this);
-        this.product = product;
+        this.id.setProduct(product);
     }
 }

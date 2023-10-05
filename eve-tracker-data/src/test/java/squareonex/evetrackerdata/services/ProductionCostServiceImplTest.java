@@ -4,12 +4,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import squareonex.evetrackerdata.model.*;
+import squareonex.evetrackerdata.model.Activity;
+import squareonex.evetrackerdata.model.Blueprint;
+import squareonex.evetrackerdata.model.BlueprintProduct;
+import squareonex.evetrackerdata.model.Item;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 
@@ -35,11 +37,11 @@ class ProductionCostServiceImplTest {
 
         when(material1.getAvgCost()).thenReturn(100.0f);
         when(material2.getAvgCost()).thenReturn(10.0f);
-        Set<BlueprintMaterial> materials = Set.of(
-                new BlueprintMaterial(blueprintDummy, material1, 1),
-                new BlueprintMaterial(blueprintDummy, material2, 5)
-        );
-        blueprintDummy.setMaterials(materials);
+//        Set<BlueprintMaterial> materials = Set.of(
+//                new BlueprintMaterial(blueprintDummy, material1, 1),
+//                new BlueprintMaterial(blueprintDummy, material2, 5)
+//        );
+        //blueprintDummy.setMaterials(materials);
 
         when(storageServiceMock.getStorageLevel(material1)).thenReturn(1);
         when(storageServiceMock.isAvailable(material1, 1)).thenReturn(true);

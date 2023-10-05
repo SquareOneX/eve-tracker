@@ -1,4 +1,4 @@
-package squareonex.evetracker.bootstrap;
+package squareonex.evetrackerdata.csv;
 
 import org.springframework.boot.CommandLineRunner;
 
