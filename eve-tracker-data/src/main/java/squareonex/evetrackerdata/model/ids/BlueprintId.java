@@ -1,10 +1,12 @@
-package squareonex.evetrackerdata.model;
+package squareonex.evetrackerdata.model.ids;
 
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
+import squareonex.evetrackerdata.model.Activity;
+import squareonex.evetrackerdata.model.Item;
 
 import java.io.Serializable;
 

@@ -2,7 +2,7 @@ package squareonex.evetrackerdata.services.map;
 
 import org.springframework.stereotype.Service;
 import squareonex.evetrackerdata.model.Blueprint;
-import squareonex.evetrackerdata.model.BlueprintId;
+import squareonex.evetrackerdata.model.ids.BlueprintId;
 import squareonex.evetrackerdata.services.ActivityService;
 import squareonex.evetrackerdata.services.BlueprintService;
 

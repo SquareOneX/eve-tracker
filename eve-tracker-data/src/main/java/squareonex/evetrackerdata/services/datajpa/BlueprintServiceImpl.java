@@ -1,7 +1,7 @@
 package squareonex.evetrackerdata.services.datajpa;
 
 import squareonex.evetrackerdata.model.Blueprint;
-import squareonex.evetrackerdata.model.BlueprintId;
+import squareonex.evetrackerdata.model.ids.BlueprintId;
 import squareonex.evetrackerdata.repositories.BlueprintRepository;
 import squareonex.evetrackerdata.services.BlueprintService;
 

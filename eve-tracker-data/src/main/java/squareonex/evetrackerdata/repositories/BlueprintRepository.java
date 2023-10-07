@@ -3,7 +3,7 @@ package squareonex.evetrackerdata.repositories;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import squareonex.evetrackerdata.model.Blueprint;
-import squareonex.evetrackerdata.model.BlueprintId;
+import squareonex.evetrackerdata.model.ids.BlueprintId;
 
 import java.util.Optional;
 

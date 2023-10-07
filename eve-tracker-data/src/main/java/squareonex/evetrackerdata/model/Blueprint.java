@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import squareonex.evetrackerdata.model.ids.BlueprintId;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -23,8 +24,8 @@ public class Blueprint {
     private Set<BlueprintMaterial> materials = new HashSet<>();
 
     public Blueprint() {
-        this.id.itemInfo = new Item();
-        this.id.activity = new Activity();
+        this.id.setItemInfo(new Item());
+        this.id.setActivity(new Activity());
     }
 
     /**
@@ -36,19 +37,19 @@ public class Blueprint {
     }
 
     public Item getItemInfo() {
-        return this.id.itemInfo;
+        return this.id.getItemInfo();
     }
 
     public Activity getActivity() {
-        return this.id.activity;
+        return this.id.getActivity();
     }
 
     public void setItemInfo(Item object) {
-        this.id.itemInfo = object;
+        this.id.setItemInfo(object);
     }
 
     public void setActivity(Activity object) {
-        this.id.activity = object;
+        this.id.setActivity(object);
     }
 
     public void setProducts(Set<BlueprintProduct> products) {
