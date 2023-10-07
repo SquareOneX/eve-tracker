@@ -1,9 +1,6 @@
 package squareonex.evetrackerdata.model.ids;
 
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.*;
 import squareonex.evetrackerdata.model.Blueprint;
 import squareonex.evetrackerdata.model.Item;
@@ -21,12 +18,16 @@ public class BlueprintProductId implements Serializable {
     @NonNull
     @EqualsAndHashCode.Include
     @ManyToOne
-    @JoinColumn(name = "blueprint_id", referencedColumnName = "blueprint_id")
-    @JoinColumn(name = "activity_id", referencedColumnName = "activity_id")
+    @JoinColumns(value = {
+            @JoinColumn(name = "blueprint_id", referencedColumnName = "blueprint_id"),
+            @JoinColumn(name = "activity_id", referencedColumnName = "activity_id")
+    },
+            foreignKey = @ForeignKey(name = "fk_blueprintproducts_blueprints")
+    )
     Blueprint blueprint;
     @NonNull
     @EqualsAndHashCode.Include
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_blueprintproducts_items"))
     Item product;
 }

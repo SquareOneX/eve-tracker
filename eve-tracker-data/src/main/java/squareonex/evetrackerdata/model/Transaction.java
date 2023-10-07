@@ -23,7 +23,7 @@ public class Transaction {
     @Column(name = "qty")
     @NonNull private Integer quantity;
     @ManyToOne
-    @JoinColumn(name = "item_id", referencedColumnName = "id")
+    @JoinColumn(name = "item_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_transactions_items"))
     @NonNull private Item item;
     @Column(name = "price")
     @NonNull private Float price;
