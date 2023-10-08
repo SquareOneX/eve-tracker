@@ -23,4 +23,5 @@ public class BlueprintCopy {
     @NonNull private Float materialModifier = 1.0F;
     @NonNull private Float timeModifier = 1.0F;
     @NonNull private Integer maxRuns;
+    @NonNull private Float blueprintCost;
 }

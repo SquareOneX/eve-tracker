@@ -85,9 +85,9 @@ public class SimpleDataLoader implements BootstrapLoader {
         blueprint1 = blueprintService.save(blueprint1);
         blueprint2 = blueprintService.save(blueprint2);
 
-        BlueprintCopy blueprintCopy1 = blueprintCopyService.save(new BlueprintCopy(blueprint1, 100));
+        BlueprintCopy blueprintCopy1 = blueprintCopyService.save(new BlueprintCopy(blueprint1, 100, 60_000F));
         blueprintCopy1.setMaterialModifier(0.9F);
-        BlueprintCopy blueprintCopy2 = blueprintCopyService.save(new BlueprintCopy(blueprint1, 100));
+        BlueprintCopy blueprintCopy2 = blueprintCopyService.save(new BlueprintCopy(blueprint1, 100, 50_000F));
         blueprintCopy2.setMaterialModifier(0.95F);
 
         /*
