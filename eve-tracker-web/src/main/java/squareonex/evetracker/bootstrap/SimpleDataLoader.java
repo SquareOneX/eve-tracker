@@ -1,6 +1,7 @@
 package squareonex.evetracker.bootstrap;
 
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import squareonex.evetrackerdata.csv.BootstrapLoader;
 import squareonex.evetrackerdata.model.*;
 import squareonex.evetrackerdata.services.*;
@@ -10,6 +11,7 @@ import java.time.Month;
 import java.util.HashSet;
 import java.util.Set;
 
+@Slf4j
 public class SimpleDataLoader implements BootstrapLoader {
     private final ActivityService activityService;
     private final BlueprintService blueprintService;
@@ -36,7 +38,6 @@ public class SimpleDataLoader implements BootstrapLoader {
     @Transactional
     @Override
     public void run(String... args) throws Exception {
-        System.out.println("............Attempting to load boostrap data............");
         /*
             Activities
          */
@@ -51,17 +52,15 @@ public class SimpleDataLoader implements BootstrapLoader {
         manufacturing = activityService.save(manufacturing);
         copying = activityService.save(copying);
 
-        System.out.println("Activities loaded....");
+        log.info(String.format("%d Activity entities loaded", activityService.count()));
 
         /*
             Users
          */
-        User user1 = new User("Sonni Cooper");
-        user1.setId(0L);
 
-        user1 = userService.save(user1);
+        User user1 = userService.save(new User("Sonni Cooper"));
 
-        System.out.println("Users loaded....");
+        log.info(String.format("%d User entities loaded", userService.count()));
 
         /*
             Blueprints
@@ -105,6 +104,8 @@ public class SimpleDataLoader implements BootstrapLoader {
         blueprintCopy1.setMaterialModifier(0.9F);
         BlueprintCopy blueprintCopy2 = blueprintCopyService.save(new BlueprintCopy(blueprint1, 100, 50_000F));
         blueprintCopy2.setMaterialModifier(0.95F);
+
+        log.info(String.format("%d Blueprint entities loaded", blueprintService.count()));
 
         /*
             Items
@@ -161,7 +162,7 @@ public class SimpleDataLoader implements BootstrapLoader {
         material3 = productService.save(material3);
         material4 = productService.save(material4);
 
-        System.out.println("Items loaded....");
+        log.info(String.format("%d Item entities loaded", productService.count()));
 
         /*
             Transactions
@@ -188,7 +189,7 @@ public class SimpleDataLoader implements BootstrapLoader {
         material3.setTransactions(Set.of(transaction3));
         material4.setTransactions(Set.of(transaction4));
 
-        System.out.println("Transactions loaded");
+        log.info(String.format("%d Transaction entities loaded", transactionService.count()));
 
         /*
             Jobs
@@ -203,8 +204,6 @@ public class SimpleDataLoader implements BootstrapLoader {
         job1 = jobService.save(job1);
         job2 = jobService.save(job2);
 
-        System.out.println("Jobs loaded....");
-
-        System.out.println("............Successfully loaded boostrap data............");
+        log.info(String.format("%d Job entities loaded", jobService.count()));
     }
 }

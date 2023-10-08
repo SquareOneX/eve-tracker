@@ -50,6 +50,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public long count() {
-        return 0;
+        return userRepository.count();
     }
 }
