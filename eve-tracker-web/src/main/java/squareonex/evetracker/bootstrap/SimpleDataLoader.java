@@ -17,15 +17,18 @@ public class SimpleDataLoader implements BootstrapLoader {
     private final TransactionService transactionService;
     private final UserService userService;
     private final JobService jobService;
+    private final BlueprintCopyService blueprintCopyService;
 
     public SimpleDataLoader(ActivityService activityService, BlueprintService blueprintService, ProductService productService,
-                            TransactionService transactionService, UserService userService, JobService jobService) {
+                            TransactionService transactionService, UserService userService, JobService jobService,
+                            BlueprintCopyService blueprintCopyService) {
         this.activityService = activityService;
         this.blueprintService = blueprintService;
         this.productService = productService;
         this.transactionService = transactionService;
         this.userService = userService;
         this.jobService = jobService;
+        this.blueprintCopyService = blueprintCopyService;
     }
 
     @Transactional
@@ -82,7 +85,10 @@ public class SimpleDataLoader implements BootstrapLoader {
         blueprint1 = blueprintService.save(blueprint1);
         blueprint2 = blueprintService.save(blueprint2);
 
-        System.out.println("Blueprints loaded....");
+        BlueprintCopy blueprintCopy1 = blueprintCopyService.save(new BlueprintCopy(blueprint1, 100));
+        blueprintCopy1.setMaterialModifier(0.9F);
+        BlueprintCopy blueprintCopy2 = blueprintCopyService.save(new BlueprintCopy(blueprint1, 100));
+        blueprintCopy2.setMaterialModifier(0.95F);
 
         /*
             Items

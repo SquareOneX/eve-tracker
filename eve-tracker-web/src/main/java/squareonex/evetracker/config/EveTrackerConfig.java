@@ -20,8 +20,8 @@ public class EveTrackerConfig {
     @Profile({"default", "simpleBootstrapData"})
     BootstrapLoader simpleDataLoader(ActivityService activityService, BlueprintService blueprintService,
                                      ProductService productService, TransactionService transactionService,
-                                     UserService userService, JobService jobService) {
-        return new SimpleDataLoader(activityService, blueprintService, productService, transactionService, userService, jobService);
+                                     UserService userService, JobService jobService, BlueprintCopyService blueprintCopyService) {
+        return new SimpleDataLoader(activityService, blueprintService, productService, transactionService, userService, jobService, blueprintCopyService);
     }
 
     @Bean(name = "activityService")
@@ -46,6 +46,16 @@ public class EveTrackerConfig {
     @Profile("jpa")
     BlueprintService blueprintJPAService(BlueprintRepository blueprintRepository) {
         return new BlueprintServiceImpl(blueprintRepository);
+    }
+    @Bean(name = "blueprintCopyService")
+    @Profile({"default", "map"})
+    BlueprintCopyService blueprintCopyMapService(){
+        return new BlueprintCopyServiceMapImpl();
+    }
+    @Bean(name = "blueprintCopyService")
+    @Profile("jpa")
+    BlueprintCopyService blueprintCopyJPAService(BlueprintCopyRepository blueprintCopyRepository) {
+        return new BlueprintCopyServiceImpl(blueprintCopyRepository);
     }
 
     @Bean(name = "itemService")
