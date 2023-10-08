@@ -15,6 +15,11 @@ public class UserServiceMapImpl extends AbstractMapService<User, Long> implement
     }
 
     @Override
+    public long count() {
+        return super.count();
+    }
+
+    @Override
     public User findById(Long id) {
         return super.findById(id);
     }

@@ -47,4 +47,9 @@ public class TransactionServiceImpl implements TransactionService {
     public Iterable<Transaction> saveAll(Iterable<Transaction> iterator) {
         return transactionRepository.saveAll(iterator);
     }
+
+    @Override
+    public long count() {
+        return transactionRepository.count();
+    }
 }

@@ -47,4 +47,9 @@ public class ProductServiceImpl implements ProductService {
     public Iterable<Item> saveAll(Iterable<Item> iterator) {
         return itemRepository.saveAll(iterator);
     }
+
+    @Override
+    public long count() {
+        return itemRepository.count();
+    }
 }

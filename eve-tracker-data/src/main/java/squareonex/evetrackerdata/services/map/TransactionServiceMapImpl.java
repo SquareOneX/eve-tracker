@@ -15,6 +15,11 @@ public class TransactionServiceMapImpl extends AbstractMapService<Transaction, L
     }
 
     @Override
+    public long count() {
+        return super.count();
+    }
+
+    @Override
     public Transaction findById(Long id) {
         return super.findById(id);
     }

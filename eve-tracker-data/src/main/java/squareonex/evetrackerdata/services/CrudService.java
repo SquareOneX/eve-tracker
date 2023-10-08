@@ -14,4 +14,6 @@ public interface CrudService<T, ID>{
     void deleteById(ID id);
 
     Iterable<T> saveAll(Iterable<T> iterator);
+
+    long count();
 }

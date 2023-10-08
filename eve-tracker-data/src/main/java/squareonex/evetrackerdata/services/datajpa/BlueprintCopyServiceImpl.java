@@ -47,4 +47,9 @@ public class BlueprintCopyServiceImpl implements BlueprintCopyService {
         blueprintCopyRepository.saveAll(iterator).forEach(set::add);
         return set;
     }
+
+    @Override
+    public long count() {
+        return blueprintCopyRepository.count();
+    }
 }

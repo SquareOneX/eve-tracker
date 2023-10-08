@@ -47,4 +47,9 @@ public class JobServiceImpl implements JobService {
     public Iterable<Job> saveAll(Iterable<Job> iterator) {
         return jobRepository.saveAll(iterator);
     }
+
+    @Override
+    public long count() {
+        return jobRepository.count();
+    }
 }

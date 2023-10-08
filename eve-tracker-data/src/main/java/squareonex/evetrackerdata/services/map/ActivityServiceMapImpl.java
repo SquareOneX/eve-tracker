@@ -49,4 +49,9 @@ public class ActivityServiceMapImpl extends AbstractMapService<Activity, Integer
     public Activity findById(Integer id) {
         return super.findById(id);
     }
+
+    @Override
+    public long count() {
+        return super.count();
+    }
 }

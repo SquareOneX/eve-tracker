@@ -15,6 +15,11 @@ public class JobServiceMapImpl extends AbstractMapService<Job, Long> implements 
     }
 
     @Override
+    public long count() {
+        return super.count();
+    }
+
+    @Override
     public Job findById(Long id) {
         return super.findById(id);
     }

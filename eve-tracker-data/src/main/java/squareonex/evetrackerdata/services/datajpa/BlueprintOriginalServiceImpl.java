@@ -45,4 +45,9 @@ public class BlueprintOriginalServiceImpl implements BlueprintOriginalService {
     public Iterable<BlueprintOriginal> saveAll(Iterable<BlueprintOriginal> iterator) {
         return blueprintOriginalRepository.saveAll(iterator);
     }
+
+    @Override
+    public long count() {
+        return blueprintOriginalRepository.count();
+    }
 }

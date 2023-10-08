@@ -47,4 +47,9 @@ public class UserServiceImpl implements UserService {
     public Iterable<User> saveAll(Iterable<User> iterator) {
         return userRepository.saveAll(iterator);
     }
+
+    @Override
+    public long count() {
+        return 0;
+    }
 }

@@ -48,4 +48,9 @@ public class BlueprintServiceImpl implements BlueprintService {
     public Iterable<Blueprint> saveAll(Iterable<Blueprint> iterator) {
         return blueprintRepository.saveAll(iterator);
     }
+
+    @Override
+    public long count() {
+        return blueprintRepository.count();
+    }
 }

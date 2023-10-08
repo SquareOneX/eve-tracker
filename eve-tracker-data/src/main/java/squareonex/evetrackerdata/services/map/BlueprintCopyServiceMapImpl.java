@@ -15,6 +15,11 @@ public class BlueprintCopyServiceMapImpl extends AbstractMapService<BlueprintCop
     }
 
     @Override
+    public long count() {
+        return super.count();
+    }
+
+    @Override
     public BlueprintCopy findById(Long id) {
         return super.findById(id);
     }

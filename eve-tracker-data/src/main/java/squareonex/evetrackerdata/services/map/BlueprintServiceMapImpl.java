@@ -23,6 +23,11 @@ public class BlueprintServiceMapImpl extends AbstractMapService<Blueprint, Bluep
     }
 
     @Override
+    public long count() {
+        return super.count();
+    }
+
+    @Override
     public void deleteById(BlueprintId id) {
         super.deleteById(id);
     }

@@ -15,6 +15,11 @@ public class BlueprintOriginalServiceMapImpl extends AbstractMapService<Blueprin
     }
 
     @Override
+    public long count() {
+        return super.count();
+    }
+
+    @Override
     public BlueprintOriginal findById(Long id) {
         return super.findById(id);
     }

@@ -14,6 +14,11 @@ public class ProductServiceMapImpl extends AbstractMapService<Item, Long> implem
     }
 
     @Override
+    public long count() {
+        return super.count();
+    }
+
+    @Override
     public void deleteById(Long id) {
         super.deleteById(id);
     }

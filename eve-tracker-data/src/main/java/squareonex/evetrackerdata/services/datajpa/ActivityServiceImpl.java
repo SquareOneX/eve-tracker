@@ -47,4 +47,9 @@ public class ActivityServiceImpl implements ActivityService {
     public Iterable<Activity> saveAll(Iterable<Activity> iterator) {
         return activityRepository.saveAll(iterator);
     }
+
+    @Override
+    public long count() {
+        return activityRepository.count();
+    }
 }
