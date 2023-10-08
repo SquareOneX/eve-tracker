@@ -18,10 +18,11 @@ public class SimpleDataLoader implements BootstrapLoader {
     private final UserService userService;
     private final JobService jobService;
     private final BlueprintCopyService blueprintCopyService;
+    private final BlueprintOriginalService blueprintOriginalService;
 
     public SimpleDataLoader(ActivityService activityService, BlueprintService blueprintService, ProductService productService,
                             TransactionService transactionService, UserService userService, JobService jobService,
-                            BlueprintCopyService blueprintCopyService) {
+                            BlueprintCopyService blueprintCopyService, BlueprintOriginalService blueprintOriginalService) {
         this.activityService = activityService;
         this.blueprintService = blueprintService;
         this.productService = productService;
@@ -29,6 +30,7 @@ public class SimpleDataLoader implements BootstrapLoader {
         this.userService = userService;
         this.jobService = jobService;
         this.blueprintCopyService = blueprintCopyService;
+        this.blueprintOriginalService = blueprintOriginalService;
     }
 
     @Transactional
@@ -38,11 +40,16 @@ public class SimpleDataLoader implements BootstrapLoader {
         /*
             Activities
          */
-        Activity activity1 = new Activity();
-        activity1.setId(1);
-        activity1.setName("Manufacturing");
+        Activity manufacturing = new Activity();
+        manufacturing.setId(1);
+        manufacturing.setName("Manufacturing");
 
-        activity1 = activityService.save(activity1);
+        Activity copying = new Activity();
+        copying.setId(5);
+        copying.setName("Copying");
+
+        manufacturing = activityService.save(manufacturing);
+        copying = activityService.save(copying);
 
         System.out.println("Activities loaded....");
 
@@ -75,15 +82,24 @@ public class SimpleDataLoader implements BootstrapLoader {
 
         Blueprint blueprint1 = new Blueprint();
         Blueprint blueprint2 = new Blueprint();
+        Blueprint blueprint3 = new Blueprint();
 
         blueprint1.setItemInfo(blueprintItem1);
-        blueprint1.setActivity(activity1);
+        blueprint1.setActivity(manufacturing);
 
         blueprint2.setItemInfo(blueprintItem2);
-        blueprint2.setActivity(activity1);
+        blueprint2.setActivity(manufacturing);
+
+        blueprint3.setItemInfo(blueprintItem1);
+        blueprint3.setActivity(copying);
 
         blueprint1 = blueprintService.save(blueprint1);
         blueprint2 = blueprintService.save(blueprint2);
+        blueprint3 = blueprintService.save(blueprint3);
+
+        BlueprintOriginal blueprintOriginal = blueprintOriginalService.save(new BlueprintOriginal(blueprint3, 5.0E07f));
+        blueprintOriginal.setTimeModifier(1F);
+        blueprintOriginal.setMaterialModifier(1F);
 
         BlueprintCopy blueprintCopy1 = blueprintCopyService.save(new BlueprintCopy(blueprint1, 100, 60_000F));
         blueprintCopy1.setMaterialModifier(0.9F);

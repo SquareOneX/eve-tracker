@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString(exclude = {"products", "materials", "copies"})
+@ToString(exclude = {"products", "materials", "copies", "originals"})
 @Entity
 @Table(name = "blueprints")
 public class Blueprint {
@@ -24,6 +24,8 @@ public class Blueprint {
     private Set<BlueprintMaterial> materials = new HashSet<>();
     @OneToMany(mappedBy = "blueprint", cascade = CascadeType.ALL)
     private Set<BlueprintCopy> copies = new HashSet<>();
+    @OneToMany(mappedBy = "blueprint", cascade = CascadeType.ALL)
+    private Set<BlueprintOriginal> originals = new HashSet<>();
 
     public Blueprint() {
         this.id.setItemInfo(new Item());
@@ -73,5 +75,12 @@ public class Blueprint {
             copy.setBlueprint(this);
         }
         this.copies = copies;
+    }
+
+    public void setOriginals(Set<BlueprintOriginal> originals) {
+        for (BlueprintOriginal original : originals) {
+            original.setBlueprint(this);
+        }
+        this.originals = originals;
     }
 }
