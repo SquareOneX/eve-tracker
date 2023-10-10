@@ -18,6 +18,8 @@ public class BlueprintDTO {
     private Long id;
     @CsvBindByName(column = "activityId")
     private Integer activityId;
+    @CsvBindByName(column = "time")
+    private Long time;
 
     BlueprintKey getKey() {
         return new BlueprintKey(this.id, this.activityId);

@@ -6,6 +6,7 @@ import squareonex.evetrackerdata.csv.BootstrapLoader;
 import squareonex.evetrackerdata.model.*;
 import squareonex.evetrackerdata.services.*;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.HashSet;
@@ -85,12 +86,15 @@ public class SimpleDataLoader implements BootstrapLoader {
 
         blueprint1.setItemInfo(blueprintItem1);
         blueprint1.setActivity(manufacturing);
+        blueprint1.setDuration(Duration.ofSeconds(6000));
 
         blueprint2.setItemInfo(blueprintItem2);
         blueprint2.setActivity(manufacturing);
+        blueprint2.setDuration(Duration.ofSeconds(6000));
 
         blueprint3.setItemInfo(blueprintItem1);
         blueprint3.setActivity(copying);
+        blueprint3.setDuration(Duration.ofSeconds(4800));
 
         blueprint1 = blueprintService.save(blueprint1);
         blueprint2 = blueprintService.save(blueprint2);

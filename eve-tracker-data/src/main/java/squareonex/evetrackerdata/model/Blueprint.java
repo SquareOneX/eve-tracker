@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import squareonex.evetrackerdata.model.ids.BlueprintId;
 
+import java.time.Duration;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,7 +27,8 @@ public class Blueprint {
     private Set<BlueprintCopy> copies = new HashSet<>();
     @OneToMany(mappedBy = "blueprint", cascade = CascadeType.ALL)
     private Set<BlueprintOriginal> originals = new HashSet<>();
-
+    @Column(name = "duration")
+    private Duration duration;
     public Blueprint() {
         this.id.setItemInfo(new Item());
         this.id.setActivity(new Activity());
