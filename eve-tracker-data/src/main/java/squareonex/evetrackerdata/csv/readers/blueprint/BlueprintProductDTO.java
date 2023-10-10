@@ -16,4 +16,6 @@ public class BlueprintProductDTO extends BlueprintDTO {
     private Long productId;
     @CsvBindByName(column = "quantity")
     private Integer quantity;
+    @CsvBindByName(column = "probability")
+    private Float probability = 1.0F;
 }

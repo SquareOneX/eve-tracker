@@ -1,5 +1,6 @@
 package squareonex.evetrackerdata.csv.readers.blueprint;
 
+import com.opencsv.CSVReaderBuilder;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import squareonex.evetrackerdata.csv.readers.BlueprintReader;
@@ -11,10 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class BlueprintReaderImpl implements BlueprintReader {
     private final ActivityRepository activityRepository;
@@ -29,7 +27,7 @@ public class BlueprintReaderImpl implements BlueprintReader {
     public List<Blueprint> readAll() throws FileNotFoundException {
         Map<BlueprintKey, Blueprint> blueprints = readBlueprintsToMap();
         Map<BlueprintKey, List<BlueprintMaterialDTO>> materials = readMaterialsToMap();
-        Map<BlueprintKey, List<BlueprintProductDTO>> products = readProductsToMap();
+        Map<BlueprintKey, Set<BlueprintProductDTO>> products = readProductsToMap();
 
         Map<Integer, Activity> activities = new HashMap<>();
         activityRepository.findAll().forEach((a) -> activities.put(a.getId(), a));
@@ -66,7 +64,7 @@ public class BlueprintReaderImpl implements BlueprintReader {
                 }
             }
 
-            List<BlueprintProductDTO> prods = products.get(blueprintKey);
+            Set<BlueprintProductDTO> prods = products.get(blueprintKey);
             if (prods != null) {
                 for (BlueprintProductDTO dto : prods) {
                     Item product = items.get(dto.getProductId());
@@ -75,7 +73,8 @@ public class BlueprintReaderImpl implements BlueprintReader {
                         blueprint.getProducts().clear();
                         break;
                     } else {
-                        blueprint.getProducts().add(new BlueprintProduct(blueprint, product, dto.getQuantity()));
+
+                        blueprint.getProducts().add(new BlueprintProduct(blueprint, product, dto.getQuantity(), dto.getProbability()));
                     }
                 }
             }
@@ -110,13 +109,20 @@ public class BlueprintReaderImpl implements BlueprintReader {
         return materials;
     }
 
-    private Map<BlueprintKey, List<BlueprintProductDTO>> readProductsToMap() throws FileNotFoundException {
+    private Map<BlueprintKey, Set<BlueprintProductDTO>> readProductsToMap() throws FileNotFoundException {
         FileReader reader = new FileReader(getClass().getClassLoader().getResource("industryactivityproducts.csv").getPath());
         CsvToBean<BlueprintProductDTO> productBean = new CsvToBeanBuilder<BlueprintProductDTO>(reader).withType(BlueprintProductDTO.class).withIgnoreLeadingWhiteSpace(true).build();
 
-        Map<BlueprintKey, List<BlueprintProductDTO>> products = new HashMap<>();
+        Map<BlueprintKey, Set<BlueprintProductDTO>> products = new HashMap<>();
         for (BlueprintProductDTO dto : productBean) {
-            if (!products.containsKey(dto.getKey())) products.put(dto.getKey(), new LinkedList<>());
+            if (!products.containsKey(dto.getKey())) products.put(dto.getKey(), new HashSet<>());
+            products.get(dto.getKey()).add(dto);
+        }
+
+        reader = new FileReader(getClass().getClassLoader().getResource("industryactivityprobabilities.csv").getPath());
+        productBean = new CsvToBeanBuilder<BlueprintProductDTO>(reader).withType(BlueprintProductDTO.class).withIgnoreLeadingWhiteSpace(true).build();
+        for (BlueprintProductDTO dto : productBean) {
+            if (!products.containsKey(dto.getKey())) products.put(dto.getKey(), new HashSet<>());
             products.get(dto.getKey()).add(dto);
         }
         return products;

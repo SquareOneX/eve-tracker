@@ -15,7 +15,13 @@ public class BlueprintProduct {
     @EmbeddedId
     private BlueprintProductId id = new BlueprintProductId();
     private Integer quantity;
+    private Float probability = 1F;
 
+    public BlueprintProduct(Blueprint blueprint, Item item, int qty, float probability) {
+        this.id = new BlueprintProductId(blueprint, item);
+        this.quantity = qty;
+        this.probability = probability;
+    }
     public BlueprintProduct(Blueprint blueprint, Item item, int qty) {
         this.id = new BlueprintProductId(blueprint, item);
         this.quantity = qty;
