@@ -15,5 +15,5 @@ public class Activity {
     @Id
     private Integer id;
     private String name;
-    private boolean published;
+    private Boolean published;
 }
