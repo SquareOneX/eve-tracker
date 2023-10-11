@@ -13,6 +13,7 @@ import squareonex.evetrackerdata.model.ids.BlueprintProductId;
 @ToString
 public class BlueprintProduct {
     @EmbeddedId
+    @EqualsAndHashCode.Include
     private BlueprintProductId id = new BlueprintProductId();
     private Integer quantity;
     private Float probability = 1F;

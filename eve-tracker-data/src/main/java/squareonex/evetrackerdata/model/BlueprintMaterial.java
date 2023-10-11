@@ -11,6 +11,7 @@ import squareonex.evetrackerdata.model.ids.BlueprintMaterialId;
 @Table(name = "blueprint_materials")
 public class BlueprintMaterial {
     @EmbeddedId
+    @EqualsAndHashCode.Include
     private BlueprintMaterialId id = new BlueprintMaterialId();
     private Integer quantity;
 
