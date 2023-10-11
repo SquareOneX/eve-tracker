@@ -5,6 +5,6 @@ import lombok.*;
 @Data
 public class UserCommand {
     private Long id;
-    private String name;
+    @NonNull private String name;
     private Long playerId;
 }
