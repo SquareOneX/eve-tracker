@@ -2,9 +2,7 @@ package squareonex.evetracker.commands;
 
 import lombok.*;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 public class UserCommand {
     private Long id;
     private String name;

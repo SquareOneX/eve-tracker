@@ -1,16 +1,14 @@
 package squareonex.evetracker.commands;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.Duration;
 import java.util.HashSet;
 import java.util.Set;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
+@ToString(exclude = {"productCommands", "materialCommands", "copyCommands", "originalCommands"})
+@EqualsAndHashCode(exclude = {"productCommands", "materialCommands", "copyCommands", "originalCommands"})
 public class BlueprintCommand {
     private ActivityCommand activityCommand;
     private ItemCommand itemCommand;

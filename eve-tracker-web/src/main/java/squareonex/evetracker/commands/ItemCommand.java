@@ -1,15 +1,13 @@
 package squareonex.evetracker.commands;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
+@ToString(exclude = {"transactionCommands", "blueprintCommands"})
+@EqualsAndHashCode(exclude = {"transactionCommands", "blueprintCommands"})
 public class ItemCommand {
     private Long id;
     private String name;

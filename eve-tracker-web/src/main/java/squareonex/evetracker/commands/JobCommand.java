@@ -1,14 +1,10 @@
 package squareonex.evetracker.commands;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 public class JobCommand {
     private Long id;
     private ItemCommand itemCommand;

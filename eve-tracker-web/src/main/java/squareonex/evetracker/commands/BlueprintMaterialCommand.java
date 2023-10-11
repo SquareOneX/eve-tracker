@@ -1,12 +1,8 @@
 package squareonex.evetracker.commands;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 public class BlueprintMaterialCommand {
     private BlueprintCommand blueprintCommand;
     private ItemCommand materialCommand;
