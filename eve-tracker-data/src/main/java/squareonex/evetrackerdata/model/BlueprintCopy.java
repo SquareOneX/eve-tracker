@@ -4,8 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Data
-@RequiredArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Entity
 @Table(name = "blueprint_copies")
 public class BlueprintCopy {
@@ -19,9 +18,15 @@ public class BlueprintCopy {
     },
             foreignKey = @ForeignKey(name = "fk_blueprintcopies_blueprints")
     )
-    @NonNull private Blueprint blueprint;
-    @NonNull private Float materialModifier = 1.0F;
-    @NonNull private Float timeModifier = 1.0F;
-    @NonNull private Integer maxRuns;
-    @NonNull private Float blueprintCost;
+    private Blueprint blueprint;
+    private Float materialModifier = 1.0F;
+    private Float timeModifier = 1.0F;
+    private Integer maxRuns;
+    private Float blueprintCost;
+
+    public BlueprintCopy(Blueprint blueprint, Integer maxRuns, Float blueprintCost) {
+        this.blueprint = blueprint;
+        this.maxRuns = maxRuns;
+        this.blueprintCost = blueprintCost;
+    }
 }
