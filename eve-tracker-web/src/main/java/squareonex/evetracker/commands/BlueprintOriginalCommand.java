@@ -5,8 +5,7 @@ import lombok.*;
 @Data
 public class BlueprintOriginalCommand {
     private Long id;
-    private BlueprintCommand blueprintCommand;
-    private Float materialModifier;
-    private Float timeModifier;
+    private Float materialModifier = 1F;
+    private Float timeModifier = 1F;
     private Float blueprintCost;
 }

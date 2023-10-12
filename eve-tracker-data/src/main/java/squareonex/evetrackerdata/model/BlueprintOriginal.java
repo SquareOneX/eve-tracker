@@ -4,8 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Data
-@RequiredArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Entity
 @Table(name = "blueprint_originals")
 public class BlueprintOriginal {
@@ -19,8 +18,13 @@ public class BlueprintOriginal {
     },
             foreignKey = @ForeignKey(name = "fk_blueprintoriginals_blueprints")
     )
-    @NonNull private Blueprint blueprint;
+    private Blueprint blueprint;
     @NonNull private Float materialModifier = 1.0F;
     @NonNull private Float timeModifier = 1.0F;
-    @NonNull private Float blueprintCost;
+    private Float blueprintCost;
+
+    public BlueprintOriginal(Blueprint blueprint, Float blueprintCost) {
+        this.blueprint = blueprint;
+        this.blueprintCost = blueprintCost;
+    }
 }
