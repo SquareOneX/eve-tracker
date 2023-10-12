@@ -4,7 +4,6 @@ import lombok.*;
 
 @Data
 public class BlueprintMaterialCommand {
-    private BlueprintCommand blueprintCommand;
-    private ItemCommand materialCommand;
+    private ItemCommand material;
     private Integer quantity;
 }
