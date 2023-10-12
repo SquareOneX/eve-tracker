@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
-@RequiredArgsConstructor
 @Entity
 @Table(name = "transactions")
 public class Transaction {
@@ -17,14 +16,22 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "date")
-    @NonNull private LocalDateTime date;
+    private LocalDateTime date;
     @Column(name = "is_buy")
-    @NonNull private Boolean isBuy;
+    private Boolean isBuy;
     @Column(name = "qty")
-    @NonNull private Integer quantity;
+    private Integer quantity;
     @ManyToOne
     @JoinColumn(name = "item_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_transactions_items"))
-    @NonNull private Item item;
+    private Item item;
     @Column(name = "price")
-    @NonNull private Float price;
+    private Float price;
+
+    public Transaction(LocalDateTime date, Boolean isBuy, Integer quantity, Item item, Float price) {
+        this.date = date;
+        this.isBuy = isBuy;
+        this.quantity = quantity;
+        this.item = item;
+        this.price = price;
+    }
 }
