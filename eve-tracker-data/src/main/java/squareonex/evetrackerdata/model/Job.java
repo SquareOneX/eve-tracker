@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
-@RequiredArgsConstructor
 @Entity
 @Table(name = "jobs")
 public class Job {
@@ -18,12 +17,19 @@ public class Job {
     private Long id;
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_jobs_items"))
-    @NonNull private Item product;
-    @NonNull private Long quantity;
+    private Item product;
+    private Long quantity;
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_jobs_users"))
-    @NonNull private User user;
+    private User user;
     private LocalDateTime startedTime;
     private LocalDateTime finishedTime;
-    @NonNull private Boolean isInternal;
+    private Boolean isInternal;
+
+    public Job(Item product, Long quantity, User user, Boolean isInternal) {
+        this.product = product;
+        this.quantity = quantity;
+        this.user = user;
+        this.isInternal = isInternal;
+    }
 }
