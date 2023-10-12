@@ -15,7 +15,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Embeddable
 public class BlueprintProductId implements Serializable {
-    @NonNull
     @EqualsAndHashCode.Include
     @ManyToOne
     @JoinColumns(value = {
@@ -25,7 +24,6 @@ public class BlueprintProductId implements Serializable {
             foreignKey = @ForeignKey(name = "fk_blueprintproducts_blueprints")
     )
     Blueprint blueprint;
-    @NonNull
     @EqualsAndHashCode.Include
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_blueprintproducts_items"))
