@@ -13,7 +13,8 @@ public class UserToUserCommand implements Converter<User, UserCommand> {
     public UserCommand convert(User source) {
         if (source == null)
             return null;
-        UserCommand target = new UserCommand(source.getName());
+        UserCommand target = new UserCommand();
+        target.setName(source.getName());
         target.setId(source.getId());
         target.setPlayerId(source.getPlayerId());
         return target;

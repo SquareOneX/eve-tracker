@@ -26,7 +26,7 @@ class UserToUserCommandTest extends ConverterTestTemplate {
     @Test
     @Override
     protected void convertingEmptyObjectShouldReturnEmptyObject() {
-        assertEquals(new UserCommand(USER_NAME), converter.convert(new User(USER_NAME)));
+        assertEquals(new UserCommand(), converter.convert(new User()));
     }
 
     @Test

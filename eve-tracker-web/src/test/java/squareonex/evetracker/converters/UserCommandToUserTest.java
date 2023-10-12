@@ -26,14 +26,14 @@ class UserCommandToUserTest extends ConverterTestTemplate {
     @Test
     @Override
     protected void convertingEmptyObjectShouldReturnEmptyObject() {
-        User converted = converter.convert(new UserCommand(USER_NAME));
+        User converted = converter.convert(new UserCommand());
         assertEquals(new User(), converted);
     }
 
     @Test
     @Override
     protected void convertShouldReturnValidTarget() {
-        UserCommand source = new UserCommand(USER_NAME);
+        UserCommand source = new UserCommand();
         source.setId(USER_ID);
         source.setName(USER_NAME);
         source.setPlayerId(PLAYER_ID);

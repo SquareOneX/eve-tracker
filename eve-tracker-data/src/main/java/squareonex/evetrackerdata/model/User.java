@@ -6,7 +6,6 @@ import lombok.*;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
-@RequiredArgsConstructor
 @Entity
 @Table(name = "users")
 public class User {
@@ -14,7 +13,10 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NonNull
     private String name;
     private Long playerId;
+
+    public User(String name) {
+        this.name = name;
+    }
 }
