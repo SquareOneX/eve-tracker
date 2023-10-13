@@ -3,9 +3,9 @@ package squareonex.evetracker.converters;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import squareonex.evetracker.commands.*;
-import squareonex.evetrackerdata.model.*;
+import squareonex.evetrackerdata.model.Blueprint;
+import squareonex.evetrackerdata.model.BlueprintProduct;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;

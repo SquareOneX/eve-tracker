@@ -8,7 +8,8 @@ import squareonex.evetrackerdata.model.Transaction;
 
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class TransactionCommandToTransactionTest extends ConverterTestTemplate {
     private static final Long TRANS_ID = 0L;

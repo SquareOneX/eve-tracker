@@ -8,10 +8,7 @@ import squareonex.evetrackerdata.model.Activity;
 import squareonex.evetrackerdata.model.Blueprint;
 import squareonex.evetrackerdata.model.Item;
 
-import javax.naming.OperationNotSupportedException;
-
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 class CopyServiceImplTest {

@@ -1,7 +1,11 @@
 package squareonex.evetrackerdata.model;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import squareonex.evetrackerdata.model.ids.BlueprintMaterialId;
 
 @Data

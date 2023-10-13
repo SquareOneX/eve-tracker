@@ -6,7 +6,8 @@ import squareonex.evetracker.commands.BlueprintCopyCommand;
 import squareonex.evetrackerdata.model.Blueprint;
 import squareonex.evetrackerdata.model.BlueprintCopy;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class BlueprintCopyToBlueprintCopyCommandTest extends ConverterTestTemplate {
     private static final Long BPC_ID = 0L;

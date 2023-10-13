@@ -1,6 +1,5 @@
 package squareonex.evetrackerdata.csv.readers.blueprint;
 
-import com.opencsv.CSVReaderBuilder;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import squareonex.evetrackerdata.csv.readers.BlueprintReader;

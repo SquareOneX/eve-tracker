@@ -6,12 +6,12 @@ import squareonex.evetracker.commands.ItemCommand;
 import squareonex.evetrackerdata.model.Blueprint;
 import squareonex.evetrackerdata.model.BlueprintProduct;
 import squareonex.evetrackerdata.model.Item;
-import squareonex.evetrackerdata.model.ids.BlueprintId;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class ItemToItemCommandTest extends ConverterTestTemplate {
     private static final Long ITEM_ID = 0L;

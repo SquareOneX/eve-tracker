@@ -2,7 +2,6 @@ package squareonex.evetrackerdata.csv.readers.activity;
 
 import com.opencsv.bean.BeanVerifier;
 import com.opencsv.exceptions.CsvConstraintViolationException;
-import squareonex.evetrackerdata.model.Activity;
 
 public class ActivityVerifier implements BeanVerifier<ActivityDTO> {
     @Override

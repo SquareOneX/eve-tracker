@@ -2,13 +2,11 @@ package squareonex.evetracker.converters;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import squareonex.evetracker.commands.*;
+import squareonex.evetracker.commands.ItemCommand;
 import squareonex.evetrackerdata.model.Item;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class ItemCommandToItemTest extends ConverterTestTemplate {
     private static final Long ITEM_ID = 0L;

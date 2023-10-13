@@ -1,6 +1,5 @@
 package squareonex.evetracker.converters;
 
-import lombok.NonNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import squareonex.evetracker.commands.JobCommand;
@@ -10,7 +9,8 @@ import squareonex.evetrackerdata.model.User;
 
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class JobToJobCommandTest extends ConverterTestTemplate {
     private static final Long JOB_ID = 0L;

@@ -1,6 +1,6 @@
 package squareonex.evetracker.commands;
 
-import lombok.*;
+import lombok.Data;
 
 import java.time.Duration;
 import java.util.HashSet;

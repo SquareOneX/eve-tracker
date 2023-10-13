@@ -5,7 +5,8 @@ import org.junit.jupiter.api.Test;
 import squareonex.evetracker.commands.UserCommand;
 import squareonex.evetrackerdata.model.User;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class UserToUserCommandTest extends ConverterTestTemplate {
     private static final String USER_NAME = "Player";

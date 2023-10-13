@@ -1,7 +1,6 @@
 package squareonex.evetracker.converters;
 
 import jakarta.annotation.Nullable;
-import lombok.NonNull;
 import lombok.Synchronized;
 import org.springframework.core.convert.converter.Converter;
 import squareonex.evetracker.commands.ItemCommand;

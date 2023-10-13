@@ -7,10 +7,10 @@ import squareonex.evetracker.commands.JobCommand;
 import squareonex.evetracker.commands.UserCommand;
 import squareonex.evetrackerdata.model.Job;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class JobCommandToJobTest extends ConverterTestTemplate {
     private static final Long JOB_ID = 0L;

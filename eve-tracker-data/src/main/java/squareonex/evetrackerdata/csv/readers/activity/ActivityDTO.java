@@ -1,8 +1,10 @@
 package squareonex.evetrackerdata.csv.readers.activity;
 
 import com.opencsv.bean.CsvBindByName;
-import lombok.*;
-import org.springframework.boot.autoconfigure.jms.JmsProperties;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter

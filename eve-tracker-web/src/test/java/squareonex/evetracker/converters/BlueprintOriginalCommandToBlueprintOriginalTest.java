@@ -5,7 +5,8 @@ import org.junit.jupiter.api.Test;
 import squareonex.evetracker.commands.BlueprintOriginalCommand;
 import squareonex.evetrackerdata.model.BlueprintOriginal;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class BlueprintOriginalCommandToBlueprintOriginalTest extends ConverterTestTemplate {
     private static final Long BPO_ID = 0L;

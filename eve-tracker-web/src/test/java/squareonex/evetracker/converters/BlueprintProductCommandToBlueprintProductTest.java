@@ -6,7 +6,8 @@ import squareonex.evetracker.commands.BlueprintProductCommand;
 import squareonex.evetracker.commands.ItemCommand;
 import squareonex.evetrackerdata.model.BlueprintProduct;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class BlueprintProductCommandToBlueprintProductTest extends ConverterTestTemplate {
     private static final Long PRODUCT_ID = 0L;
