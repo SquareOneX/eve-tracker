@@ -3,9 +3,9 @@ package squareonex.evetracker.converters;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import squareonex.evetracker.commands.*;
-import squareonex.evetrackerdata.model.Blueprint;
-import squareonex.evetrackerdata.model.BlueprintProduct;
+import squareonex.evetrackerdata.model.*;
 
+import java.time.Duration;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,6 +21,7 @@ class BlueprintCommandToBlueprintTest extends ConverterTestTemplate {
     private static final Long BPO_ID_2 = 1L;
     private static final Long BPC_ID_1 = 0L;
     private static final Long BPC_ID_2 = 1L;
+    private static final Duration BP_DURATION = Duration.ofHours(2);
 
     BlueprintCommandToBlueprint converter;
 
@@ -45,7 +46,7 @@ class BlueprintCommandToBlueprintTest extends ConverterTestTemplate {
 
     @Test
     protected void convertingEmptyObjectShouldReturnEmptyObject() {
-        assertNotNull(converter.convert(new BlueprintCommand()));
+        assertEquals(new Blueprint(), converter.convert(new BlueprintCommand()));
     }
 
     @Test
@@ -60,8 +61,18 @@ class BlueprintCommandToBlueprintTest extends ConverterTestTemplate {
         assertEquals(BLUEPRINT_ID, converted.getItemInfo().getId());
         assertEquals(ACTIVITY_ID, converted.getActivity().getId());
         for (BlueprintProduct product : converted.getProducts()) {
-            Set.of(PRODUCT_ID_1, PRODUCT_ID_2).contains(product.getProduct().getId());
+            assertTrue(Set.of(PRODUCT_ID_1, PRODUCT_ID_2).contains(product.getProduct().getId()));
         }
+        for (BlueprintMaterial material : converted.getMaterials()) {
+            assertTrue(Set.of(MATERIAL_ID_1, MATERIAL_ID_2).contains(material.getMaterial().getId()));
+        }
+        for (BlueprintOriginal original : converted.getOriginals()) {
+            assertTrue(Set.of(BPO_ID_1, BPO_ID_2).contains(original.getId()));
+        }
+        for (BlueprintCopy copy : converted.getCopies()) {
+            assertTrue(Set.of(BPC_ID_1, BPC_ID_2).contains(copy.getId()));
+        }
+        assertEquals(BP_DURATION, converted.getDuration());
     }
     private BlueprintCommand setUpSource() {
         BlueprintCommand source = new BlueprintCommand();
@@ -104,6 +115,8 @@ class BlueprintCommandToBlueprintTest extends ConverterTestTemplate {
         copyCommand1.setId(BPC_ID_1);
         copyCommand2.setId(BPC_ID_2);
         source.setCopyCommands(Set.of(copyCommand1, copyCommand2));
+
+        source.setDuration(BP_DURATION);
 
         return source;
     }

@@ -6,6 +6,7 @@ import squareonex.evetracker.commands.*;
 import squareonex.evetrackerdata.model.*;
 import squareonex.evetrackerdata.model.ids.BlueprintId;
 
+import java.time.Duration;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,6 +24,7 @@ class BlueprintToBlueprintCommandTest extends ConverterTestTemplate {
     private static final Long BPC_ID_2 = 1L;
     private static final int BPC_QTY = 1;
     private static final float BPC_PROB = 1F;
+    private static final Duration BP_DURATION = Duration.ofHours(2);
     BlueprintToBlueprintCommand converter;
 
     @BeforeEach
@@ -61,7 +63,6 @@ class BlueprintToBlueprintCommandTest extends ConverterTestTemplate {
         for (BlueprintProductCommand command : converted.getProductCommands()) {
             assertTrue(Set.of(PRODUCT_ID_1, PRODUCT_ID_2).contains(command.getProduct().getId()));
         }
-
         for (BlueprintMaterialCommand command : converted.getMaterialCommands()) {
             assertTrue(Set.of(MATERIAL_ID_1, MATERIAL_ID_2).contains(command.getMaterial().getId()));
         }
@@ -71,6 +72,7 @@ class BlueprintToBlueprintCommandTest extends ConverterTestTemplate {
         for (BlueprintCopyCommand command : converted.getCopyCommands()) {
             assertTrue(Set.of(BPC_ID_1, BPC_ID_2).contains(command.getId()));
         }
+        assertEquals(BP_DURATION, converted.getDuration());
 
     }
 
@@ -113,6 +115,8 @@ class BlueprintToBlueprintCommandTest extends ConverterTestTemplate {
         blueprintCopy1.setId(BPC_ID_1);
         blueprintCopy2.setId(BPC_ID_2);
         source.setCopies(Set.of(blueprintCopy1, blueprintCopy2));
+
+        source.setDuration(BP_DURATION);
         return source;
     }
 }

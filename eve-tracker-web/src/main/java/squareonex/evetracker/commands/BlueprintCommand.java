@@ -8,8 +8,8 @@ import java.util.Set;
 
 @Data
 public class BlueprintCommand {
-    private ActivityCommand activityCommand;
-    private ItemCommand itemCommand;
+    private ActivityCommand activityCommand = new ActivityCommand();
+    private ItemCommand itemCommand = new ItemCommand();
     private Duration duration;
     private Set<BlueprintProductCommand> productCommands = new HashSet<>();
     private Set<BlueprintMaterialCommand> materialCommands = new HashSet<>();
