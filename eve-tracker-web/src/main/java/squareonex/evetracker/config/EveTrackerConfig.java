@@ -6,11 +6,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import squareonex.evetracker.bootstrap.SimpleDataLoader;
+import squareonex.evetracker.services.ProductionCostService;
+import squareonex.evetracker.services.ProductionCostServiceImpl;
+import squareonex.evetracker.services.StorageService;
+import squareonex.evetracker.services.StorageServiceMapImpl;
 import squareonex.evetrackerdata.csv.BootstrapLoader;
 import squareonex.evetrackerdata.repositories.*;
 import squareonex.evetrackerdata.services.*;
 import squareonex.evetrackerdata.services.datajpa.*;
-import squareonex.evetrackerdata.services.map.*;
 
 @Configuration
 @EnableJpaRepositories(basePackages = "squareonex.evetrackerdata.repositories")
@@ -24,105 +27,52 @@ public class EveTrackerConfig {
                                      BlueprintOriginalService blueprintOriginalService) {
         return new SimpleDataLoader(activityService, blueprintService, productService, transactionService, userService, jobService, blueprintCopyService, blueprintOriginalService);
     }
-
-    @Bean(name = "activityService")
-    @Profile({"default", "map"})
-    ActivityService activityMapService() {
-        return new ActivityServiceMapImpl();
-    }
-
-    @Bean(name = "activityService")
-    @Profile("jpa")
-    ActivityService activityJPAService(ActivityRepository activityRepository) {
+    @Bean
+    @Profile({"default", "jpa"})
+    ActivityService activityService(ActivityRepository activityRepository) {
         return new ActivityServiceImpl(activityRepository);
     }
-
-    @Bean(name = "blueprintService")
-    @Profile({"default", "map"})
-    BlueprintService blueprintMapService(ActivityService activityService) {
-        return new BlueprintServiceMapImpl(activityService);
-    }
-
-    @Bean(name = "blueprintService")
-    @Profile("jpa")
-    BlueprintService blueprintJPAService(BlueprintRepository blueprintRepository) {
+    @Bean
+    @Profile({"default", "jpa"})
+    BlueprintService blueprintService(BlueprintRepository blueprintRepository) {
         return new BlueprintServiceImpl(blueprintRepository);
     }
-    @Bean(name = "blueprintCopyService")
-    @Profile({"default", "map"})
-    BlueprintCopyService blueprintCopyMapService(){
-        return new BlueprintCopyServiceMapImpl();
-    }
-    @Bean(name = "blueprintCopyService")
-    @Profile("jpa")
-    BlueprintCopyService blueprintCopyJPAService(BlueprintCopyRepository blueprintCopyRepository) {
+    @Bean
+    @Profile({"default", "jpa"})
+    BlueprintCopyService blueprintCopyService(BlueprintCopyRepository blueprintCopyRepository) {
         return new BlueprintCopyServiceImpl(blueprintCopyRepository);
     }
-    @Bean(name = "blueprintOriginalService")
-    @Profile({"default", "map"})
-    BlueprintOriginalService blueprintOriginalMapService() {
-        return new BlueprintOriginalServiceMapImpl();
-    }
-    @Bean(name = "blueprintOriginalService")
-    @Profile("jpa")
-    BlueprintOriginalService blueprintOriginalJPAService(BlueprintOriginalRepository bpoRepository) {
+    @Bean
+    @Profile({"default", "jpa"})
+    BlueprintOriginalService blueprintOriginalService(BlueprintOriginalRepository bpoRepository) {
         return new BlueprintOriginalServiceImpl(bpoRepository);
     }
-    @Bean(name = "itemService")
-    @Profile({"default", "map"})
-    ProductService itemMapService() {
-        return new ProductServiceMapImpl();
-    }
-
-    @Bean(name = "itemService")
-    @Profile("jpa")
-    ProductService itemJPAService(ItemRepository itemRepository) {
+    @Bean
+    @Profile({"default", "jpa"})
+    ProductService productService(ItemRepository itemRepository) {
         return new ProductServiceImpl(itemRepository);
     }
-
-    @Bean
-    StorageService storageService() {
+    @Bean(name = "storageService")
+    StorageService storageMapService() {
         return new StorageServiceMapImpl();
     }
-
     @Bean
     ProductionCostService productionCostService(StorageService storageService) {
         return new ProductionCostServiceImpl(storageService);
     }
-
-    @Bean(name = "transactionService")
-    @Profile({"default", "map"})
-    TransactionService transactionMapService() {
-        return new TransactionServiceMapImpl();
-    }
-
-    @Bean(name = "transactionService")
-    @Profile("jpa")
-    TransactionService transactionJPAService(TransactionRepository transactionRepository) {
+    @Bean
+    @Profile({"default", "jpa"})
+    TransactionService transactionService(TransactionRepository transactionRepository) {
         return new TransactionServiceImpl(transactionRepository);
     }
-
-    @Bean(name = "jobService")
-    @Profile({"default", "map"})
-    JobService jobMapService() {
-        return new JobServiceMapImpl();
-    }
-
-    @Bean(name = "jobService")
-    @Profile("jpa")
-    JobService jobJPAService(JobRepository jobRepository) {
+    @Bean
+    @Profile({"default", "jpa"})
+    JobService jobService(JobRepository jobRepository) {
         return new JobServiceImpl(jobRepository);
     }
-
-    @Bean(name = "userService")
-    @Profile({"default", "map"})
-    UserService userMapService() {
-        return new UserServiceMapImpl();
-    }
-
-    @Bean(name = "userService")
-    @Profile("jpa")
-    UserService userJPAService(UserRepository userRepository) {
+    @Bean
+    @Profile({"default", "jpa"})
+    UserService userService(UserRepository userRepository) {
         return new UserServiceImpl(userRepository);
     }
 }

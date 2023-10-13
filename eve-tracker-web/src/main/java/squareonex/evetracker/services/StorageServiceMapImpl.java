@@ -1,7 +1,6 @@
-package squareonex.evetrackerdata.services.map;
+package squareonex.evetracker.services;
 
 import squareonex.evetrackerdata.model.Item;
-import squareonex.evetrackerdata.services.StorageService;
 
 import java.util.HashMap;
 import java.util.Map;

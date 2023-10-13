@@ -1,4 +1,4 @@
-package squareonex.evetrackerdata.services;
+package squareonex.evetracker.services;
 
 import squareonex.evetrackerdata.model.Item;
 

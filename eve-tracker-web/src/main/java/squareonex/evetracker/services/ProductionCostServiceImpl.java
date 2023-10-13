@@ -1,9 +1,9 @@
-package squareonex.evetrackerdata.services;
+package squareonex.evetracker.services;
 
-import squareonex.evetrackerdata.model.Blueprint;
-import squareonex.evetrackerdata.model.BlueprintMaterial;
+import org.springframework.stereotype.Service;
 import squareonex.evetrackerdata.model.Item;
 
+@Service
 public class ProductionCostServiceImpl implements ProductionCostService {
     private final StorageService storageService;
     public ProductionCostServiceImpl(StorageService storageService) {
