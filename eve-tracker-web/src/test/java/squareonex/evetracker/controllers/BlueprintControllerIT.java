@@ -24,6 +24,6 @@ class BlueprintControllerIT {
     void webPageShouldLoad() throws Exception {
         mockMvc.perform(get("/blueprints"))
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("blueprints", blueprintService.findAll()));
+                .andExpect(model().attribute("blueprints", blueprintService.getBlueprints()));
     }
 }

@@ -16,7 +16,7 @@ public class BlueprintController {
 
     @RequestMapping({"", "index", "index.html"})
     public String list(Model model){
-        model.addAttribute("blueprints", blueprintService.findAll());
+        model.addAttribute("blueprints", blueprintService.getBlueprints());
         return "blueprints/list";
     }
 }

@@ -28,6 +28,6 @@ class BlueprintControllerTest {
         String list = blueprintController.list(modelMock);
 
         assertEquals("blueprints/list", list);
-        verify(modelMock,times(1)).addAttribute("blueprints", blueprintService.findAll());
+        verify(modelMock,times(1)).addAttribute("blueprints", blueprintService.getBlueprints());
     }
 }

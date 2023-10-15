@@ -17,4 +17,8 @@ public abstract class AbstractCrudService<T, Id> {
         repository.findAll().forEach(set::add);
         return set;
     }
+
+    public T findById(Id id) {
+        return repository.findById(id).orElse(null);
+    }
 }

@@ -8,20 +8,15 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.Set;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 class AbstractCrudServiceTest<T, I> {
     AbstractCrudService<T, I> unit;
     @Mock CrudRepository<T, I> repositoryMock;
     @BeforeEach
-    protected void setUp(){
+    void beforeEach(){
         MockitoAnnotations.openMocks(this);
         this.unit = new AbstractCrudService<T, I>(repositoryMock) {
-            @Override
-            public Set<T> findAll() {
-                return super.findAll();
-            }
         };
     }
 
@@ -29,5 +24,12 @@ class AbstractCrudServiceTest<T, I> {
     void findAllShouldCallRepository() {
         Set<T> all = unit.findAll();
         verify(repositoryMock, times(1)).findAll();
+    }
+
+    @Test
+    void findByIdShouldCallRepository() {
+        I id = mock();
+        unit.findById(id);
+        verify(repositoryMock, times(1)).findById(id);
     }
 }
