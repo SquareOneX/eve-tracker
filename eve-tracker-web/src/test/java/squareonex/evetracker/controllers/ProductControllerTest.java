@@ -5,16 +5,16 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.ui.Model;
-import squareonex.evetrackerdata.services.ProductService;
+import squareonex.evetracker.services.ItemService;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 class ProductControllerTest {
     ProductController productController;
     @Mock
-    ProductService productService;
+    ItemService productService;
     @Mock
     Model model;
     @BeforeEach

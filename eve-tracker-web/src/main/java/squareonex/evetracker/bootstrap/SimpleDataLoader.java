@@ -2,9 +2,11 @@ package squareonex.evetracker.bootstrap;
 
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
 import squareonex.evetrackerdata.csv.BootstrapLoader;
 import squareonex.evetrackerdata.model.*;
-import squareonex.evetrackerdata.services.*;
+import squareonex.evetrackerdata.repositories.*;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -12,20 +14,22 @@ import java.time.Month;
 import java.util.HashSet;
 import java.util.Set;
 
+@Service
+@Profile({"default", "simpleBootstrapData"})
 @Slf4j
 public class SimpleDataLoader implements BootstrapLoader {
-    private final ActivityService activityService;
-    private final BlueprintService blueprintService;
-    private final ProductService productService;
-    private final TransactionService transactionService;
-    private final UserService userService;
-    private final JobService jobService;
-    private final BlueprintCopyService blueprintCopyService;
-    private final BlueprintOriginalService blueprintOriginalService;
+    private final ActivityRepository activityService;
+    private final BlueprintRepository blueprintService;
+    private final ItemRepository productService;
+    private final TransactionRepository transactionService;
+    private final UserRepository userService;
+    private final JobRepository jobService;
+    private final BlueprintCopyRepository blueprintCopyService;
+    private final BlueprintOriginalRepository blueprintOriginalService;
 
-    public SimpleDataLoader(ActivityService activityService, BlueprintService blueprintService, ProductService productService,
-                            TransactionService transactionService, UserService userService, JobService jobService,
-                            BlueprintCopyService blueprintCopyService, BlueprintOriginalService blueprintOriginalService) {
+    public SimpleDataLoader(ActivityRepository activityService, BlueprintRepository blueprintService, ItemRepository productService,
+                            TransactionRepository transactionService, UserRepository userService, JobRepository jobService,
+                            BlueprintCopyRepository blueprintCopyService, BlueprintOriginalRepository blueprintOriginalService) {
         this.activityService = activityService;
         this.blueprintService = blueprintService;
         this.productService = productService;

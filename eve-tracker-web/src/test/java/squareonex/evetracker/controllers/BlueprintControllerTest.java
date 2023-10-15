@@ -2,16 +2,12 @@ package squareonex.evetracker.controllers;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.plugins.MockMaker;
 import org.springframework.ui.Model;
-import squareonex.evetrackerdata.services.BlueprintService;
+import squareonex.evetracker.services.BlueprintService;
 
-import javax.lang.model.util.Types;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
