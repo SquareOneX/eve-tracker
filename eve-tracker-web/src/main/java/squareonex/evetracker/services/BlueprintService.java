@@ -9,4 +9,5 @@ import java.util.Set;
 public interface BlueprintService {
     Set<Blueprint> getBlueprints();
     Blueprint findById(BlueprintId blueprintId);
+    Blueprint findByBlueprintIdAndActivityId(Long blueprintId, Integer activityId);
 }

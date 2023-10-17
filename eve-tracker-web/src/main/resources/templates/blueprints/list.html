@@ -11,15 +11,13 @@
         <th>Id</th>
         <th>Name</th>
         <th>Activity</th>
-        <th>Product</th>
+        <th></th>
     </tr>
     <tr th:each="bp: ${blueprints}">
         <td th:text="${bp.itemInfo.id}"></td>
         <td th:text="${bp.itemInfo.name}"></td>
         <td th:text="${bp.activity.name}"></td>
-        <td>
-            <div th:each="prod: ${bp.products}" th:text="${prod.product.name}"></div>
-        </td>
+        <td><a href="#" th:href="@{'/blueprints/' + ${bp.id.itemInfo.id} + '/' + ${bp.id.activity.id} + '/show'}">View</a></td>
     </tr>
 </table>
 </body>

@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'blueprint')}">
+<head>
+    <title th:text="${blueprint.itemInfo.name}">Blueprint Name</title>
+</head>
+<body>
+<div class="container-fluid" style="margin-top: 20px">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="pannel-group">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="panel-title row">
+                            <h1 class="col-md-"
+                                th:text="${blueprint.itemInfo.getName() + ' - ' + blueprint.activity.getName()}">
+                                Blueprint Name - Activity</h1>
+                            <a class="col-md-3" href="#" th:href="@{'/products' + ${blueprint.itemInfo.id} + '/show'}">Go
+                                To Item</a>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h5 th:text="'Base Duration:'">Base Duration:</h5>
+                            </div>
+                            <div class="col-md-9" th:text="'0d 00h 00m'">0d 00h 00m</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h5 th:text="'MarketGroups:'">MarketGroups:</h5>
+                            </div>
+                            <div class="col-md-9">
+                                <ul>
+                                    <li>Market Group 1</li>
+                                    <li>Market Group 2</li>
+                                    <li>Market Group 3</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h5>Group:</h5>
+                            </div>
+                            <div class="col-md-9">
+                                <ul>
+                                    <li>Group 1</li>
+                                    <li>Group 2</li>
+                                    <li>Group 3</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h1 class="panel-title" th:text="'Products'">Products</h1>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Create Job</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="product: ${blueprint.products}">
+                                <th scope="row" th:text="${product.product.name}">Material Name</th>
+                                <td th:text="${#numbers.formatInteger(product.quantity, 1, 'POINT')}">Quantity</td>
+                                <td><a href="#" th:href="@{'/products/' + ${product.product.id} + '/show'}">View</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h1 class="panel-title" th:text="'Materials'">Materials</h1>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Item Info</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="material: ${blueprint.materials}">
+                                <th scope="row" th:text="${material.material.name}">Material Name</th>
+                                <td th:text="${#numbers.formatInteger(material.quantity, 1, 'POINT')}">Quantity</td>
+                                <td><a href="#" th:href="@{'/products/' + ${material.material.id} + '/show'}">View</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="panel panel-primary" th:unless="${blueprint.originals.isEmpty()}">
+                    <div class="panel-heading">
+                        <h1 class="panel-title" th:text="'Blueprint Originals'">Blueprint Originals</h1>
+                    </div>
+                    <div class="panel-body">
+                        <div th:each="original: ${blueprint.originals}" class="row">
+                            <div class="col-md-5">
+                                <h5 th:text="${original.blueprint.itemInfo.name}">BPO Name</h5>
+                            </div>
+                            <div class="col-md-3" th:text="${#numbers.formatDecimal(original.materialModifier, 2, 0)}">
+                                Material Modifier
+                            </div>
+                            <div class="col-md-3" th:text="${#numbers.formatDecimal(original.timeModifier, 2, 0)}">
+                                Time Modifier
+                            </div>
+                            <div class="col-md-1">
+                                <a href="#" th:href="@{'/products/' + ${original.blueprint.itemInfo.id} + '/show'}">View</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h1 class="panel-title" th:text="'Blueprint Copies'">Blueprint Copies</h1>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Runs Remaining</th>
+                                <th scope="col">Material Modifier</th>
+                                <th scope="col">Time Modifier</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="copy: ${blueprint.copies}">
+                                <th scope="row" th:text="${copy.blueprint.itemInfo.getName()}">Blueprint Name</th>
+                                <td th:text="${#numbers.formatInteger(copy.maxRuns, 1, 'POINT')}"> Runs Remaining</td>
+                                <td th:text="${#numbers.formatDecimal(copy.materialModifier, 1, 2, 'POINT')}">Material
+                                    Modifier
+                                </td>
+                                <td th:text="${#numbers.formatDecimal(copy.timeModifier, 1, 2, 'POINT')}">Time
+                                    Modifier
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
