@@ -5,10 +5,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@Slf4j
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
@@ -25,24 +27,35 @@ public class Item {
     private Set<BlueprintProduct> blueprints = new HashSet<>();
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private Set<Transaction> transactions = new HashSet<>();
+    private Float avgCost;
 
     public Item(Long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public Float getAvgCost(){
-        if (transactions.isEmpty())
-            return null;
+    @PreUpdate
+    void preUpdate() {
+        calcAvgCost();
+    }
 
-        float cost = 0.0f;
-        int buyCount = 0;
-        for (Transaction transaction : transactions) {
+    @PrePersist()
+    void prePersist() {
+        calcAvgCost();
+    }
+
+    void calcAvgCost() {
+        Double price = 0D;
+        Long qty = 0L;
+        for (Transaction transaction : this.transactions) {
             if (transaction.getIsBuy()) {
-                cost += transaction.getPrice() / transaction.getQuantity();
-                buyCount++;
+                price += transaction.getPrice();
+                qty += transaction.getQuantity();
             }
         }
-        return cost / buyCount;
+        if (qty > 0) {
+            this.avgCost = (float) (price / qty);
+            log.debug("Updating Item avgCost");
+        }
     }
 }

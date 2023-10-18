@@ -36,4 +36,14 @@ public class Transaction {
         this.item = item;
         this.price = price;
     }
+
+    @PostPersist
+    void postPersist() {
+        this.item.calcAvgCost();
+    }
+
+    @PostUpdate
+    void postUpdate() {
+        this.item.calcAvgCost();
+    }
 }

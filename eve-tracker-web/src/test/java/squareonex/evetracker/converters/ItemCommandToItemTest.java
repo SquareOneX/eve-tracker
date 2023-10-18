@@ -12,6 +12,7 @@ class ItemCommandToItemTest extends ConverterTestTemplate {
     private static final Long ITEM_ID = 0L;
     private static final String ITEM_NAME = "Item";
     private static final Boolean ITEM_PUBBLISHED = true;
+    private static final Float ITEM_AVG_COST = 500_000F;
     ItemCommandToItem converter;
 
     @BeforeEach
@@ -42,6 +43,7 @@ class ItemCommandToItemTest extends ConverterTestTemplate {
         assertEquals(ITEM_ID, converted.getId());
         assertEquals(ITEM_NAME, converted.getName());
         assertEquals(ITEM_PUBBLISHED, converted.getPublished());
+        assertEquals(ITEM_AVG_COST, converted.getAvgCost());
     }
 
     private ItemCommand createSource() {
@@ -49,6 +51,7 @@ class ItemCommandToItemTest extends ConverterTestTemplate {
         source.setId(ITEM_ID);
         source.setName(ITEM_NAME);
         source.setPublished(ITEM_PUBBLISHED);
+        source.setAvgCost(ITEM_AVG_COST);
 
         return source;
     }

@@ -7,4 +7,5 @@ public class ItemCommand {
     private Long id;
     private String name;
     private Boolean published;
+    private Float avgCost;
 }

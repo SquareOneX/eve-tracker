@@ -6,3 +6,7 @@ spring:
     url: jdbc:h2:mem:testdb
   profiles:
     active: jpa,simpleBootstrapData
+logging:
+  level:
+    squareonex.evetracker: DEBUG
+    squareonex.evetrackerdata: DEBUG

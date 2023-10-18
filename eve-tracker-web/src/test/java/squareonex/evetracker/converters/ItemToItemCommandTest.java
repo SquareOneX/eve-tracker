@@ -18,6 +18,7 @@ class ItemToItemCommandTest extends ConverterTestTemplate {
     private static final Boolean ITEM_PUBLISHED = true;
     private static final String ITEM_NAME = "item";
     private static final Long BLUEPRINT_ID = 1L;
+    private static final Float ITEM_AVG_COST = 500_000F;
     ItemToItemCommand converter;
     @BeforeEach
     void setUp() {
@@ -46,6 +47,7 @@ class ItemToItemCommandTest extends ConverterTestTemplate {
         assertEquals(ITEM_ID, converted.getId());
         assertEquals(ITEM_PUBLISHED, converted.getPublished());
         assertEquals(ITEM_NAME, converted.getName());
+        assertEquals(ITEM_AVG_COST, converted.getAvgCost());
     }
 
     private Item createSource() {
@@ -58,6 +60,7 @@ class ItemToItemCommandTest extends ConverterTestTemplate {
         blueprint.setItemInfo(new Item(BLUEPRINT_ID, null));
         blueprints.add(new BlueprintProduct(blueprint, source, 1));
         source.setBlueprints(blueprints);
+        source.setAvgCost(ITEM_AVG_COST);
         return source;
     }
 }

@@ -19,6 +19,7 @@ public class ItemToItemCommand implements Converter<Item, ItemCommand> {
         target.setId(source.getId());
         target.setName(source.getName());
         target.setPublished(source.getPublished());
+        target.setAvgCost(source.getAvgCost());
         return target;
     }
 }

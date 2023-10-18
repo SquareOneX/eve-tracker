@@ -209,19 +209,10 @@ public class SimpleDataLoader implements BootstrapLoader {
 
         LocalDateTime time = LocalDateTime.of(2023, Month.OCTOBER, 5, 13, 8);
 
-        Transaction transaction1 = new Transaction(time, true, 64_000, material1, 273_280.0f);
-        transaction1.setId(0L);
-        Transaction transaction2 = new Transaction(time, true, 12_000, material2, 124_320.0f);
-        transaction2.setId(1L);
-        Transaction transaction3 = new Transaction(time, true, 5_000, material3, 245_000.0f);
-        transaction3.setId(2L);
-        Transaction transaction4 = new Transaction(time, true, 1_000, material4, 465_000.0f);
-        transaction4.setId(3L);
-
-        transaction1 = transactionService.save(transaction1);
-        transaction2 = transactionService.save(transaction2);
-        transaction3 = transactionService.save(transaction3);
-        transaction4 = transactionService.save(transaction4);
+        Transaction transaction1 = transactionService.save(new Transaction(time, true, 64_000, material1, 273_280.0f));
+        Transaction transaction2 = transactionService.save(new Transaction(time, true, 12_000, material2, 124_320.0f));
+        Transaction transaction3 = transactionService.save(new Transaction(time, true, 5_000, material3, 245_000.0f));
+        Transaction transaction4 = transactionService.save(new Transaction(time, true, 1_000, material4, 465_000.0f));
 
         material1.setTransactions(Set.of(transaction1));
         material2.setTransactions(Set.of(transaction2));
