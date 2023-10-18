@@ -3,11 +3,13 @@ package squareonex.evetracker.converters;
 import jakarta.annotation.Nullable;
 import lombok.Synchronized;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 import squareonex.evetracker.commands.ItemCommand;
 import squareonex.evetracker.commands.TransactionCommand;
 import squareonex.evetrackerdata.model.Item;
 import squareonex.evetrackerdata.model.Transaction;
 
+@Component
 public class TransactionToTransactionCommand implements Converter<Transaction, TransactionCommand> {
     private final Converter<Item, ItemCommand> itemToItemCommand;
 
@@ -21,7 +23,7 @@ public class TransactionToTransactionCommand implements Converter<Transaction, T
     public TransactionCommand convert(Transaction source) {
         if (source == null)
             return null;
-        TransactionCommand target = new TransactionCommand();
+        final TransactionCommand target = new TransactionCommand();
         target.setId(source.getId());
         target.setDate(source.getDate());
         target.setPrice(source.getPrice());

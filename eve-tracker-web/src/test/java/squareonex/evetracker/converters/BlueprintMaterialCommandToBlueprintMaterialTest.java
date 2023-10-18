@@ -15,7 +15,7 @@ class BlueprintMaterialCommandToBlueprintMaterialTest extends ConverterTestTempl
     BlueprintMaterialCommandToBlueprintMaterial converter;
     @BeforeEach
     void setUp() {
-        this.converter = new BlueprintMaterialCommandToBlueprintMaterial();
+        this.converter = new BlueprintMaterialCommandToBlueprintMaterial(new ItemCommandToItem());
     }
 
     @Test

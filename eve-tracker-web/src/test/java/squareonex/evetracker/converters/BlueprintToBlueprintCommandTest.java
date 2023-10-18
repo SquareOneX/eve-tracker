@@ -29,12 +29,13 @@ class BlueprintToBlueprintCommandTest extends ConverterTestTemplate {
 
     @BeforeEach
     void setUp() {
+        ItemToItemCommand itemToItemCommand = new ItemToItemCommand();
         this.converter = new BlueprintToBlueprintCommand(
                 new ActivityToActivityCommand(),
-                new ItemToItemCommand(),
+                itemToItemCommand,
                 new BlueprintCopyToBlueprintCopyCommand(),
-                new BlueprintProductToBlueprintProductCommand(new ItemToItemCommand()),
-                new BlueprintMaterialToBlueprintMaterialCommand(),
+                new BlueprintProductToBlueprintProductCommand(itemToItemCommand),
+                new BlueprintMaterialToBlueprintMaterialCommand(itemToItemCommand),
                 new BlueprintOriginalToBlueprintOriginalCommand()
         );
     }

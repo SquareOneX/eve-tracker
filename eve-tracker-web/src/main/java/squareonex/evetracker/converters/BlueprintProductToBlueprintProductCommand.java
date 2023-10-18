@@ -3,11 +3,13 @@ package squareonex.evetracker.converters;
 import jakarta.annotation.Nullable;
 import lombok.Synchronized;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 import squareonex.evetracker.commands.BlueprintProductCommand;
 import squareonex.evetracker.commands.ItemCommand;
 import squareonex.evetrackerdata.model.BlueprintProduct;
 import squareonex.evetrackerdata.model.Item;
 
+@Component
 public class BlueprintProductToBlueprintProductCommand implements Converter<BlueprintProduct, BlueprintProductCommand> {
     private final Converter<Item, ItemCommand> itemToItemCommand;
 

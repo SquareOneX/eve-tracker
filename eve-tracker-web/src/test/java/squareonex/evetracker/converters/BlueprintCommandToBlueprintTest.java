@@ -30,7 +30,7 @@ class BlueprintCommandToBlueprintTest extends ConverterTestTemplate {
         this.converter = new BlueprintCommandToBlueprint(
                 new BlueprintCopyCommandToBlueprintCopy(),
                 new BlueprintOriginalCommandToBlueprintOriginal(),
-                new BlueprintMaterialCommandToBlueprintMaterial(),
+                new BlueprintMaterialCommandToBlueprintMaterial(new ItemCommandToItem()),
                 new BlueprintProductCommandToBlueprintProduct(
                         new ItemCommandToItem()
                 ),

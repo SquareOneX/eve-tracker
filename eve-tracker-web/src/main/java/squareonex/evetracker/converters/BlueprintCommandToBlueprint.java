@@ -3,6 +3,7 @@ package squareonex.evetracker.converters;
 import jakarta.annotation.Nullable;
 import lombok.Synchronized;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 import squareonex.evetracker.commands.*;
 import squareonex.evetrackerdata.model.*;
 import squareonex.evetrackerdata.model.ids.BlueprintId;
@@ -10,6 +11,7 @@ import squareonex.evetrackerdata.model.ids.BlueprintId;
 import java.util.HashSet;
 import java.util.Set;
 
+@Component
 public class BlueprintCommandToBlueprint implements Converter<BlueprintCommand, Blueprint> {
     private final Converter<BlueprintCopyCommand, BlueprintCopy> copyCommandToCopy;
     private final Converter<BlueprintOriginalCommand, BlueprintOriginal> originalCommandToOriginal;
@@ -43,21 +45,13 @@ public class BlueprintCommandToBlueprint implements Converter<BlueprintCommand, 
         final Blueprint target = new Blueprint();
         target.setId(new BlueprintId(new Item(), new Activity()));
 
-        Set<BlueprintCopy> copyTargets = new HashSet<>();
-        source.getCopyCommands().forEach((command) -> copyTargets.add(copyCommandToCopy.convert(command)));
-        target.setCopies(copyTargets);
+        source.getCopyCommands().forEach((command) -> target.getCopies().add(copyCommandToCopy.convert(command)));
 
-        Set<BlueprintOriginal> originalTargets = new HashSet<>();
-        source.getOriginalCommands().forEach((command) -> originalTargets.add(originalCommandToOriginal.convert(command)));
-        target.setOriginals(originalTargets);
+        source.getOriginalCommands().forEach((command) -> target.getOriginals().add(originalCommandToOriginal.convert(command)));
 
-        Set<BlueprintMaterial> materialTargets = new HashSet<>();
-        source.getMaterialCommands().forEach((command) -> materialTargets.add(materialCommandToMaterial.convert(command)));
-        target.setMaterials(materialTargets);
+        source.getMaterialCommands().forEach((command) -> target.getMaterials().add(materialCommandToMaterial.convert(command)));
 
-        Set<BlueprintProduct> productTargets = new HashSet<>();
-        source.getProductCommands().forEach((command) -> productTargets.add(productCommandToProduct.convert(command)));
-        target.setProducts(productTargets);
+        source.getProductCommands().forEach((command) -> target.getProducts().add(productCommandToProduct.convert(command)));
 
         target.setActivity(activityCommandToActivity.convert(source.getActivityCommand()));
         target.setItemInfo(itemCommandToItem.convert(source.getItemCommand()));

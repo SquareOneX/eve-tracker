@@ -1,9 +1,13 @@
 package squareonex.evetracker.converters;
 
+import jakarta.annotation.Nullable;
+import lombok.Synchronized;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 import squareonex.evetracker.commands.*;
 import squareonex.evetrackerdata.model.*;
 
+@Component
 public class BlueprintToBlueprintCommand implements Converter<Blueprint, BlueprintCommand> {
     private final Converter<Activity, ActivityCommand> activityToActivityCommand;
     private final Converter<Item, ItemCommand> itemToItemCommand;
@@ -21,11 +25,13 @@ public class BlueprintToBlueprintCommand implements Converter<Blueprint, Bluepri
         this.originalToOriginalCommand = originalToOriginalCommand;
     }
 
+    @Nullable
+    @Synchronized
     @Override
     public BlueprintCommand convert(Blueprint source) {
         if (source == null)
             return null;
-        BlueprintCommand target = new BlueprintCommand();
+        final BlueprintCommand target = new BlueprintCommand();
         target.setActivityCommand(activityToActivityCommand.convert(source.getActivity()));
         target.setItemCommand(itemToItemCommand.convert(source.getItemInfo()));
 

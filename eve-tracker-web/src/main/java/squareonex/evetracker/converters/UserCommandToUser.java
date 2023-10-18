@@ -3,9 +3,11 @@ package squareonex.evetracker.converters;
 import jakarta.annotation.Nullable;
 import lombok.Synchronized;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 import squareonex.evetracker.commands.UserCommand;
 import squareonex.evetrackerdata.model.User;
 
+@Component
 public class UserCommandToUser implements Converter<UserCommand, User> {
     @Synchronized
     @Nullable
