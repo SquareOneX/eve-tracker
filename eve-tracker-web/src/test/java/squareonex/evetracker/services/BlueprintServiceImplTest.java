@@ -15,6 +15,7 @@ import squareonex.evetrackerdata.repositories.ItemRepository;
 
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 class BlueprintServiceImplTest {
@@ -55,5 +56,13 @@ class BlueprintServiceImplTest {
         verify(activityRepositoryMock, times(1)).findById(ACTIVITY_ID);
         verify(itemRepositoryMock, times(1)).findById(BLUEPRINT_ID);
         verify(blueprintRepositoryMock, times(1)).findById(blueprintId);
+    }
+
+    @Test
+    void findByIdShouldReturnBlueprintOrNull() {
+        BlueprintId id = new BlueprintId();
+        assertNull(blueprintService.findById(id));
+
+        verify(blueprintRepositoryMock, times(1)).findById(any(BlueprintId.class));
     }
 }

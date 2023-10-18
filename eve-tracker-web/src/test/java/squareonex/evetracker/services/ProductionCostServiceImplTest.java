@@ -46,8 +46,6 @@ class ProductionCostServiceImplTest {
         Mockito.when(storageServiceMock.isAvailable(material1, 1)).thenReturn(true);
         Mockito.when(storageServiceMock.getStorageLevel(material2)).thenReturn(5);
         Mockito.when(storageServiceMock.isAvailable(material2, 5)).thenReturn(true);
-        System.out.println(productDummy);
-        System.out.println(blueprintDummy);
     }
 
     @Test

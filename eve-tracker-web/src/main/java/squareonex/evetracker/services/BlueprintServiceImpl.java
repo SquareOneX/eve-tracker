@@ -9,25 +9,32 @@ import squareonex.evetrackerdata.repositories.ActivityRepository;
 import squareonex.evetrackerdata.repositories.BlueprintRepository;
 import squareonex.evetrackerdata.repositories.ItemRepository;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
 @Service
-public class BlueprintServiceImpl extends AbstractCrudService<Blueprint, BlueprintId> implements BlueprintService {
+public class BlueprintServiceImpl implements BlueprintService {
+    private final BlueprintRepository blueprintRepository;
     private final ItemRepository itemRepository;
     private final ActivityRepository activityRepository;
     public BlueprintServiceImpl(BlueprintRepository blueprintRepository, ItemRepository itemRepository, ActivityRepository activityRepository) {
-        super(blueprintRepository);
+        this.blueprintRepository = blueprintRepository;
         this.itemRepository = itemRepository;
         this.activityRepository = activityRepository;
     }
 
-    @Override
     public Set<Blueprint> getBlueprints() {
-        return super.findAll();
+        Set<Blueprint> set = new HashSet<>();
+        blueprintRepository.findAll().forEach(set::add);
+        return set;
     }
 
     @Override
+    public Blueprint findById(BlueprintId blueprintId) {
+        return blueprintRepository.findById(blueprintId).orElse(null);
+    }
+
     public Blueprint findByBlueprintIdAndActivityId(Long blueprintId, Integer activityId) {
         Optional<Item> optionalItem = itemRepository.findById(blueprintId);
         Optional<Activity> optionalActivity = activityRepository.findById(activityId);
@@ -37,7 +44,7 @@ public class BlueprintServiceImpl extends AbstractCrudService<Blueprint, Bluepri
         if (optionalActivity.isEmpty())
             throw new IllegalArgumentException("Activity with item id = " + activityId + " not found");
         BlueprintId id = new BlueprintId(optionalItem.get(), optionalActivity.get());
-        Optional<Blueprint> blueprint = repository.findById(id);
+        Optional<Blueprint> blueprint = blueprintRepository.findById(id);
         return blueprint.orElse(null);
     }
 }
