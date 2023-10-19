@@ -10,3 +10,7 @@ logging:
   level:
     squareonex.evetracker: DEBUG
     squareonex.evetrackerdata: DEBUG
+server:
+  error:
+    whitelabel:
+      enabled: false
