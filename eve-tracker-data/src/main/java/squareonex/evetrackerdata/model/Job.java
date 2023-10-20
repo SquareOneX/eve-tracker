@@ -26,7 +26,7 @@ public class Job {
     private User user;
     private LocalDateTime startedTime;
     private LocalDateTime finishedTime;
-    private Boolean isInternal;
+    private Boolean isInternal = false;
 
     public Job(Item product, Long quantity, User user, Boolean isInternal) {
         this.product = product;

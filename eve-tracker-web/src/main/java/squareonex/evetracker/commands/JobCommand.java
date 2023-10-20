@@ -12,5 +12,5 @@ public class JobCommand {
     private UserCommand userCommand;
     private LocalDateTime startedTime;
     private LocalDateTime finishedTime;
-    private Boolean isInternal;
+    private Boolean isInternal = false;
 }

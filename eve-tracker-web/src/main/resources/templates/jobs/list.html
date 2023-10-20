@@ -5,7 +5,14 @@
     <title>Job Index</title>
 </head>
 <body>
-<h2 th:text="'List of Jobs'">List of Jobs</h2>
+<div class="row">
+    <div class="col-md-10">
+        <h2 th:text="'List of Jobs'">List of Jobs</h2>
+    </div>
+    <div class="col-md-2">
+        <h2><a href="/jobs/new" class="ui-button">Create New</a></h2>
+    </div>
+</div>
 <table class="table table-striped">
     <tr>
         <th>Id</th>
