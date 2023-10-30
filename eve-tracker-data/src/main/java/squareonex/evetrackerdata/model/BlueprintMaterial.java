@@ -19,16 +19,16 @@ public class BlueprintMaterial {
     private BlueprintMaterialId id = new BlueprintMaterialId();
     private Integer quantity;
 
-    public BlueprintMaterial(Blueprint blueprint, Item material, Integer quantity) {
+    public BlueprintMaterial(BlueprintAction blueprint, Item material, Integer quantity) {
         this.id = new BlueprintMaterialId(blueprint, material);
         this.quantity = quantity;
     }
 
-    public Blueprint getBlueprint() {
+    public BlueprintAction getBlueprint() {
         return this.id.getBlueprint();
     }
 
-    public void setBlueprint(Blueprint blueprint) {
+    public void setBlueprint(BlueprintAction blueprint) {
         this.id.setBlueprint(blueprint);
     }
 

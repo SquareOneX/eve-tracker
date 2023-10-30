@@ -3,12 +3,7 @@ package squareonex.evetracker.converters;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import squareonex.evetracker.commands.ItemCommand;
-import squareonex.evetrackerdata.model.Blueprint;
-import squareonex.evetrackerdata.model.BlueprintProduct;
 import squareonex.evetrackerdata.model.Item;
-
-import java.util.HashSet;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -55,11 +50,6 @@ class ItemToItemCommandTest extends ConverterTestTemplate {
         source.setId(ITEM_ID);
         source.setPublished(ITEM_PUBLISHED);
         source.setName(ITEM_NAME);
-        Set<BlueprintProduct> blueprints = new HashSet<>();
-        Blueprint blueprint = new Blueprint();
-        blueprint.setItemInfo(new Item(BLUEPRINT_ID, null));
-        blueprints.add(new BlueprintProduct(blueprint, source, 1));
-        source.setBlueprints(blueprints);
         source.setAvgCost(ITEM_AVG_COST);
         return source;
     }

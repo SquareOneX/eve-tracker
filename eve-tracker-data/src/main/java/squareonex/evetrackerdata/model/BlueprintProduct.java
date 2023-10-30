@@ -6,36 +6,27 @@ import jakarta.persistence.Table;
 import lombok.*;
 import squareonex.evetrackerdata.model.ids.BlueprintProductId;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode
 @Entity
 @Table(name = "blueprint_products")
 @ToString
 public class BlueprintProduct {
     @EmbeddedId
-    @EqualsAndHashCode.Include
+    @Setter(value = AccessLevel.PRIVATE)
     private BlueprintProductId id = new BlueprintProductId();
     private Integer quantity;
     private Float probability = 1F;
 
-    public BlueprintProduct(Blueprint blueprint, Item item, int qty, float probability) {
-        this.id = new BlueprintProductId(blueprint, item);
-        this.quantity = qty;
-        this.probability = probability;
-    }
-    public BlueprintProduct(Blueprint blueprint, Item item, int qty) {
-        this.id = new BlueprintProductId(blueprint, item);
-        this.quantity = qty;
-    }
-
-    public Blueprint getBlueprint() {
+    public BlueprintAction getBlueprintAction() {
         return this.id.getBlueprint();
     }
 
-    public void setBlueprint(Blueprint blueprint) {
+    public void setBlueprintAction(BlueprintAction blueprint) {
         this.id.setBlueprint(blueprint);
+        blueprint.getProducts().add(this);
     }
 
     public Item getProduct() {
@@ -44,5 +35,6 @@ public class BlueprintProduct {
 
     public void setProduct(Item product) {
         this.id.setProduct(product);
+        product.getBlueprints().add(this);
     }
 }

@@ -13,12 +13,7 @@ public class BlueprintCopy {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @ManyToOne
-    @JoinColumns(value = {
-            @JoinColumn(name = "blueprint_id", referencedColumnName = "blueprint_id"),
-            @JoinColumn(name = "activity_id", referencedColumnName = "activity_id")
-    },
-            foreignKey = @ForeignKey(name = "fk_blueprintcopies_blueprints")
-    )
+    @JoinColumn(name = "blueprint_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_blueprintcopies_blueprints"))
     private Blueprint blueprint;
     private Float materialModifier = 1.0F;
     private Float timeModifier = 1.0F;
