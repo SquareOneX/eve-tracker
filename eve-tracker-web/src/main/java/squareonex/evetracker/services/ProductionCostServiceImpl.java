@@ -17,7 +17,7 @@ public class ProductionCostServiceImpl implements ProductionCostService {
             return null;
         else{
             double cost = 0;
-            for (BlueprintMaterial material : product.getBlueprint().getMaterials()) {
+            for (BlueprintMaterial material : product.getBlueprintAction().getMaterials()) {
                 if(!storageService.isAvailable(material.getMaterial(), material.getQuantity()))
                     return null;
                 cost += material.getQuantity() * material.getMaterial().getAvgCost();

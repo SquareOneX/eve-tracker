@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'owners')}">
+<html lang="en" xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'blueprintActions')}">
 <head>
     <meta charset="UTF-8">
     <title>List of Blueprints</title>
@@ -13,11 +13,12 @@
         <th>Activity</th>
         <th></th>
     </tr>
-    <tr th:each="bp: ${blueprints}">
-        <td th:text="${bp.itemInfo.id}"></td>
-        <td th:text="${bp.itemInfo.name}"></td>
-        <td th:text="${bp.activity.name}"></td>
-        <td><a href="#" th:href="@{'/blueprints/' + ${bp.id.itemInfo.id} + '/' + ${bp.id.activity.id} + '/show'}">View</a></td>
+    <!--/*@thymesVar id="blueprint" type="squareonex.evetrackerdata.model.BlueprintAction"*/-->
+    <tr th:each="action: ${blueprintActions}">
+        <td th:text="${action.blueprint.id}"></td>
+        <td th:text="${action.blueprint.name}"></td>
+        <td th:text="${action.activity.name}"></td>
+        <td><a href="#" th:href="@{'/blueprints/' + ${action.blueprint.id} + '/' + ${action.activity.id} + '/show'}">View</a></td>
     </tr>
 </table>
 </body>

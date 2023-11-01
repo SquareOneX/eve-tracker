@@ -5,9 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 import squareonex.evetracker.services.BlueprintService;
 import squareonex.evetrackerdata.model.Blueprint;
-import squareonex.evetrackerdata.model.ids.BlueprintId;
+import squareonex.evetrackerdata.model.BlueprintAction;
+import squareonex.evetrackerdata.model.ids.BlueprintActionId;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -27,24 +29,26 @@ class BlueprintControllerIT {
     void webPageShouldLoad() throws Exception {
         mockMvc.perform(get("/blueprints"))
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("blueprints", blueprintService.getBlueprints()));
+                .andExpect(model().attribute("blueprintActions", blueprintService.getBlueprintActions()));
     }
 
     @Test
+    @Transactional
     void showBlueprintShouldLoad() throws Exception {
-        Blueprint blueprint = blueprintService.getBlueprints().iterator().next();
-        assertNotNull(blueprint);
-        Long blueprintId = blueprint.getItemInfo().getId();
-        Integer activityId = blueprint.getActivity().getId();
+        BlueprintAction blueprintAction = blueprintService.getBlueprints().iterator().next().getActions().iterator().next();
+        assertNotNull(blueprintAction);
+        Long blueprintId = blueprintAction.getBlueprint().getId();
+        Integer activityId = blueprintAction.getActivity().getId();
+        //I know this is hideous code but this is only a test :)
 
         mockMvc.perform(get("/blueprints/" + blueprintId + "/" + activityId + "/show"))
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("blueprint", blueprint));
+                .andExpect(model().attribute("blueprint", blueprintAction));
     }
 
     @Test
     void showBlueprintByIdShouldThrow404NotFound() throws Exception {
-        mockMvc.perform(get("/blueprints/420/1/show"))
+        mockMvc.perform(get("/blueprints/101/1/show"))
                 .andExpect(status().isNotFound());
     }
 

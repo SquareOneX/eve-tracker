@@ -16,7 +16,6 @@ import squareonex.evetrackerdata.repositories.ItemRepository;
 import squareonex.evetrackerdata.repositories.JobRepository;
 import squareonex.evetrackerdata.repositories.UserRepository;
 
-import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 
@@ -68,7 +67,7 @@ class JobServiceImplTest {
     void saveOrUpdateCommand() {
         JobCommand jobCommand = createJobCommand();
         Item item = new Item();
-        item.setBlueprints(Set.of(new BlueprintProduct(null, null, null)));
+        item.setBlueprints(Set.of(new BlueprintProduct()));
         doAnswer(invocation -> invocation.getArgument(0)).when(jobRepositoryMock).save(any(Job.class));
         doReturn(Optional.of(item)).when(itemRepository).findByNameIgnoreCase(ITEM_NAME);
         doReturn(Optional.of(new User())).when(userRepository).findByNameIgnoreCase(USER_NAME);

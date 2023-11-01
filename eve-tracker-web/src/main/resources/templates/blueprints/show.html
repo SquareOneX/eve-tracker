@@ -1,7 +1,8 @@
 <!doctype html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'blueprint')}">
+<!--/*@thymesVar id="blueprint" type="squareonex.evetrackerdata.model.BlueprintAction"*/-->
 <head>
-    <title th:text="${blueprint.itemInfo.name}">Blueprint Name</title>
+    <title th:text="${blueprint.blueprint.name}">Blueprint Name</title>
 </head>
 <body>
 <div class="container-fluid" style="margin-top: 20px">
@@ -12,9 +13,9 @@
                     <div class="panel-heading">
                         <div class="panel-title row">
                             <h1 class="col-md-"
-                                th:text="${blueprint.itemInfo.getName() + ' - ' + blueprint.activity.getName()}">
+                                th:text="${blueprint.blueprint.name + ' - ' + blueprint.activity.name}">
                                 Blueprint Name - Activity</h1>
-                            <a class="col-md-3" href="#" th:href="@{'/products' + ${blueprint.itemInfo.id} + '/show'}">Go
+                            <a class="col-md-3" href="#" th:href="@{'/products' + ${blueprint.blueprint.id} + '/show'}">Go
                                 To Item</a>
                         </div>
                     </div>
@@ -99,14 +100,14 @@
                         </table>
                     </div>
                 </div>
-                <div class="panel panel-primary" th:unless="${blueprint.originals.isEmpty()}">
+                <div class="panel panel-primary" th:unless="${blueprint.blueprint.originals.isEmpty()}">
                     <div class="panel-heading">
                         <h1 class="panel-title" th:text="'Blueprint Originals'">Blueprint Originals</h1>
                     </div>
                     <div class="panel-body">
-                        <div th:each="original: ${blueprint.originals}" class="row">
+                        <div th:each="original: ${blueprint.blueprint.originals}" class="row">
                             <div class="col-md-5">
-                                <h5 th:text="${original.blueprint.itemInfo.name}">BPO Name</h5>
+                                <h5 th:text="${original.blueprint.name}">BPO Name</h5>
                             </div>
                             <div class="col-md-3" th:text="${#numbers.formatDecimal(original.materialModifier, 2, 0)}">
                                 Material Modifier
@@ -115,7 +116,7 @@
                                 Time Modifier
                             </div>
                             <div class="col-md-1">
-                                <a href="#" th:href="@{'/products/' + ${original.blueprint.itemInfo.id} + '/show'}">View</a>
+                                <a href="#" th:href="@{'/products/' + ${original.blueprint.id} + '/show'}">View</a>
                             </div>
                         </div>
                     </div>
@@ -135,8 +136,8 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="copy: ${blueprint.copies}">
-                                <th scope="row" th:text="${copy.blueprint.itemInfo.getName()}">Blueprint Name</th>
+                            <tr th:each="copy: ${blueprint.blueprint.copies}">
+                                <th scope="row" th:text="${copy.blueprint.name}">Blueprint Name</th>
                                 <td th:text="${#numbers.formatInteger(copy.maxRuns, 1, 'POINT')}"> Runs Remaining</td>
                                 <td th:text="${#numbers.formatDecimal(copy.materialModifier, 1, 2, 'POINT')}">Material
                                     Modifier

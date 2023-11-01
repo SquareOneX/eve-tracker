@@ -7,15 +7,15 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import squareonex.evetrackerdata.model.Activity;
 import squareonex.evetrackerdata.model.Blueprint;
-import squareonex.evetrackerdata.model.Item;
-import squareonex.evetrackerdata.model.ids.BlueprintId;
+import squareonex.evetrackerdata.model.BlueprintAction;
+import squareonex.evetrackerdata.model.ids.BlueprintActionId;
 import squareonex.evetrackerdata.repositories.ActivityRepository;
 import squareonex.evetrackerdata.repositories.BlueprintRepository;
 import squareonex.evetrackerdata.repositories.ItemRepository;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class BlueprintServiceImplTest {
@@ -24,8 +24,6 @@ class BlueprintServiceImplTest {
     @InjectMocks BlueprintServiceImpl blueprintService;
     @Mock
     BlueprintRepository blueprintRepositoryMock;
-    @Mock
-    ItemRepository itemRepositoryMock;
     @Mock
     ActivityRepository activityRepositoryMock;
 
@@ -43,26 +41,31 @@ class BlueprintServiceImplTest {
 
     @Test
     void findByBlueprintIdAndActivityIdShouldReturnExpectedValue() {
-        Item item = new Item(BLUEPRINT_ID, null);
+        Blueprint blueprint = new Blueprint(BLUEPRINT_ID, null);
         Activity activity = new Activity();
         activity.setId(ACTIVITY_ID);
+        BlueprintAction action = new BlueprintAction(new BlueprintActionId(blueprint, activity));
+        blueprint.getActions().add(action);
 
-        when(itemRepositoryMock.findById(BLUEPRINT_ID)).thenReturn(Optional.of(item));
-        when(activityRepositoryMock.findById(ACTIVITY_ID)).thenReturn(Optional.of(activity));
+        when(blueprintRepositoryMock.findById(BLUEPRINT_ID)).thenReturn(Optional.of(blueprint));
 
-        Blueprint blueprintIdAndActivityId = blueprintService.findByBlueprintIdAndActivityId(BLUEPRINT_ID, ACTIVITY_ID);
+        BlueprintAction blueprintIdAndActivityId = blueprintService.findByBlueprintIdAndActivityId(BLUEPRINT_ID, ACTIVITY_ID);
 
-        BlueprintId blueprintId = new BlueprintId(item, activity);
-        verify(activityRepositoryMock, times(1)).findById(ACTIVITY_ID);
-        verify(itemRepositoryMock, times(1)).findById(BLUEPRINT_ID);
-        verify(blueprintRepositoryMock, times(1)).findById(blueprintId);
+        verify(blueprintRepositoryMock, times(1)).findById(BLUEPRINT_ID);
+        assertEquals(action, blueprintIdAndActivityId);
     }
 
     @Test
     void findByIdShouldReturnBlueprintOrNull() {
-        BlueprintId id = new BlueprintId();
-        assertNull(blueprintService.findById(id));
+        assertNull(blueprintService.findById(BLUEPRINT_ID));
 
-        verify(blueprintRepositoryMock, times(1)).findById(any(BlueprintId.class));
+        verify(blueprintRepositoryMock, times(1)).findById(anyLong());
+    }
+
+    @Test
+    void getBlueprintActions() {
+        assertNotNull(blueprintService.getBlueprintActions());
+
+        verify(blueprintRepositoryMock, times(1)).findAll();
     }
 }

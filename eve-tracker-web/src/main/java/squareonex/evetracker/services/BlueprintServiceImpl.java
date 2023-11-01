@@ -1,29 +1,24 @@
 package squareonex.evetracker.services;
 
 import org.springframework.stereotype.Service;
-import squareonex.evetrackerdata.model.Activity;
+import org.springframework.transaction.annotation.Transactional;
 import squareonex.evetrackerdata.model.Blueprint;
-import squareonex.evetrackerdata.model.Item;
-import squareonex.evetrackerdata.model.ids.BlueprintId;
-import squareonex.evetrackerdata.repositories.ActivityRepository;
+import squareonex.evetrackerdata.model.BlueprintAction;
 import squareonex.evetrackerdata.repositories.BlueprintRepository;
-import squareonex.evetrackerdata.repositories.ItemRepository;
 
 import java.util.HashSet;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 @Service
 public class BlueprintServiceImpl implements BlueprintService {
     private final BlueprintRepository blueprintRepository;
-    private final ItemRepository itemRepository;
-    private final ActivityRepository activityRepository;
-    public BlueprintServiceImpl(BlueprintRepository blueprintRepository, ItemRepository itemRepository, ActivityRepository activityRepository) {
+
+    public BlueprintServiceImpl(BlueprintRepository blueprintRepository) {
         this.blueprintRepository = blueprintRepository;
-        this.itemRepository = itemRepository;
-        this.activityRepository = activityRepository;
     }
 
+    @Override
     public Set<Blueprint> getBlueprints() {
         Set<Blueprint> set = new HashSet<>();
         blueprintRepository.findAll().forEach(set::add);
@@ -31,20 +26,25 @@ public class BlueprintServiceImpl implements BlueprintService {
     }
 
     @Override
-    public Blueprint findById(BlueprintId blueprintId) {
-        return blueprintRepository.findById(blueprintId).orElse(null);
+    @Transactional
+    public Set<BlueprintAction> getBlueprintActions() {
+        Set<BlueprintAction> set = new HashSet<>();
+        blueprintRepository.findAll().forEach(a -> set.addAll(a.getActions()));
+        return set;
     }
 
-    public Blueprint findByBlueprintIdAndActivityId(Long blueprintId, Integer activityId) {
-        Optional<Item> optionalItem = itemRepository.findById(blueprintId);
-        Optional<Activity> optionalActivity = activityRepository.findById(activityId);
+    @Override
+    public Blueprint findById(Long id) {
+        return blueprintRepository.findById(id).orElse(null);
+    }
 
-        if (optionalItem.isEmpty())
-            throw new IllegalArgumentException("Blueprint with item id = " + blueprintId + " not found");
-        if (optionalActivity.isEmpty())
-            throw new IllegalArgumentException("Activity with item id = " + activityId + " not found");
-        BlueprintId id = new BlueprintId(optionalItem.get(), optionalActivity.get());
-        Optional<Blueprint> blueprint = blueprintRepository.findById(id);
-        return blueprint.orElse(null);
+    public BlueprintAction findByBlueprintIdAndActivityId(Long blueprintId, Integer activityId) throws NoSuchElementException {
+        Blueprint blueprint = blueprintRepository.findById(blueprintId).orElseThrow();
+
+        for (BlueprintAction action : blueprint.getActions()) {
+            if (action.getActivity().getId().equals(activityId))
+                return action;
+        }
+        throw new NoSuchElementException();
     }
 }

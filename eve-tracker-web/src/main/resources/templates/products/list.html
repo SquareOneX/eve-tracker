@@ -17,10 +17,10 @@
             <td th:text="${i.id}"></td>
             <td th:text="${i.name}"></td>
             <td>
-                <div th:each="bp: ${i.blueprints}" th:text="${bp.blueprint?.itemInfo.name}"></div>
+                <div th:each="bp: ${i.blueprints}" th:text="${bp.blueprintAction?.blueprint.name}"></div>
             </td>
             <td>
-                <div th:each="bp: ${i.blueprints}" th:text="${bp.blueprint?.activity.name}"></div>
+                <div th:each="bp: ${i.blueprints}" th:text="${bp.blueprintAction?.activity.name}"></div>
             </td>
         </tr>
     </table>

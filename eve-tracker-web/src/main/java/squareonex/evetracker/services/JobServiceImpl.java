@@ -2,6 +2,7 @@ package squareonex.evetracker.services;
 
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import squareonex.evetracker.commands.JobCommand;
 import squareonex.evetracker.converters.JobCommandToJob;
 import squareonex.evetracker.converters.JobToJobCommand;
@@ -51,6 +52,7 @@ public class JobServiceImpl implements JobService {
      * @return the resulting job
      */
     @Override
+    @Transactional
     public JobCommand saveOrUpdateCommand(@NonNull JobCommand command) {
         Job job = jobCommandToJob.convert(command);
 
@@ -61,11 +63,13 @@ public class JobServiceImpl implements JobService {
         Item item = job.getProduct();
         Objects.requireNonNull(item.getName());
 
-        if (item.getId() == null)
-            job.setProduct(itemRepository.findByNameIgnoreCase(item.getName()).orElseThrow());
+        if (item.getId() == null){
+            item = itemRepository.findByNameIgnoreCase(item.getName()).orElseThrow();
+            job.setProduct(item);
+        }
 
         if (job.getProduct().getBlueprints().isEmpty())
-            throw new IllegalArgumentException("Can't produce this item");
+            throw new IllegalArgumentException("The specified Item is missing a blueprint to produce it");
 
         User user = job.getUser();
         Objects.requireNonNull(user.getName());

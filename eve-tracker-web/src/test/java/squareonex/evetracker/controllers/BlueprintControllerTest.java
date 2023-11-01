@@ -7,6 +7,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.ui.Model;
 import squareonex.evetracker.services.BlueprintService;
 import squareonex.evetrackerdata.model.Blueprint;
+import squareonex.evetrackerdata.model.BlueprintAction;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -31,17 +32,17 @@ class BlueprintControllerTest {
         String list = blueprintController.list(modelMock);
 
         assertEquals("blueprints/list", list);
-        verify(modelMock, times(1)).addAttribute("blueprints", blueprintService.getBlueprints());
+        verify(modelMock, times(1)).addAttribute("blueprintActions", blueprintService.getBlueprintActions());
     }
 
     @Test
     void showBlueprintByIds() {
-        Blueprint blueprint = new Blueprint();
-        doReturn(blueprint).when(blueprintService).findByBlueprintIdAndActivityId(BLUEPRINT_ID, ACTIVITY_ID);
-        String templateStr = blueprintController.showBlueprintByIds(BLUEPRINT_ID, ACTIVITY_ID, modelMock);
+        BlueprintAction blueprintAction = new BlueprintAction();
+        doReturn(blueprintAction).when(blueprintService).findByBlueprintIdAndActivityId(BLUEPRINT_ID, ACTIVITY_ID);
+        String templateStr = blueprintController.showBlueprintByIdAndActivity(BLUEPRINT_ID, ACTIVITY_ID, modelMock);
 
         assertEquals("blueprints/show", templateStr);
         verify(blueprintService, times(1)).findByBlueprintIdAndActivityId(BLUEPRINT_ID, ACTIVITY_ID);
-        verify(modelMock, times(1)).addAttribute("blueprint", blueprint);
+        verify(modelMock, times(1)).addAttribute("blueprint", blueprintAction);
     }
 }

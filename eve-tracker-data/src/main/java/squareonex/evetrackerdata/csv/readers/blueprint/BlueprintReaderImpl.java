@@ -9,8 +9,6 @@ import squareonex.evetrackerdata.repositories.ItemRepository;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 public class BlueprintReaderImpl implements BlueprintReader {
@@ -24,7 +22,7 @@ public class BlueprintReaderImpl implements BlueprintReader {
 
     @Override
     public List<Blueprint> readAll() throws FileNotFoundException {
-        Map<BlueprintKey, Blueprint> blueprints = readBlueprintsToMap();
+        Map<BlueprintKey, BlueprintDTO> blueprints = readBlueprintsToMap();
         Map<BlueprintKey, List<BlueprintMaterialDTO>> materials = readMaterialsToMap();
         Map<BlueprintKey, Set<BlueprintProductDTO>> products = readProductsToMap();
 
@@ -36,17 +34,33 @@ public class BlueprintReaderImpl implements BlueprintReader {
 
         Map<BlueprintKey, Blueprint> result = new HashMap<>();
 
-        for (Map.Entry<BlueprintKey, Blueprint> entry : blueprints.entrySet()) {
+        for (Map.Entry<BlueprintKey, BlueprintDTO> entry : blueprints.entrySet()) {
             BlueprintKey blueprintKey = entry.getKey();
-            Blueprint blueprint = entry.getValue();
+            Blueprint blueprint = new Blueprint();
+
+            /*
+             * Blueprints
+             */
+            Item item = items.get(blueprintKey.id);
+            if (item == null)
+                continue;
+
+            blueprint.setId(item.getId());
+            blueprint.setName(item.getName());
+            blueprint.setPublished(item.getPublished());
+
+            /*
+             * BlueprintActions
+             */
+
+            BlueprintAction blueprintAction = new BlueprintAction();
+            blueprintAction.setBlueprint(blueprint);
 
             Activity activity = activities.get(blueprintKey.activityId);
-            Item item = items.get(blueprintKey.id);
+            if (activity == null)
+                continue;
 
-            if (activity == null || item == null) continue;
-
-            blueprint.setActivity(activity);
-            blueprint.setItemInfo(item);
+            blueprintAction.setActivity(activity);
 
             List<BlueprintMaterialDTO> mats = materials.get(blueprintKey);
             boolean valid = true;
@@ -55,10 +69,10 @@ public class BlueprintReaderImpl implements BlueprintReader {
                     Item material = items.get(dto.getMaterialId());
                     if (material == null) {
                         valid = false;
-                        blueprint.getMaterials().clear();
+                        blueprintAction.getMaterials().clear();
                         break;
                     } else {
-                        blueprint.getMaterials().add(new BlueprintMaterial(blueprint, material, dto.getQuantity()));
+                        blueprintAction.getMaterials().add(new BlueprintMaterial(blueprintAction, material, dto.getQuantity()));
                     }
                 }
             }
@@ -69,11 +83,15 @@ public class BlueprintReaderImpl implements BlueprintReader {
                     Item product = items.get(dto.getProductId());
                     if (product == null) {
                         valid = false;
-                        blueprint.getProducts().clear();
+                        blueprintAction.getProducts().clear();
                         break;
                     } else {
-
-                        blueprint.getProducts().add(new BlueprintProduct(blueprint, product, dto.getQuantity(), dto.getProbability()));
+                        BlueprintProduct blueprintProduct = new BlueprintProduct();
+                        blueprintProduct.setBlueprintAction(blueprintAction);
+                        blueprintProduct.setProduct(product);
+                        blueprintProduct.setQuantity(dto.getQuantity());
+                        blueprintProduct.setProbability(dto.getProbability());
+                        blueprintAction.getProducts().add(blueprintProduct);
                     }
                 }
             }
@@ -83,15 +101,13 @@ public class BlueprintReaderImpl implements BlueprintReader {
         return new LinkedList<>(result.values());
     }
 
-    private Map<BlueprintKey, Blueprint> readBlueprintsToMap() throws FileNotFoundException {
+    private Map<BlueprintKey, BlueprintDTO> readBlueprintsToMap() throws FileNotFoundException {
         FileReader reader = new FileReader(getClass().getClassLoader().getResource("industryactivity.csv").getPath());
         CsvToBean<BlueprintDTO> blueprintBeans = new CsvToBeanBuilder<BlueprintDTO>(reader).withType(BlueprintDTO.class).withIgnoreLeadingWhiteSpace(true).withVerifier(new BlueprintDTO.Verifier()).build();
 
-        Map<BlueprintKey, Blueprint> blueprints = new HashMap<>();
+        Map<BlueprintKey, BlueprintDTO> blueprints = new HashMap<>();
         for (BlueprintDTO dto : blueprintBeans) {
-            Blueprint blueprint = new Blueprint();
-            blueprint.setDuration(Duration.of(dto.getTime(), ChronoUnit.SECONDS));
-            blueprints.put(dto.getKey(), blueprint);
+            blueprints.put(dto.getKey(), dto);
         }
         return blueprints;
     }

@@ -12,6 +12,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -27,9 +28,7 @@ public class SimpleDataLoader implements BootstrapLoader {
     private final BlueprintCopyRepository blueprintCopyService;
     private final BlueprintOriginalRepository blueprintOriginalService;
 
-    public SimpleDataLoader(ActivityRepository activityService, BlueprintRepository blueprintService, ItemRepository itemService,
-                            TransactionRepository transactionService, UserRepository userService, JobRepository jobService,
-                            BlueprintCopyRepository blueprintCopyService, BlueprintOriginalRepository blueprintOriginalService) {
+    public SimpleDataLoader(ActivityRepository activityService, BlueprintRepository blueprintService, ItemRepository itemService, TransactionRepository transactionService, UserRepository userService, JobRepository jobService, BlueprintCopyRepository blueprintCopyService, BlueprintOriginalRepository blueprintOriginalService) {
         this.activityService = activityService;
         this.blueprintService = blueprintService;
         this.itemService = itemService;
@@ -43,9 +42,58 @@ public class SimpleDataLoader implements BootstrapLoader {
     @Transactional
     @Override
     public void run(String... args) throws Exception {
-        /*
-            Activities
-         */
+        loadData();
+
+        int[] activityIds = new int[]{1, 5, 8};
+        for (int id : activityIds) {
+            Optional<Activity> activity = activityService.findById(id);
+            if (activity.isEmpty()) {
+                throw new RuntimeException("Expected Activity with id=" + id);
+            }
+        }
+
+        if (userService.findByNameIgnoreCase("Sonni Cooper").isEmpty())
+            throw new RuntimeException("Expected User with name='Sonni Cooper");
+
+        long[] itemIds = new long[]{34L, 35L, 36L, 37L, 585L, 608L, 689L, 995L, 11197L, 11198L, 20172L, 20411L};
+        for (long id : itemIds) {
+            Optional<Item> item = itemService.findById(id);
+            if (item.isEmpty())
+                throw new RuntimeException("Expected Item with id=" + id);
+
+            if (item.get().getName() == null)
+                throw new RuntimeException("Expected non-null name for Item with id=" + id);
+        }
+
+        long[][] blueprintActions = new long[][]{
+                new long[]{689L, 1, 5, 8},  //Slasher (Manufacturing, Copying, Invention)
+                new long[]{995L, 1},        //Atron (Manufacturing)
+                new long[]{11197L, 1}       //Stiletto (Manufacturing)
+        };
+        for (long[] blueprintAction : blueprintActions) {
+            Optional<Blueprint> optionalBlueprint = blueprintService.findById(blueprintAction[0]);
+            if (optionalBlueprint.isEmpty())
+                throw new RuntimeException("Expected Blueprint with id=" + blueprintAction[0]);
+
+            Blueprint blueprint = optionalBlueprint.get();
+
+            if (blueprint.getActions().size() != blueprintAction.length - 1)
+                throw new RuntimeException(
+                        "Expected Blueprint with id=" + blueprintAction[0] + " to have " + (blueprintAction.length - 1)
+                                + " actions, but was" + blueprint.getActions().size());
+        }
+
+        Item slasher = itemService.findById(585L).orElseThrow();
+        if (slasher.getBlueprints().isEmpty())
+            throw new RuntimeException("Expected Item with id=" + 689L + " to have a BlueprintProduct");
+
+        log.info("Bootstrap data loaded");
+    }
+
+    private void loadData() {
+    /*
+        Activities
+     */
         Activity manufacturing = new Activity();
         manufacturing.setId(1);
         manufacturing.setName("Manufacturing");
@@ -223,10 +271,6 @@ public class SimpleDataLoader implements BootstrapLoader {
         job1 = jobService.save(job1);
         job2 = jobService.save(job2);
 
-        /*
-            Saving
-         */
-
-        log.info("Bootstrap data loaded");
-    }
+        itemService.save(slasher);
+        }
 }
