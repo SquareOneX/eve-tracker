@@ -24,4 +24,12 @@ public class BlueprintOriginal {
         this.blueprint = blueprint;
         this.blueprintCost = blueprintCost;
     }
+
+    public void setBlueprint(Blueprint blueprint) {
+        if (blueprint != null)
+            blueprint.getOriginals().add(this);
+        else if (this.getBlueprint() != null)
+            this.getBlueprint().getOriginals().remove(this);
+        this.blueprint = blueprint;
+    }
 }

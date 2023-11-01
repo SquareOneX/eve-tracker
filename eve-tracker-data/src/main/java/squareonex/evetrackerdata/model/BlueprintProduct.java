@@ -34,7 +34,11 @@ public class BlueprintProduct {
     }
 
     public void setProduct(Item product) {
+        if (product != null)
+            product.getBlueprints().add(this);
+        else if (this.getProduct() != null) {
+            this.getProduct().getBlueprints().remove(this);
+        }
         this.id.setProduct(product);
-        product.getBlueprints().add(this);
     }
 }

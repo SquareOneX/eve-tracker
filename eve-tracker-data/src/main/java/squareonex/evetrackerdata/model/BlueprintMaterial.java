@@ -28,8 +28,13 @@ public class BlueprintMaterial {
         return this.id.getBlueprint();
     }
 
-    public void setBlueprint(BlueprintAction blueprint) {
-        this.id.setBlueprint(blueprint);
+    public void setBlueprint(BlueprintAction blueprintAction) {
+        if (blueprintAction != null) {
+            blueprintAction.getMaterials().add(this);
+        } else if (this.getBlueprint() != null) {
+            this.getBlueprint().getMaterials().remove(this);
+        }
+        this.id.setBlueprint(blueprintAction);
     }
 
     public Item getMaterial() {

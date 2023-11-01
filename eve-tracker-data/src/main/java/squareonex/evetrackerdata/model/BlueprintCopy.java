@@ -25,4 +25,12 @@ public class BlueprintCopy {
         this.maxRuns = maxRuns;
         this.blueprintCost = blueprintCost;
     }
+
+    public void setBlueprint(Blueprint blueprint) {
+        if (blueprint != null)
+            blueprint.getCopies().add(this);
+        else if (this.getBlueprint() != null)
+            this.getBlueprint().getCopies().remove(this);
+        this.blueprint = blueprint;
+    }
 }
