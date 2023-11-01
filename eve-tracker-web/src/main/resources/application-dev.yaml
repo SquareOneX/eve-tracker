@@ -1,0 +1,7 @@
+logging:
+  level:
+    squareonex.evetracker: DEBUG
+    squareonex.evetrackerdata: DEBUG
+spring:
+  jpa:
+    show-sql: true
