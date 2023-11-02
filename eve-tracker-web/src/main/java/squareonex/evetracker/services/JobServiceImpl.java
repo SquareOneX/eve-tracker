@@ -53,29 +53,49 @@ public class JobServiceImpl implements JobService {
      */
     @Override
     @Transactional
-    public JobCommand saveOrUpdateCommand(@NonNull JobCommand command) {
+    public JobCommand saveOrUpdateCommand(@NonNull JobCommand command) throws IllegalArgumentException, NullPointerException{
         Job job = jobCommandToJob.convert(command);
+
+        if (command.getItemCommand() == null) {
+            throw new NullPointerException("Expected non-null item for job");
+        } else if (command.getItemCommand().getId() != null) {
+            itemRepository.findById(command.getItemCommand().getId())
+                    .ifPresentOrElse(job::setProduct, () -> {
+                        throw new IllegalArgumentException("Item with id=" + command.getItemCommand().getId() + " doesn't exist");
+                    });
+        } else if (command.getItemCommand().getName() != null) {
+            itemRepository.findByNameIgnoreCase(command.getItemCommand().getName())
+                    .ifPresentOrElse(job::setProduct, () -> {
+                        throw new IllegalArgumentException("Item with name=" + command.getItemCommand().getName() + " doesn't exist");
+                    });
+        } else {
+            throw new NullPointerException("Expected non-null name or id for item");
+        }
+
+        if (command.getUserCommand() == null) {
+            throw new NullPointerException("Expected non-null user for job");
+        } else if (command.getUserCommand().getId() != null) {
+            userRepository.findById(command.getUserCommand().getId()).ifPresentOrElse(
+                    job::setUser, () -> {
+                        throw new IllegalArgumentException("User with id=" + command.getUserCommand().getId() + " doesn't exist");
+                    }
+            );
+        } else if (command.getUserCommand().getName() != null) {
+            userRepository.findByNameIgnoreCase(command.getUserCommand().getName()).ifPresentOrElse(
+                    job::setUser, () -> {
+                        throw new IllegalArgumentException("User with name=" + command.getUserCommand().getName() + " doesn't exist");
+                    }
+            );
+        } else {
+            throw new NullPointerException("Expected non-null name or id for user");
+        }
 
         Objects.requireNonNull(job.getQuantity());
         if (job.getQuantity() <= 0)
             throw new IllegalArgumentException("Illegal quantity");
 
-        Item item = job.getProduct();
-        Objects.requireNonNull(item.getName());
-
-        if (item.getId() == null){
-            item = itemRepository.findByNameIgnoreCase(item.getName()).orElseThrow();
-            job.setProduct(item);
-        }
-
         if (job.getProduct().getBlueprints().isEmpty())
             throw new IllegalArgumentException("The specified Item is missing a blueprint to produce it");
-
-        User user = job.getUser();
-        Objects.requireNonNull(user.getName());
-
-        if (user.getId() == null)
-            job.setUser(userRepository.findByNameIgnoreCase(user.getName()).orElseThrow());
 
         Job save = jobRepository.save(job);
         return jobToJobCommand.convert(save);

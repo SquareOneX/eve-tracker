@@ -9,5 +9,5 @@ import java.util.Set;
 public interface JobService {
     Set<Job> findAll();
     Job findById(Long id);
-    JobCommand saveOrUpdateCommand(JobCommand command);
+    JobCommand saveOrUpdateCommand(JobCommand command) throws IllegalArgumentException, NullPointerException;
 }

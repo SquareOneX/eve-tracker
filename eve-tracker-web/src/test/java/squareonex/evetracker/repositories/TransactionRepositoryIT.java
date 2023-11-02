@@ -21,6 +21,7 @@ import squareonex.evetrackerdata.repositories.TransactionRepository;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.boot.jdbc.EmbeddedDatabaseConnection.H2;
@@ -43,8 +44,7 @@ class TransactionRepositoryIT {
     @Test
     void persistingTransactionShouldUpdateItemAvgCost() {
         long itemId = 689L;
-        Item item = itemRepository.findById(itemId).orElse(null);
-        assertNotNull(item, "Item with id=" + itemId + "missing");
+        Item item = itemRepository.findById(itemId).orElseThrow();
 
         Float avgCostBefore = item.getAvgCost();
 
@@ -56,7 +56,8 @@ class TransactionRepositoryIT {
         transaction.setIsBuy(true);
         transaction = transactionRepository.save(transaction);
 
-        assertTrue(transaction.getItem().getTransactions().contains(transaction));
+        Set<Transaction> transactions = itemRepository.findById(itemId).orElseThrow().getTransactions();
+        assertEquals(1, transactions.size());
         assertNotEquals(avgCostBefore, item.getAvgCost());
     }
 }
