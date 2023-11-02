@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import squareonex.evetracker.commands.JobCommand;
+import squareonex.evetracker.controllers.exception.InvalidJobException;
 import squareonex.evetracker.services.JobService;
 
 @RequestMapping("jobs")
@@ -32,8 +33,11 @@ public class JobController {
 
     @PostMapping("")
     public String createJob(@ModelAttribute JobCommand command) {
-        JobCommand saved = jobService.saveOrUpdateCommand(command);
-
-        return "redirect:/jobs";
+        try {
+            JobCommand saved = jobService.saveOrUpdateCommand(command);
+            return "redirect:/jobs";
+        } catch (IllegalArgumentException | NullPointerException e) {
+            throw new InvalidJobException(e);
+        }
     }
 }

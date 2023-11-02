@@ -97,7 +97,10 @@ public class JobServiceImpl implements JobService {
         if (job.getProduct().getBlueprints().isEmpty())
             throw new IllegalArgumentException("The specified Item is missing a blueprint to produce it");
 
-        Job save = jobRepository.save(job);
-        return jobToJobCommand.convert(save);
+
+        if (job.getFinishedTime() != null && job.getStartedTime() != null && job.getFinishedTime().isBefore(job.getStartedTime()))
+            throw new IllegalArgumentException("The job is finished before it starts");
+
+        return jobToJobCommand.convert(jobRepository.save(job));
     }
 }
