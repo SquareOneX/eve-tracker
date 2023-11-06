@@ -8,17 +8,17 @@ import squareonex.evetracker.commands.ItemCommand;
 import squareonex.evetracker.commands.JobCommand;
 import squareonex.evetracker.commands.UserCommand;
 import squareonex.evetracker.converters.*;
-import squareonex.evetrackerdata.model.BlueprintProduct;
-import squareonex.evetrackerdata.model.Item;
-import squareonex.evetrackerdata.model.Job;
-import squareonex.evetrackerdata.model.User;
+import squareonex.evetrackerdata.model.*;
+import squareonex.evetrackerdata.model.ids.BlueprintActionId;
 import squareonex.evetrackerdata.repositories.ItemRepository;
 import squareonex.evetrackerdata.repositories.JobRepository;
 import squareonex.evetrackerdata.repositories.UserRepository;
 
+import java.time.Duration;
 import java.util.Optional;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
@@ -33,6 +33,8 @@ class JobServiceImplTest {
     ItemRepository itemRepository;
     @Mock
     UserRepository userRepository;
+    @Mock
+    StorageService storageService;
 
     @BeforeEach
     void setUp() {
@@ -42,8 +44,8 @@ class JobServiceImplTest {
                 new JobCommandToJob(new UserCommandToUser(), new ItemCommandToItem()),
                 jobRepositoryMock,
                 itemRepository,
-                userRepository
-        );
+                userRepository,
+                storageService);
     }
 
     @Test
@@ -80,6 +82,7 @@ class JobServiceImplTest {
         verify(userRepository, times(1)).findByNameIgnoreCase(USER_NAME);
     }
 
+
     private JobCommand createJobCommand() {
         JobCommand jobCommand = new JobCommand();
         ItemCommand itemCommand = new ItemCommand();
@@ -93,5 +96,45 @@ class JobServiceImplTest {
         jobCommand.setIsInternal(false);
 
         return jobCommand;
+    }
+
+    @Test
+    void startJob() {
+        final int materialQty = 100;
+        final float costPer = 200F;
+        final float materialMod = 0.98F;
+
+        final long jobRuns = 5;
+        Item material = new Item(0L, "Material");
+        material.setAvgCost(costPer);
+
+        BlueprintCopy blueprintCopy = new BlueprintCopy();
+        blueprintCopy.setMaterialModifier(materialMod);
+        Blueprint blueprint = new Blueprint();
+        Activity manufacturing = new Activity();
+        BlueprintAction blueprintAction = new BlueprintAction(new BlueprintActionId(blueprint, manufacturing));
+
+        blueprintAction.getMaterials().add(new BlueprintMaterial(blueprintAction, material, materialQty));
+        blueprintAction.setDuration(Duration.ofHours(2));
+        blueprint.getActions().add(blueprintAction);
+        blueprintCopy.setBlueprint(blueprint);
+        Job job = new Job();
+        job.setQuantity(jobRuns);
+
+        when(jobRepositoryMock.save(any(Job.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(storageService.isAvailable(any(Item.class), anyLong())).thenReturn(true);
+
+        Job startedJob = jobService.startJob(blueprintCopy, manufacturing, job);
+
+        long expectedUsedQty = Math.round(materialQty * jobRuns * materialMod);
+
+        verify(jobRepositoryMock, times(1)).save(any());
+        verify(storageService).isAvailable(material, expectedUsedQty);
+        verify(storageService).remove(material, expectedUsedQty);
+
+        double expectedJobCost = expectedUsedQty * costPer;
+        assertEquals(expectedJobCost, startedJob.getJobCost());
+        assertNotNull(startedJob.getStartedTime());
+        assertNotNull(startedJob.getFinishedTime());
     }
 }

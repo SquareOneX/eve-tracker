@@ -21,6 +21,7 @@ public class Job {
     private LocalDateTime startedTime;
     private LocalDateTime finishedTime;
     private Boolean isInternal = false;
+    private Double jobCost;
     @ManyToOne
     @JoinColumn(name = "bpc_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_jobs_blueprintcopies"))
     private BlueprintCopy blueprintCopy;
