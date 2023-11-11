@@ -5,6 +5,13 @@
     <title>Oops</title>
 </head>
     <body>
-        <h1>Something went wrong! </h1>
+        <div class="container-fluid">
+            <div class="panel-group">
+                <div class="panel panel-danger">
+                    <div class="panel-heading" th:text="${errorName}">Error</div>
+                    <div class="panel-body" th:text="${errorMessage}">Message</div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

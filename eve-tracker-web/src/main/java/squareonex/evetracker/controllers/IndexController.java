@@ -11,9 +11,4 @@ public class IndexController implements ErrorController {
     public String index(){
         return "index";
     }
-
-    @RequestMapping("error")
-    public String handleError(HttpServletRequest request) {
-        return "error";
-    }
 }
