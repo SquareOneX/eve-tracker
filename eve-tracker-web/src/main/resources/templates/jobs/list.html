@@ -21,6 +21,7 @@
         <th>User</th>
         <th>Started</th>
         <th>Finished</th>
+        <th>Duration</th>
         <th>isInternal</th>
     </tr>
     <tr th:each="j: ${jobs}">
@@ -30,8 +31,49 @@
         <td th:text="${j.user.name}"></td>
         <td th:text="${#temporals.format(j.startedTime)} ?: 'planned'"></td>
         <td th:text="${#temporals.format(j.finishedTime)} ?: 'planned'"></td>
+        <td th:if="${j.startedTime != null}" th:id="${'duration' + j.id}"></td>
+        <td th:if="${j.startedTime == null}">
+            <a href="#" th:href="@{'/jobs/' + ${j.id} + '/start'}">Start</a>
+        </td>
         <td th:text="${j.isInternal}"></td>
     </tr>
 </table>
+
+<script th:inline="javascript">
+    let durationsMap = [[${jobDurations}]];
+
+    function formatDuration(milliseconds) {
+        let seconds = Math.floor(milliseconds / 1000);
+        let minutes = Math.floor(seconds / 60);
+        let hours = Math.floor(minutes / 60);
+        let days = Math.floor(hours / 24);
+
+        return {
+            days: days,
+            hours: hours % 24,
+            minutes: minutes % 60,
+            seconds: seconds % 60
+        };
+    }
+    function updateDurations() {
+        Object.entries(durationsMap).forEach(([id, val]) => {
+            let durationElem = document.getElementById('duration' + id);
+            if (durationElem) {
+                let currentDuration = val;
+                if (currentDuration > 0) {
+                    durationsMap[id] = currentDuration - 1000;
+                    let conv = formatDuration(currentDuration - 1000);
+                    let dayStr = conv.days > 0 ? (conv.days + ':').padStart(3, '0') : '00:';
+                    let hourStr = conv.hours > 0 ? (conv.hours + ':').padStart(3, '0') : '00:';
+                    let minStr = conv.minutes > 0 ? (conv.minutes + ':').padStart(3, '0') : '00:';
+                    let secStr = conv.seconds > 0 ? (conv.seconds + '').padStart(2, '0') : '00'
+                    durationElem.textContent = dayStr + hourStr + minStr + secStr;
+                }
+            }
+        });
+    }
+
+    setInterval(updateDurations, 1000);
+</script>
 </body>
 </html>
