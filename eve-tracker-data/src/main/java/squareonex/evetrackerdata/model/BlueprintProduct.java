@@ -24,6 +24,10 @@ public class BlueprintProduct {
         return this.id.getBlueprint();
     }
 
+    /**
+     * Sets this instances blueprintAction while also updating the blueprint passed
+     * @param blueprint a blueprintAction
+     */
     public void setBlueprintAction(BlueprintAction blueprint) {
         this.id.setBlueprint(blueprint);
         blueprint.getProducts().add(this);

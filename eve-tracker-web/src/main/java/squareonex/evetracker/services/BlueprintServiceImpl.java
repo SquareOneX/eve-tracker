@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import squareonex.evetrackerdata.model.Blueprint;
 import squareonex.evetrackerdata.model.BlueprintAction;
+import squareonex.evetrackerdata.model.BlueprintCopy;
+import squareonex.evetrackerdata.model.Item;
 import squareonex.evetrackerdata.repositories.BlueprintRepository;
 
 import java.util.HashSet;
@@ -46,5 +48,14 @@ public class BlueprintServiceImpl implements BlueprintService {
                 return action;
         }
         throw new NoSuchElementException();
+    }
+
+    @Override
+    public Set<BlueprintCopy> findBlueprintCopiesByProduct(Item product) {
+        Set<BlueprintCopy> copies = new HashSet<>();
+        product.getBlueprints().forEach(val -> {
+            copies.addAll(val.getBlueprintAction().getBlueprint().getCopies());
+        });
+        return copies;
     }
 }
