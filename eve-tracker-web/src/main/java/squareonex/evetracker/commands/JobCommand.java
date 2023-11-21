@@ -1,6 +1,8 @@
 package squareonex.evetracker.commands;
 
 import lombok.Data;
+import squareonex.evetrackerdata.model.Activity;
+import squareonex.evetrackerdata.model.BlueprintCopy;
 
 import java.time.LocalDateTime;
 
@@ -13,4 +15,6 @@ public class JobCommand {
     private LocalDateTime startedTime;
     private LocalDateTime finishedTime;
     private Boolean isInternal = false;
+    private BlueprintCopy blueprintCopy;
+    private Activity activity;
 }

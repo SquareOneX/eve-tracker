@@ -23,6 +23,9 @@ public class Job {
     private Boolean isInternal = false;
     private Double jobCost;
     @ManyToOne
+    @JoinColumn(name = "activity_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_jobs_activities"))
+    private Activity activity;
+    @ManyToOne
     @JoinColumn(name = "bpc_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_jobs_blueprintcopies"))
     private BlueprintCopy blueprintCopy;
     @ManyToOne

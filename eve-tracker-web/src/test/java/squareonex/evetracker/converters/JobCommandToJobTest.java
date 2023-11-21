@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import squareonex.evetracker.commands.ItemCommand;
 import squareonex.evetracker.commands.JobCommand;
 import squareonex.evetracker.commands.UserCommand;
+import squareonex.evetrackerdata.model.Activity;
+import squareonex.evetrackerdata.model.BlueprintCopy;
 import squareonex.evetrackerdata.model.Job;
 
 import java.time.LocalDateTime;
@@ -20,6 +22,8 @@ class JobCommandToJobTest extends ConverterTestTemplate {
     private static final Boolean JOB_IS_INTERNAL = true;
     private static final LocalDateTime JOB_STARTED_TIME = LocalDateTime.now();
     private static final LocalDateTime JOB_FINISHED_TIME = LocalDateTime.now().plusHours(2);
+    private static final Long BPC_ID = 0L;
+    private static final Integer ACTIVITY_ID = 0;
     JobCommandToJob converter;
 
     @BeforeEach
@@ -56,6 +60,8 @@ class JobCommandToJobTest extends ConverterTestTemplate {
         assertEquals(JOB_IS_INTERNAL, converted.getIsInternal());
         assertEquals(JOB_STARTED_TIME, converted.getStartedTime());
         assertEquals(JOB_FINISHED_TIME, converted.getFinishedTime());
+        assertEquals(BPC_ID, converted.getBlueprintCopy().getId());
+        assertEquals(ACTIVITY_ID, converted.getActivity().getId());
     }
 
     private JobCommand getSource() {
@@ -71,6 +77,12 @@ class JobCommandToJobTest extends ConverterTestTemplate {
         source.setIsInternal(JOB_IS_INTERNAL);
         source.setStartedTime(JOB_STARTED_TIME);
         source.setFinishedTime(JOB_FINISHED_TIME);
+        BlueprintCopy blueprintCopy = new BlueprintCopy();
+        blueprintCopy.setId(BPC_ID);
+        source.setBlueprintCopy(blueprintCopy);
+        Activity activity = new Activity();
+        activity.setId(ACTIVITY_ID);
+        source.setActivity(activity);
         return source;
     }
 }
