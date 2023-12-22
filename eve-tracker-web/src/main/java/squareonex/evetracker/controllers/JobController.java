@@ -2,27 +2,30 @@ package squareonex.evetracker.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import squareonex.evetracker.commands.JobCommand;
 import squareonex.evetracker.controllers.exception.InvalidJobException;
+import squareonex.evetracker.services.ActivityService;
+import squareonex.evetracker.services.BlueprintService;
 import squareonex.evetracker.services.JobService;
+import squareonex.evetrackerdata.model.BlueprintCopy;
 import squareonex.evetrackerdata.model.Job;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @RequestMapping("jobs")
 @Controller
 public class JobController {
     private final JobService jobService;
+    private final BlueprintService blueprintService;
+    private final ActivityService activityService;
 
-    public JobController(JobService jobService) {
+    public JobController(JobService jobService, BlueprintService blueprintService, ActivityService activityService) {
         this.jobService = jobService;
+        this.blueprintService = blueprintService;
+        this.activityService = activityService;
     }
 
     @RequestMapping({"", "index", "index.html"})
@@ -42,12 +45,14 @@ public class JobController {
 
     @RequestMapping("new")
     public String newJob(Model model){
-        model.addAttribute("job", new JobCommand());
-        return "jobs/form";
+        model.addAttribute("jobCommand", new JobCommand());
+        model.addAttribute("activities", activityService.findAll());
+        model.addAttribute("blueprintCopies", new ArrayList<BlueprintCopy>());
+        return "jobs/new";
     }
 
-    @PostMapping("")
-    public String createJob(@ModelAttribute JobCommand command) {
+    @PostMapping("create")
+    public String createJob(@ModelAttribute(name = "jobCommand") JobCommand command) {
         try {
             JobCommand saved = jobService.saveOrUpdateCommand(command);
             return "redirect:/jobs";

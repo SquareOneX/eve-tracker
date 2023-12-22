@@ -6,7 +6,12 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.ui.Model;
 import squareonex.evetracker.commands.JobCommand;
+import squareonex.evetracker.services.ActivityService;
+import squareonex.evetracker.services.BlueprintService;
 import squareonex.evetracker.services.JobService;
+import squareonex.evetrackerdata.model.BlueprintCopy;
+
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.times;
@@ -18,10 +23,14 @@ class JobControllerTest {
     JobService jobServiceMock;
     @Mock
     Model modelMock;
+    @Mock
+    BlueprintService blueprintService;
+    @Mock ActivityService activityService;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        this.jobController = new JobController(jobServiceMock);
+        this.jobController = new JobController(jobServiceMock, blueprintService, activityService);
     }
 
     @Test
@@ -36,8 +45,9 @@ class JobControllerTest {
     void newJob() {
         String templateStr = jobController.newJob(modelMock);
 
-        assertEquals("jobs/form", templateStr);
-        verify(modelMock, times(1)).addAttribute("job", new JobCommand());
+        assertEquals("jobs/new", templateStr);
+        verify(modelMock, times(1)).addAttribute("blueprintCopies", new ArrayList<BlueprintCopy>());
+        verify(modelMock, times(1)).addAttribute("jobCommand", new JobCommand());
     }
 
     @Test
