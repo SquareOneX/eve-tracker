@@ -14,7 +14,7 @@ public class JobCommand {
     private UserCommand userCommand;
     private LocalDateTime startedTime;
     private LocalDateTime finishedTime;
-    private Boolean isInternal = false;
+    private Boolean isInternal;
     private BlueprintCopy blueprintCopy;
     private Activity activity;
 }

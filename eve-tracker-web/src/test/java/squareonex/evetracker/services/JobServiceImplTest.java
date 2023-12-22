@@ -27,6 +27,7 @@ class JobServiceImplTest {
     private static final Long JOB_ID = 0L;
     private static final String ITEM_NAME = "Item";
     private static final String USER_NAME = "USER";
+    private static final Integer ACTIVITY_ID = 0;
     JobServiceImpl jobService;
     @Mock
     JobRepository jobRepositoryMock;
@@ -78,6 +79,9 @@ class JobServiceImplTest {
         doAnswer(invocation -> invocation.getArgument(0)).when(jobRepositoryMock).save(any(Job.class));
         doReturn(Optional.of(item)).when(itemRepository).findByNameIgnoreCase(ITEM_NAME);
         doReturn(Optional.of(new User())).when(userRepository).findByNameIgnoreCase(USER_NAME);
+        Activity activity = new Activity();
+        activity.setId(ACTIVITY_ID);
+        doReturn(Optional.of(activity)).when(activityRepository).findById(ACTIVITY_ID);
 
 
         JobCommand savedCommand = jobService.saveOrUpdateCommand(jobCommand);
@@ -96,6 +100,9 @@ class JobServiceImplTest {
         UserCommand userCommand = new UserCommand();
         userCommand.setName(USER_NAME);
         jobCommand.setUserCommand(userCommand);
+        Activity activity = new Activity();
+        activity.setId(ACTIVITY_ID);
+        jobCommand.setActivity(activity);
 
         jobCommand.setQuantity(1L);
         jobCommand.setIsInternal(false);

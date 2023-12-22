@@ -49,6 +49,9 @@ public class JobServiceImpl implements JobService {
     public Job findById(Long id) {
         return jobRepository.findById(id).orElse(null);
     }
+    public JobCommand findCommandById(Long id) {
+        return jobToJobCommand.convert(findById(id));
+    }
 
     /**
      * Verifies that all required details of the job are set and creates it

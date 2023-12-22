@@ -17,6 +17,7 @@
     <tr>
         <th>Id</th>
         <th>Product</th>
+        <th>Activity</th>
         <th>Quantity</th>
         <th>User</th>
         <th>Started</th>
@@ -27,13 +28,14 @@
     <tr th:each="j: ${jobs}">
         <td th:text="${j.id}"></td>
         <td th:text="${j.product.name}"></td>
+        <td th:text="${j.activity.name}"></td>
         <td th:text="${j.quantity}"></td>
         <td th:text="${j.user.name}"></td>
         <td th:text="${#temporals.format(j.startedTime)} ?: 'planned'"></td>
         <td th:text="${#temporals.format(j.finishedTime)} ?: 'planned'"></td>
         <td th:if="${j.startedTime != null}" th:id="${'duration' + j.id}"></td>
         <td th:if="${j.startedTime == null}">
-            <a href="#" th:href="@{'/jobs/' + ${j.id} + '/start'}">Start</a>
+            <a href="#" th:href="@{'/jobs/' + ${j.id} + '/view'}">View</a>
         </td>
         <td th:text="${j.isInternal}"></td>
     </tr>

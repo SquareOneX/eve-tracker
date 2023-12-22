@@ -20,7 +20,7 @@ public class Job {
     private Long quantity;
     private LocalDateTime startedTime;
     private LocalDateTime finishedTime;
-    private Boolean isInternal = false;
+    private Boolean isInternal;
     private Double jobCost;
     @ManyToOne
     @JoinColumn(name = "activity_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_jobs_activities"))

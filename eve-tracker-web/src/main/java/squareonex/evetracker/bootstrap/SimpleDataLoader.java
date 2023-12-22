@@ -263,10 +263,12 @@ public class SimpleDataLoader implements BootstrapLoader {
          */
 
         Job job1 = new Job(slasher, 10L, user, false);
+        job1.setActivity(manufacturing);
         job1.setStartedTime(LocalDateTime.of(2023, Month.SEPTEMBER, 20, 13, 28));
         job1.setFinishedTime(LocalDateTime.now().plusHours(2));
 
         Job job2 = new Job(atron, 10L, user, false);
+        job2.setActivity(manufacturing);
 
         job1 = jobService.save(job1);
         job2 = jobService.save(job2);

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'view Job')}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>View Job</title>
+</head>
+<body>
+<form th:object="${jobCommand}" th:action="@{/jobs/save}" method="post">
+    <div class="container container-fluid">
+        <div class="row">
+            <div th:replace="~{jobs/form-fragment :: form (${jobCommand}, ${activities})}"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div th:replace="~{jobs/bpc-fragment :: bpc-selection-panel (${blueprintCopies})}"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary form-control">Submit</button>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-danger form-control" onclick="" th:if="*{id} != null">Delete
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+</body>
+</html>
