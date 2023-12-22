@@ -10,6 +10,7 @@ import squareonex.evetracker.commands.UserCommand;
 import squareonex.evetracker.converters.*;
 import squareonex.evetrackerdata.model.*;
 import squareonex.evetrackerdata.model.ids.BlueprintActionId;
+import squareonex.evetrackerdata.repositories.ActivityRepository;
 import squareonex.evetrackerdata.repositories.ItemRepository;
 import squareonex.evetrackerdata.repositories.JobRepository;
 import squareonex.evetrackerdata.repositories.UserRepository;
@@ -35,6 +36,8 @@ class JobServiceImplTest {
     UserRepository userRepository;
     @Mock
     StorageService storageService;
+    @Mock
+    ActivityRepository activityRepository;
 
     @BeforeEach
     void setUp() {
@@ -45,7 +48,9 @@ class JobServiceImplTest {
                 jobRepositoryMock,
                 itemRepository,
                 userRepository,
-                storageService);
+                storageService,
+                activityRepository
+        );
     }
 
     @Test

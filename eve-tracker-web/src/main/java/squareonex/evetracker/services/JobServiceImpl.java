@@ -7,6 +7,7 @@ import squareonex.evetracker.commands.JobCommand;
 import squareonex.evetracker.converters.JobCommandToJob;
 import squareonex.evetracker.converters.JobToJobCommand;
 import squareonex.evetrackerdata.model.*;
+import squareonex.evetrackerdata.repositories.ActivityRepository;
 import squareonex.evetrackerdata.repositories.ItemRepository;
 import squareonex.evetrackerdata.repositories.JobRepository;
 import squareonex.evetrackerdata.repositories.UserRepository;
@@ -23,15 +24,18 @@ public class JobServiceImpl implements JobService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
     private final StorageService storageService;
+    private final ActivityRepository activityRepository;
 
     public JobServiceImpl(JobToJobCommand jobToJobCommand, JobCommandToJob jobCommandToJob, JobRepository jobRepository, ItemRepository itemRepository,
-                          UserRepository userRepository, StorageService storageService) {
+                          UserRepository userRepository, StorageService storageService,
+                          ActivityRepository activityRepository) {
         this.jobToJobCommand = jobToJobCommand;
         this.jobCommandToJob = jobCommandToJob;
         this.jobRepository = jobRepository;
         this.itemRepository = itemRepository;
         this.userRepository = userRepository;
         this.storageService = storageService;
+        this.activityRepository = activityRepository;
     }
 
     @Override
@@ -56,6 +60,20 @@ public class JobServiceImpl implements JobService {
     @Transactional
     public JobCommand saveOrUpdateCommand(@NonNull JobCommand command) throws IllegalArgumentException, NullPointerException {
         Job job = jobCommandToJob.convert(command);
+
+        if (command.getActivity() == null) {
+            throw new NullPointerException("Expected non-null actvitiy for job");
+        } else if (command.getActivity().getId() != null) {
+            activityRepository.findById(command.getActivity().getId())
+                    .ifPresentOrElse(job::setActivity, () -> {
+                        throw new IllegalArgumentException("Activity with id=" + command.getActivity().getId() + " doesn't exist");
+                    });
+        } else if (command.getActivity().getName() != null) {
+            activityRepository.findActivityByName(command.getActivity().getName())
+                    .ifPresentOrElse(job::setActivity, () -> {
+                        throw new IllegalArgumentException("Activity with name=" + command.getActivity().getName() + " doesn't exist");
+                    });
+        }
 
         if (command.getItemCommand() == null) {
             throw new NullPointerException("Expected non-null item for job");
