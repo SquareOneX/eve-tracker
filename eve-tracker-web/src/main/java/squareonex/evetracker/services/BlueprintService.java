@@ -13,5 +13,5 @@ public interface BlueprintService {
     Set<BlueprintAction> getBlueprintActions();
     Blueprint findById(Long blueprintId);
     BlueprintAction findByBlueprintIdAndActivityId(Long blueprintId, Integer activityId) throws NoSuchElementException;
-    Set<BlueprintCopy> findBlueprintCopiesByProduct(Item product);
+    Set<BlueprintCopy> findBlueprintCopiesByItem(Item product);
 }

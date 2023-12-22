@@ -9,7 +9,6 @@ import squareonex.evetrackerdata.model.*;
 import squareonex.evetrackerdata.model.ids.BlueprintActionId;
 import squareonex.evetrackerdata.repositories.ActivityRepository;
 import squareonex.evetrackerdata.repositories.BlueprintRepository;
-import squareonex.evetrackerdata.repositories.ItemRepository;
 
 import java.util.Optional;
 import java.util.Set;
@@ -87,7 +86,7 @@ class BlueprintServiceImplTest {
         blueprintProduct.setProduct(item);
         item.getBlueprints().add(blueprintProduct);
 
-        Set<BlueprintCopy> copies = blueprintService.findBlueprintCopiesByProduct(item);
+        Set<BlueprintCopy> copies = blueprintService.findBlueprintCopiesByItem(item);
 
         assertTrue(copies.contains(bpc1));
         assertTrue(copies.contains(bpc2));

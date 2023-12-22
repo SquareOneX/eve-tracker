@@ -51,7 +51,7 @@ public class BlueprintServiceImpl implements BlueprintService {
     }
 
     @Override
-    public Set<BlueprintCopy> findBlueprintCopiesByProduct(Item product) {
+    public Set<BlueprintCopy> findBlueprintCopiesByItem(Item product) {
         Set<BlueprintCopy> copies = new HashSet<>();
         product.getBlueprints().forEach(val -> {
             copies.addAll(val.getBlueprintAction().getBlueprint().getCopies());
