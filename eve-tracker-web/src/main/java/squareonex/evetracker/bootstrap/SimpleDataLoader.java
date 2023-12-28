@@ -270,8 +270,16 @@ public class SimpleDataLoader implements BootstrapLoader {
         Job job2 = new Job(atron, 10L, user, false);
         job2.setActivity(manufacturing);
 
+        Job job3 = new Job(slasher, 5L, user, false);
+        job3.setActivity(manufacturing);
+
+        Job job4 = new Job(slasherBP, 1L, user, true);
+        job4.setActivity(invention);
+
         job1 = jobService.save(job1);
         job2 = jobService.save(job2);
+        job3 = jobService.save(job3);
+        job4 = jobService.save(job4);
 
         itemService.save(slasher);
         }
