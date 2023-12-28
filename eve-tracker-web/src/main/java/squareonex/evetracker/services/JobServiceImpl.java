@@ -63,6 +63,7 @@ public class JobServiceImpl implements JobService {
     @Transactional
     public JobCommand saveOrUpdateCommand(@NonNull JobCommand command) throws IllegalArgumentException, NullPointerException {
         Job job = jobCommandToJob.convert(command);
+        Objects.requireNonNull(job);
 
         if (command.getActivity() == null) {
             throw new NullPointerException("Expected non-null actvitiy for job");
@@ -140,13 +141,15 @@ public class JobServiceImpl implements JobService {
 
         Map<Item, Long> materials = calculateMaterialRequirements(blueprintAction.getMaterials(), blueprintCopy, job.getQuantity());
         double jobCost = 0.0; //TODO Calculate additional service cost based on location and taxes
-        for (Map.Entry<Item, Long> entry : materials.entrySet()) {
-            if (!storageService.isAvailable(entry.getKey(), entry.getValue())) {
-                throw new IllegalArgumentException("Not enough materials (missing " + entry.getKey().getName() + ")");
+        for (Map.Entry<Item, Long> materialEntry : materials.entrySet()) {
+            Item materialItem = materialEntry.getKey();
+            Long materialQty = materialEntry.getValue();
+            if (!storageService.isAvailable(materialItem, materialQty)) {
+                throw new IllegalArgumentException("Not enough materials (missing " + materialItem.getName() + ")");
             }
 
-            storageService.remove(entry.getKey(), entry.getValue());
-            jobCost += entry.getKey().getAvgCost() * entry.getValue();
+            storageService.remove(materialItem, Math.toIntExact(materialQty));
+            jobCost += materialItem.getAvgCost() * materialQty;
         }
         job.setJobCost(jobCost);
 

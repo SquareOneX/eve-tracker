@@ -2,9 +2,22 @@ package squareonex.evetracker.services;
 
 import squareonex.evetrackerdata.model.Item;
 
-public interface StorageService{
-    void add(Item item, long amount);
-    void remove(Item item, long amount);
-    boolean isAvailable(Item item, Long amount);
-    Long getStorageLevel(Item item);
+import java.util.Optional;
+
+public interface StorageService {
+
+    // Adds a specific quantity of an item to the storage
+    // Returns the new total quantity of this item in the storage
+    int add(Item item, int quantityToAdd);
+
+    // Removes a specific quantity of an item from the storage
+    // Returns the remaining quantity of this item in the storage, or an empty Optional if the item does not exist in the storage
+    Optional<Integer> remove(Item item, long quantityToRemove);
+
+    // Checks the quantity of an item in the storage
+    // Returns the quantity of this item in the storage, or an empty Optional if the item does not exist in the storage
+    Optional<Integer> check(Item item);
+    // Checks if the storage contains the specified quantity of an item
+    // Returns true if the storage contains at least the specified quantity of the item, or false otherwise
+    boolean isAvailable(Item item, long quantity);
 }
