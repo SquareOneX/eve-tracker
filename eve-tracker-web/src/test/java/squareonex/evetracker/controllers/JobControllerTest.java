@@ -10,12 +10,15 @@ import squareonex.evetracker.services.ActivityService;
 import squareonex.evetracker.services.BlueprintService;
 import squareonex.evetracker.services.JobService;
 import squareonex.evetrackerdata.model.BlueprintCopy;
+import squareonex.evetrackerdata.model.Item;
+import squareonex.evetrackerdata.model.Job;
 
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.Mockito.*;
 
 class JobControllerTest {
     JobController jobController;
@@ -57,5 +60,22 @@ class JobControllerTest {
 
         assertEquals("redirect:/jobs", templateStr);
         verify(jobServiceMock, times(1)).saveOrUpdateCommand(jobCommand);
+    }
+
+    @Test
+    void viewShouldShowCorrectTemplate() {
+        long jobId = 1L;
+        Job job = new Job();
+        job.setId(jobId);
+        Item product = new Item(1L, null);
+        job.setProduct(product);
+        when(jobServiceMock.findById(jobId)).thenReturn(job);
+        when(jobServiceMock.findCommandById(jobId)).thenReturn(new JobCommand());
+        String template = jobController.view(jobId, modelMock);
+
+        assertEquals("jobs/view", template);
+        verify( modelMock, times(1)).addAttribute(eq("blueprintCopies"), any());
+        verify(modelMock, times(1)).addAttribute(eq("jobCommand"), any(JobCommand.class));
+        verify(modelMock, times(1)).addAttribute(eq("activities"), any());
     }
 }

@@ -51,7 +51,7 @@ public class JobController {
         return "jobs/new";
     }
 
-    @PostMapping("create")
+    @PostMapping("save")
     public String createJob(@ModelAttribute(name = "jobCommand") JobCommand command) {
         try {
             JobCommand saved = jobService.saveOrUpdateCommand(command);
@@ -59,5 +59,19 @@ public class JobController {
         } catch (IllegalArgumentException | NullPointerException e) {
             throw new InvalidJobException(e);
         }
+    }
+
+    @RequestMapping("{id}/view")
+    public String view(@PathVariable Long id, Model model){
+        JobCommand jobCommand = jobService.findCommandById(id);
+        if (jobCommand == null)
+            throw new NoSuchElementException("Job with id=" + id + " doesn't exist. It may have been deleted.");
+        Job job = jobService.findById(id);
+
+        model.addAttribute("blueprintCopies", blueprintService.findBlueprintCopiesByItem(job.getProduct()));
+        model.addAttribute("jobCommand", jobCommand);
+        model.addAttribute("activities", activityService.findAll());
+
+        return "jobs/view";
     }
 }
