@@ -10,7 +10,7 @@ import squareonex.evetracker.services.StorageService;
 
 @Configuration
 @EnableJpaRepositories(basePackages = "squareonex.evetrackerdata.repositories")
-@ComponentScan(basePackages = "squareonex.evetrackerdata")
+@ComponentScan(basePackages = {"squareonex.evetrackerdata", "squareonex.evetracker"})
 public class EveTrackerConfig {
     @Bean
     ProductionCostService productionCostService(StorageService storageService) {
