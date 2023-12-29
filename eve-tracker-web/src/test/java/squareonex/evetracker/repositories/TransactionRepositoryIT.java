@@ -41,7 +41,7 @@ class TransactionRepositoryIT {
     ItemRepository itemRepository;
 
     @Test
-    void persistingTransactionShouldUpdateItemAvgCost() {
+    void persistingTransactionForItemWithoutPriorTransactionsShouldCalculateAvgCost() {
         long itemId = 689L;
         Item item = itemRepository.findById(itemId).orElseThrow();
 
@@ -58,5 +58,25 @@ class TransactionRepositoryIT {
         Set<Transaction> transactions = itemRepository.findById(itemId).orElseThrow().getTransactions();
         assertEquals(1, transactions.size());
         assertNotEquals(avgCostBefore, item.getAvgCost());
+    }
+
+    @Test
+    void persistingTransactionShouldUpdateItemAvgCost() {
+        long itemId = 34L;
+        Item item = itemRepository.findById(itemId).orElseThrow();
+
+        assertNotNull(item.getAvgCost());
+
+        Transaction transaction = new Transaction();
+        transaction.setItem(item);
+        transaction.setQuantity(10);
+        transaction.setPrice(1_000_000F);
+        transaction.setDate(LocalDateTime.now());
+        transaction.setIsBuy(true);
+        transaction = transactionRepository.save(transaction);
+
+        Set<Transaction> transactions = itemRepository.findById(itemId).orElseThrow().getTransactions();
+        assertEquals(2, transactions.size());
+        assertNotEquals(null, item.getAvgCost());
     }
 }

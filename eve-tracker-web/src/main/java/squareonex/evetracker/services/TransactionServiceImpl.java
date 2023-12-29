@@ -39,8 +39,7 @@ public class TransactionServiceImpl implements TransactionService {
     public TransactionCommand saveOrUpdateCommand(TransactionCommand transactionCommand) {
         Transaction transaction = transactionCommandToTransaction.convert(transactionCommand);
         transaction = saveOrUpdate(transaction);
-        TransactionCommand converted = transactionToTransactionCommand.convert(transaction);
-        return converted;
+        return transactionToTransactionCommand.convert(transaction);
     }
 
     @Override
