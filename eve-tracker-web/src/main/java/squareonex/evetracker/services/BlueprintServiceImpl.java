@@ -2,11 +2,16 @@ package squareonex.evetracker.services;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import squareonex.evetracker.commands.BlueprintCopyCommand;
+import squareonex.evetracker.commands.ItemCommand;
+import squareonex.evetracker.converters.BlueprintCopyToBlueprintCopyCommand;
+import squareonex.evetracker.converters.ItemCommandToItem;
 import squareonex.evetrackerdata.model.Blueprint;
 import squareonex.evetrackerdata.model.BlueprintAction;
 import squareonex.evetrackerdata.model.BlueprintCopy;
 import squareonex.evetrackerdata.model.Item;
 import squareonex.evetrackerdata.repositories.BlueprintRepository;
+import squareonex.evetrackerdata.repositories.ItemRepository;
 
 import java.util.HashSet;
 import java.util.NoSuchElementException;
@@ -18,9 +23,15 @@ import java.util.Set;
 @Service
 public class BlueprintServiceImpl implements BlueprintService {
     private final BlueprintRepository blueprintRepository;
+    private final ItemRepository itemRepository;
+    private final ItemCommandToItem itemCommandToItem;
+    private final BlueprintCopyToBlueprintCopyCommand bpcToBpcCommand;
 
-    public BlueprintServiceImpl(BlueprintRepository blueprintRepository) {
+    public BlueprintServiceImpl(BlueprintRepository blueprintRepository, ItemRepository itemRepository, ItemCommandToItem itemCommandToItem, BlueprintCopyToBlueprintCopyCommand blueprintCopyToBlueprintCopyCommand) {
         this.blueprintRepository = blueprintRepository;
+        this.itemRepository = itemRepository;
+        this.itemCommandToItem = itemCommandToItem;
+        this.bpcToBpcCommand = blueprintCopyToBlueprintCopyCommand;
     }
 
     /**
@@ -90,5 +101,21 @@ public class BlueprintServiceImpl implements BlueprintService {
             copies.addAll(val.getBlueprintAction().getBlueprint().getCopies());
         });
         return copies;
+    }
+
+    /**
+     * Retrieves a set of BlueprintCopyCommand objects by the given ItemCommand.
+     *
+     * @param itemCommand the ItemCommand for which to retrieve the BlueprintCopyCommands
+     * @return a set of BlueprintCopyCommand objects
+     * @throws IllegalArgumentException if no item with the given id is found in the database
+     */
+    @Override
+    public Set<BlueprintCopyCommand> findBlueprintCopyCommandsByItemCommand(ItemCommand itemCommand) {
+        Item item = itemCommandToItem.convert(itemCommand);
+        item = itemRepository.findById(item.getId()).orElseThrow(() -> new IllegalArgumentException("No item with id=" + itemCommand.getId() + " found in database"));
+        Set<BlueprintCopyCommand> bpcs = new HashSet<>();
+        findBlueprintCopiesByItem(item).forEach((val) -> bpcs.add(bpcToBpcCommand.convert(val)));
+        return bpcs;
     }
 }

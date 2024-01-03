@@ -20,12 +20,15 @@ class JobToJobCommandTest extends ConverterTestTemplate {
     private static final LocalDateTime JOB_FINISHED_TIME = LocalDateTime.now().plusHours(2);
     private static final Integer ACTIVITY_ID = 0;
     private static final Long BPC_ID = 0L;
+    private static final Long BLUEPRINT_ID = 0L;
+    private static final String BLUEPRINT_NAME = "BPO";
     JobToJobCommand converter;
     @BeforeEach
     void setUp() {
         this.converter = new JobToJobCommand(
                 new UserToUserCommand(),
-                new ItemToItemCommand()
+                new ItemToItemCommand(),
+                new BlueprintCopyToBlueprintCopyCommand()
         );
     }
 
@@ -67,6 +70,7 @@ class JobToJobCommandTest extends ConverterTestTemplate {
         source.setStartedTime(JOB_STARTED_TIME);
         source.setFinishedTime(JOB_FINISHED_TIME);
         BlueprintCopy blueprintCopy = new BlueprintCopy();
+        blueprintCopy.setBlueprint(new Blueprint(BLUEPRINT_ID, BLUEPRINT_NAME));
         blueprintCopy.setId(BPC_ID);
         source.setBlueprintCopy(blueprintCopy);
         Activity activity = new Activity();
@@ -77,6 +81,7 @@ class JobToJobCommandTest extends ConverterTestTemplate {
         User user = new User();
         user.setId(USER_ID);
         source.setUser(user);
+
         return source;
     }
 }

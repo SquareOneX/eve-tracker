@@ -1,5 +1,7 @@
 package squareonex.evetracker.services;
 
+import squareonex.evetracker.commands.BlueprintCopyCommand;
+import squareonex.evetracker.commands.ItemCommand;
 import squareonex.evetrackerdata.model.Blueprint;
 import squareonex.evetrackerdata.model.BlueprintAction;
 import squareonex.evetrackerdata.model.BlueprintCopy;
@@ -14,4 +16,5 @@ public interface BlueprintService {
     Blueprint findById(Long blueprintId);
     BlueprintAction findByBlueprintIdAndActivityId(Long blueprintId, Integer activityId) throws NoSuchElementException;
     Set<BlueprintCopy> findBlueprintCopiesByItem(Item product);
+    Set<BlueprintCopyCommand> findBlueprintCopyCommandsByItemCommand(ItemCommand itemCommand);
 }

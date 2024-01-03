@@ -10,10 +10,7 @@ import squareonex.evetracker.commands.UserCommand;
 import squareonex.evetracker.converters.*;
 import squareonex.evetrackerdata.model.*;
 import squareonex.evetrackerdata.model.ids.BlueprintActionId;
-import squareonex.evetrackerdata.repositories.ActivityRepository;
-import squareonex.evetrackerdata.repositories.ItemRepository;
-import squareonex.evetrackerdata.repositories.JobRepository;
-import squareonex.evetrackerdata.repositories.UserRepository;
+import squareonex.evetrackerdata.repositories.*;
 
 import java.time.Duration;
 import java.util.Optional;
@@ -39,13 +36,17 @@ class JobServiceImplTest {
     StorageService storageService;
     @Mock
     ActivityRepository activityRepository;
+    @Mock
+    BlueprintCopyRepository blueprintCopyRepository;
+    @Mock
+    BlueprintRepository blueprintRepository;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         this.jobService = new JobServiceImpl(
-                new JobToJobCommand(new UserToUserCommand(), new ItemToItemCommand()),
-                new JobCommandToJob(new UserCommandToUser(), new ItemCommandToItem()),
+                new JobToJobCommand(new UserToUserCommand(), new ItemToItemCommand(), new BlueprintCopyToBlueprintCopyCommand()),
+                new JobCommandToJob(new UserCommandToUser(), new ItemCommandToItem(), new BlueprintCopyCommandToBlueprintCopy(blueprintCopyRepository, blueprintRepository)),
                 jobRepositoryMock,
                 itemRepository,
                 userRepository,
