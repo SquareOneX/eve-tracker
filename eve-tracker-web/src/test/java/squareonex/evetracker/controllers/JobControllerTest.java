@@ -17,7 +17,6 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.*;
 
 class JobControllerTest {
@@ -56,7 +55,7 @@ class JobControllerTest {
     @Test
     void createJob() {
         JobCommand jobCommand = new JobCommand();
-        String templateStr = jobController.createJob(jobCommand);
+        String templateStr = jobController.saveJobCommand(jobCommand);
 
         assertEquals("redirect:/jobs", templateStr);
         verify(jobServiceMock, times(1)).saveOrUpdateCommand(jobCommand);

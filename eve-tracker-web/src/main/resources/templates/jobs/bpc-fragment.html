@@ -1,18 +1,17 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <body>
-<div th:fragment="bpc-selection-panel (blueprintCopies)" class="panel panel-default">
+<div th:fragment="bpc-selection-panel (blueprintCopies, jobCommand)" class="panel panel-default">
     <div class="panel-heading">
         Select a Blueprint Copy
     </div>
     <div class="panel-body">
         <label>
-            Blueprint Copy
-            <select multiple="" class="form-control" id="exampleSelect2">
-                <!--/*@thymesVar id="bpc" type="squareonex.evetrackerdata.model.BlueprintCopy"*/-->
-                <option th:each="bpc: ${blueprintCopies}"
-                        th:text="'Runs: ' + ${bpc.maxRuns} + ' MM: ' + ${bpc.materialModifier} + ' TM: ' + ${bpc.timeModifier}">
-                </option>
-            </select>
+            <ul class="list-unstyled">
+                <li th:each="bpc: ${blueprintCopies}">
+                    <!--/*@thymesVar id="bpc" type="squareonex.evetracker.commands.BlueprintCopyCommand"*/-->
+                    <input type="radio" th:field="*{blueprintCopy}" th:value="${bpc}" th:text="'Runs: ' + ${bpc.maxRuns} + ' MM: ' + ${#numbers.formatDecimal(bpc.materialModifier, 1, 2)} + ' TM: ' + ${#numbers.formatDecimal(bpc.timeModifier, 1, 2)}">
+                </li>
+            </ul>
         </label>
     </div>
 </div>

@@ -2,7 +2,10 @@ package squareonex.evetracker.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import squareonex.evetracker.commands.JobCommand;
 import squareonex.evetracker.controllers.exception.InvalidJobException;
 import squareonex.evetracker.services.ActivityService;
@@ -29,7 +32,7 @@ public class JobController {
     }
 
     @RequestMapping({"", "index", "index.html"})
-    public String list(Model model){
+    public String list(Model model) {
         Set<Job> all = jobService.findAll();
         Map<Long, Long> jobDurations = new HashMap<>();
         all.forEach(val -> {
@@ -44,7 +47,7 @@ public class JobController {
     }
 
     @RequestMapping("new")
-    public String newJob(Model model){
+    public String newJob(Model model) {
         model.addAttribute("jobCommand", new JobCommand());
         model.addAttribute("activities", activityService.findAll());
         model.addAttribute("blueprintCopies", new ArrayList<BlueprintCopy>());
@@ -52,7 +55,7 @@ public class JobController {
     }
 
     @PostMapping("save")
-    public String createJob(@ModelAttribute(name = "jobCommand") JobCommand command) {
+    public String saveJobCommand(@ModelAttribute(name = "jobCommand") JobCommand command) {
         try {
             JobCommand saved = jobService.saveOrUpdateCommand(command);
             return "redirect:/jobs";
@@ -62,13 +65,12 @@ public class JobController {
     }
 
     @RequestMapping("{id}/view")
-    public String view(@PathVariable Long id, Model model){
+    public String view(@PathVariable Long id, Model model) {
         JobCommand jobCommand = jobService.findCommandById(id);
         if (jobCommand == null)
             throw new NoSuchElementException("Job with id=" + id + " doesn't exist. It may have been deleted.");
-        Job job = jobService.findById(id);
 
-        model.addAttribute("blueprintCopies", blueprintService.findBlueprintCopiesByItem(job.getProduct()));
+        model.addAttribute("blueprintCopies", blueprintService.findBlueprintCopyCommandsByItemCommand(jobCommand.getItemCommand()));
         model.addAttribute("jobCommand", jobCommand);
         model.addAttribute("activities", activityService.findAll());
 
