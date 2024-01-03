@@ -16,6 +16,13 @@ public class StorageServiceImpl implements StorageService {
         this.storageRepository = storageRepository;
     }
 
+    /**
+     * Adds a specific quantity of an item to the storage.
+     *
+     * @param item The item to add.
+     * @param quantityToAdd The quantity to add.
+     * @return The new total quantity of the item in the storage.
+     */
     @Transactional
     @Override
     public long add(Item item, long quantityToAdd) {
@@ -28,6 +35,14 @@ public class StorageServiceImpl implements StorageService {
         }
     }
 
+    /**
+     * Removes a specific quantity of an item from the storage.
+     *
+     * @param item The item to remove.
+     * @param quantityToRemove The quantity to remove.
+     * @return The remaining quantity of this item in the storage, or an empty Optional if the item does not exist in the storage or the quantity to remove exceeds the current quantity
+     * in storage.
+     */
     @Override
     @Transactional
     public Optional<Long> remove(Item item, long quantityToRemove) {
@@ -48,6 +63,12 @@ public class StorageServiceImpl implements StorageService {
         }
     }
 
+    /**
+     * Checks the quantity of an item in the storage.
+     *
+     * @param item The item to check.
+     * @return The quantity of this item in the storage, or an empty Optional if the item does not exist in the storage.
+     */
     @Override
     public Optional<Long> check(Item item) {
         Optional<Storage> storageEntry = storageRepository.findByItem(item);
@@ -57,6 +78,13 @@ public class StorageServiceImpl implements StorageService {
             return Optional.of(storageEntry.get().getQuantity());
     }
 
+    /**
+     * Checks if the storage contains the specified quantity of an item.
+     *
+     * @param item The item to check.
+     * @param quantity The quantity to check.
+     * @return True if the storage contains at least the specified quantity of the item, false otherwise.
+     */
     @Override
     public boolean isAvailable(Item item, long quantity) {
         Optional<Long> quantityInStorage = check(item);

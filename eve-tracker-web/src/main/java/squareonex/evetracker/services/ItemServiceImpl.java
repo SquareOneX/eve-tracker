@@ -14,6 +14,11 @@ public class ItemServiceImpl implements ItemService {
         this.itemRepository = itemRepository;
     }
 
+    /**
+     * Retrieves all items from the item repository.
+     *
+     * @return a set of Item objects containing all the items
+     */
     @Override
     public Set<Item> findAll() {
         Set<Item> set = new HashSet<>();

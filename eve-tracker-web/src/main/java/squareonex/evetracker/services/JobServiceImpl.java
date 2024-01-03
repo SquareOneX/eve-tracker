@@ -38,6 +38,11 @@ public class JobServiceImpl implements JobService {
         this.activityRepository = activityRepository;
     }
 
+    /**
+     * Retrieves all the jobs from the job repository.
+     *
+     * @return a set of jobs
+     */
     @Override
     public Set<Job> findAll() {
         Set<Job> set = new HashSet<>();
@@ -45,6 +50,12 @@ public class JobServiceImpl implements JobService {
         return set;
     }
 
+    /**
+     * Retrieves a job by its ID.
+     *
+     * @param id the ID of the job to retrieve
+     * @return the job with the specified ID, or null if no job is found
+     */
     @Override
     public Job findById(Long id) {
         return jobRepository.findById(id).orElse(null);
@@ -54,7 +65,7 @@ public class JobServiceImpl implements JobService {
     }
 
     /**
-     * Verifies that all required details of the job are set and creates it
+     * Verifies that all required details of the job are set and creates/updates it
      *
      * @param command command object representing a job
      * @return the resulting job
@@ -127,6 +138,16 @@ public class JobServiceImpl implements JobService {
         return jobToJobCommand.convert(jobRepository.save(job));
     }
 
+    /**
+     * Verifies all the necessary details of the job and starts it.
+     *
+     * @param blueprintCopy the blueprint copy associated with the job
+     * @param activity      the activity to be performed for the job
+     * @param job           the job to be started
+     * @return the started job
+     * @throws IllegalArgumentException if the blueprint copy cannot be used with the activity
+     * @throws IllegalArgumentException if there are not enough materials for the job
+     */
     @Override
     @Transactional
     public Job startJob(BlueprintCopy blueprintCopy, Activity activity, Job  job) {

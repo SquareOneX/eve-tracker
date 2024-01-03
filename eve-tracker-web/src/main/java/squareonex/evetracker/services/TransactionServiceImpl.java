@@ -27,6 +27,11 @@ public class TransactionServiceImpl implements TransactionService {
         this.transactionCommandToTransaction = transactionCommandToTransaction;
     }
 
+    /**
+     * This method retrieves all transactions from the transaction repository and returns them as a Set.
+     *
+     * @return A Set of Transaction objects representing all transactions in the repository.
+     */
     @Override
     public Set<Transaction> findAll() {
         Set<Transaction> set = new HashSet<>();
@@ -34,6 +39,12 @@ public class TransactionServiceImpl implements TransactionService {
         return set;
     }
 
+    /**
+     * Saves or updates a TransactionCommand object.
+     *
+     * @param transactionCommand The TransactionCommand object to be saved or updated.
+     * @return The saved or updated TransactionCommand object.
+     */
     @Override
     @Transactional
     public TransactionCommand saveOrUpdateCommand(TransactionCommand transactionCommand) {
@@ -42,6 +53,12 @@ public class TransactionServiceImpl implements TransactionService {
         return transactionToTransactionCommand.convert(transaction);
     }
 
+    /**
+     * Saves or updates a Transaction object.
+     *
+     * @param transaction The Transaction object to be saved or updated.
+     * @return The saved or updated Transaction object.
+     */
     @Override
     @Transactional
     public Transaction saveOrUpdate(Transaction transaction) {
