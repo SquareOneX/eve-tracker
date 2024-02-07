@@ -40,7 +40,7 @@ public class JobToJobCommand implements Converter<Job, JobCommand> {
         target.setUserCommand(userToUserCommand.convert(source.getUser()));
         target.setQuantity(source.getQuantity());
         target.setActivity(source.getActivity());
-        target.setBlueprintCopy(blueprintCopyToBlueprintCopyCommand.convert(source.getBlueprintCopy()));
+        target.setBlueprintCopy(source.getBlueprintCopy());
         return target;
     }
 }

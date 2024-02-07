@@ -7,10 +7,7 @@ import squareonex.evetracker.commands.JobCommand;
 import squareonex.evetracker.converters.JobCommandToJob;
 import squareonex.evetracker.converters.JobToJobCommand;
 import squareonex.evetrackerdata.model.*;
-import squareonex.evetrackerdata.repositories.ActivityRepository;
-import squareonex.evetrackerdata.repositories.ItemRepository;
-import squareonex.evetrackerdata.repositories.JobRepository;
-import squareonex.evetrackerdata.repositories.UserRepository;
+import squareonex.evetrackerdata.repositories.*;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -25,10 +22,11 @@ public class JobServiceImpl implements JobService {
     private final UserRepository userRepository;
     private final StorageService storageService;
     private final ActivityRepository activityRepository;
+    private final BlueprintCopyRepository blueprintCopyRepository;
 
     public JobServiceImpl(JobToJobCommand jobToJobCommand, JobCommandToJob jobCommandToJob, JobRepository jobRepository, ItemRepository itemRepository,
                           UserRepository userRepository, StorageService storageService,
-                          ActivityRepository activityRepository) {
+                          ActivityRepository activityRepository, BlueprintCopyRepository blueprintCopyRepository) {
         this.jobToJobCommand = jobToJobCommand;
         this.jobCommandToJob = jobCommandToJob;
         this.jobRepository = jobRepository;
@@ -36,6 +34,7 @@ public class JobServiceImpl implements JobService {
         this.userRepository = userRepository;
         this.storageService = storageService;
         this.activityRepository = activityRepository;
+        this.blueprintCopyRepository = blueprintCopyRepository;
     }
 
     /**
@@ -75,6 +74,14 @@ public class JobServiceImpl implements JobService {
     public JobCommand saveOrUpdateCommand(@NonNull JobCommand command) throws IllegalArgumentException, NullPointerException {
         Job job = jobCommandToJob.convert(command);
         Objects.requireNonNull(job);
+
+        if (job.getBlueprintCopy() != null) {
+            Optional<BlueprintCopy> blueprint = blueprintCopyRepository.findById(command.getBlueprintCopy().getId());
+            blueprint.ifPresent(job::setBlueprintCopy);
+
+            if (blueprint.isEmpty())
+                throw new IllegalArgumentException("BlueprintCopy with id=" + command.getBlueprintCopy().getId() + " doesn't exist");
+        }
 
         if (command.getActivity() == null) {
             throw new NullPointerException("Expected non-null actvitiy for job");
@@ -150,7 +157,7 @@ public class JobServiceImpl implements JobService {
      */
     @Override
     @Transactional
-    public Job startJob(BlueprintCopy blueprintCopy, Activity activity, Job  job) {
+    public Job startJob(BlueprintCopy blueprintCopy, Activity activity, Job job) {
         Blueprint blueprint = blueprintCopy.getBlueprint();
         BlueprintAction blueprintAction = null;
         for (BlueprintAction action : blueprint.getActions()) {
@@ -182,7 +189,7 @@ public class JobServiceImpl implements JobService {
     }
 
     private Map<Item, Long> calculateMaterialRequirements(
-        Set<BlueprintMaterial> baseMaterials, BlueprintCopy blueprintCopy, Long runs) {
+            Set<BlueprintMaterial> baseMaterials, BlueprintCopy blueprintCopy, Long runs) {
         Map<Item, Long> materialMap = new HashMap<>();
         for (BlueprintMaterial material : baseMaterials) {
             double quantity = material.getQuantity() * runs * blueprintCopy.getMaterialModifier();

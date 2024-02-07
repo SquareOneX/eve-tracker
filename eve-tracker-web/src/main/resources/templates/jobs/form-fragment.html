@@ -2,40 +2,50 @@
 <body>
 <!--/*@thymesVar id="jobCommand" type="squareonex.evetracker.commands.JobCommand"*/-->
 <div th:fragment="form (jobCommand, activities)" class="panel panel-primary" th:object="${jobCommand}">
+    <input type="hidden" th:field="*{id}" th:value="*{id}">
     <div class="panel-heading">
         Enter the Job Specifics
     </div>
     <div class="panel-body">
         <label class="col-md-2">
             Activity
-            <select id="activitySelect" class="form-control" th:field="*{activity.name}"
-                    th:disabled="*{id} != null">
+            <select id="activitySelect" class="form-control"
+                    th:field="*{activity}"
+                    th:readonly="*{id} != null">
                 <!--/*@thymesVar id="activity" type="squareonex.evetrackerdata.model.Activity"*/-->
-                <option th:each="activity: ${activities}" th:text="${activity.name}"
-                        th:value="${activity.name}"
+                <option class="form-control"
+                        th:each="activity: ${activities}"
+                        th:text="${activity.name}"
+                        th:value="${activity.id }"
                         th:selected="${activity.id} == ${jobCommand.activity.id}"
-                        class="form-control"></option>
+                ></option>
             </select>
         </label>
         <label class="col-md-4">
             Product
-            <input type="text" class="form-control" th:field="*{itemCommand.name}"
-                   th:disabled="*{itemCommand} != null">
+            <input type="text" class="form-control"
+                   th:value="*{itemCommand}"
+                   th:field="*{itemCommand.name}"
+                   th:readonly="*{itemCommand} != null">
         </label>
         <label class="col-md-2">
             Runs
             <input type="number" class="form-control" th:field="*{quantity}"
-                   th:disabled="*{quantity} != null">
+                   th:readonly="*{quantity} != null">
         </label>
         <label class="col-md-3">
             User
             <input type="search" class="form-control" th:field="*{userCommand.name}"
-                   th:disabled="*{userCommand} != null">
+                   th:readonly="*{userCommand} != null">
         </label>
         <label class="col-md-1">
             Internal
             <input type="checkbox" class="form-control checkbox-inline" th:field="*{isInternal}"
-                   th:disabled="*{isInternal} != null">
+                   th:disabled="${jobCommand.id} != null">
+            <input type="hidden"  class="form-control checkbox-inline"
+                   th:if="${jobCommand.id != null}"
+                   th:field="*{isInternal}"
+                   th:value="${jobCommand.isInternal}">
         </label>
     </div>
 </div>

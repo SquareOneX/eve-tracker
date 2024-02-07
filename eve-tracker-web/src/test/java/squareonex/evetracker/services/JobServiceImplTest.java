@@ -51,7 +51,8 @@ class JobServiceImplTest {
                 itemRepository,
                 userRepository,
                 storageService,
-                activityRepository
+                activityRepository,
+                blueprintCopyRepository
         );
     }
 

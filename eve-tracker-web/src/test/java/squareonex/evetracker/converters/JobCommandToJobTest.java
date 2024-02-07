@@ -66,7 +66,7 @@ class JobCommandToJobTest extends ConverterTestTemplate {
     @Override
     protected void convertShouldReturnValidTarget() {
         JobCommand source = getSource();
-        when(blueprintRepositoyMock.findById(source.getBlueprintCopy().getBlueprintId())).thenReturn(Optional.of(new Blueprint(BLUEPRINT_ID, BLUEPRINT_NAME)));
+        when(blueprintRepositoyMock.findById(source.getBlueprintCopy().getBlueprint().getId())).thenReturn(Optional.of(new Blueprint(BLUEPRINT_ID, BLUEPRINT_NAME)));
 
         Job converted = converter.convert(source);
 
@@ -94,7 +94,7 @@ class JobCommandToJobTest extends ConverterTestTemplate {
         source.setIsInternal(JOB_IS_INTERNAL);
         source.setStartedTime(JOB_STARTED_TIME);
         source.setFinishedTime(JOB_FINISHED_TIME);
-        BlueprintCopyCommand blueprintCopy = new BlueprintCopyCommand(BPC_ID, BLUEPRINT_ID, BLUEPRINT_NAME);
+        BlueprintCopy blueprintCopy = new BlueprintCopy(new Blueprint(BLUEPRINT_ID, BLUEPRINT_NAME), null, null);
         blueprintCopy.setId(BPC_ID);
         source.setBlueprintCopy(blueprintCopy);
         Activity activity = new Activity();

@@ -5,14 +5,25 @@
         Select a Blueprint Copy
     </div>
     <div class="panel-body">
-        <label>
-            <ul class="list-unstyled">
-                <li th:each="bpc: ${blueprintCopies}">
-                    <!--/*@thymesVar id="bpc" type="squareonex.evetracker.commands.BlueprintCopyCommand"*/-->
-                    <input type="radio" th:field="*{blueprintCopy}" th:value="${bpc}" th:text="'Runs: ' + ${bpc.maxRuns} + ' MM: ' + ${#numbers.formatDecimal(bpc.materialModifier, 1, 2)} + ' TM: ' + ${#numbers.formatDecimal(bpc.timeModifier, 1, 2)}">
-                </li>
-            </ul>
-        </label>
+        <div class="radio" th:each="bpc : ${blueprintCopies}">
+            <label>
+                <input type="radio" class="overflow-scroll"
+                       th:field="*{blueprintCopy}"
+                       th:text="'Runs: ' + ${bpc.maxRuns} + ' MM: ' + ${#numbers.formatDecimal(bpc.materialModifier, 1, 2)} + ' TM: ' + ${#numbers.formatDecimal(bpc.timeModifier, 1, 2)}"
+                       th:value="${bpc.id}"
+                       th:selected="${jobCommand.blueprintCopy != null && jobCommand.blueprintCopy.id == bpc.id}"
+                       th:disabled="${jobCommand.blueprintCopy != null}"
+                <!--/*@thymesVar id="jobCommand" type="squareonex.evetracker.commands.JobCommand"*/-->
+                <!--/*@thymesVar id="blueprintCopy" type="squareonex.evetrackerdata.model.BlueprintCopy"*/-->
+                <!--/*@thymesVar id="bpc" type="squareonex.evetrackerdata.model.BlueprintCopy"*/-->
+                >
+                <input type="hidden"
+                       th:if="${jobCommand.blueprintCopy != null}"
+                       th:field="*{blueprintCopy}"
+                       th:value="${jobCommand.blueprintCopy}"
+                >
+            </label>
+        </div>
     </div>
 </div>
 </body>

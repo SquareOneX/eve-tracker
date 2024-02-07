@@ -41,7 +41,7 @@ public class JobCommandToJob implements Converter<JobCommand, Job> {
         target.setStartedTime(source.getStartedTime());
         target.setFinishedTime(source.getFinishedTime());
         target.setActivity(source.getActivity());
-        target.setBlueprintCopy(blueprintCopyCommandBlueprintCopy.convert(source.getBlueprintCopy()));
+        target.setBlueprintCopy(source.getBlueprintCopy());
         return target;
     }
 }
