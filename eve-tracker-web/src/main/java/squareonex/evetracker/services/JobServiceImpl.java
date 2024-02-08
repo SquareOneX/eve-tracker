@@ -1,6 +1,8 @@
 package squareonex.evetracker.services;
 
 import lombok.NonNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import squareonex.evetracker.commands.JobCommand;
@@ -186,6 +188,11 @@ public class JobServiceImpl implements JobService {
         job.setFinishedTime(job.getStartedTime().plus(modifiedDuration));
 
         return jobRepository.save(job);
+    }
+
+    @Override
+    public Page<Job> findPaginated(Pageable pageable) {
+        return jobRepository.findAll(pageable);
     }
 
     private Map<Item, Long> calculateMaterialRequirements(

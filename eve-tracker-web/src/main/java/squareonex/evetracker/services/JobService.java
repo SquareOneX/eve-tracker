@@ -1,5 +1,8 @@
 package squareonex.evetracker.services;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import squareonex.evetracker.commands.JobCommand;
 import squareonex.evetrackerdata.model.Activity;
 import squareonex.evetrackerdata.model.BlueprintCopy;
@@ -13,4 +16,6 @@ public interface JobService {
     JobCommand findCommandById(Long id);
     JobCommand saveOrUpdateCommand(JobCommand command) throws IllegalArgumentException, NullPointerException;
     Job startJob(BlueprintCopy blueprintCopy, Activity activity, Job job);
+
+    Page<Job> findPaginated(Pageable pageable);
 }

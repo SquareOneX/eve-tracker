@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.ui.Model;
 import squareonex.evetracker.commands.JobCommand;
 import squareonex.evetracker.services.ActivityService;
@@ -14,6 +16,7 @@ import squareonex.evetrackerdata.model.Item;
 import squareonex.evetrackerdata.model.Job;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -28,19 +31,22 @@ class JobControllerTest {
     @Mock
     BlueprintService blueprintService;
     @Mock ActivityService activityService;
+    private final int maxItemsPerPage = 10;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        this.jobController = new JobController(jobServiceMock, blueprintService, activityService);
+        this.jobController = new JobController(jobServiceMock, blueprintService, activityService, maxItemsPerPage);
     }
 
     @Test
     void list() {
-        String templateString = jobController.list(modelMock);
+        Page<Job> expectedPage = Page.empty();
+        when(jobServiceMock.findPaginated(any(Pageable.class))).thenReturn(expectedPage);
+        String templateString = jobController.list(modelMock, Optional.empty(), Optional.empty());
 
         assertEquals("jobs/list", templateString);
-        verify(modelMock, times(1)).addAttribute("jobs", jobServiceMock.findAll());
+        verify(modelMock, times(1)).addAttribute("jobs", expectedPage);
     }
 
     @Test

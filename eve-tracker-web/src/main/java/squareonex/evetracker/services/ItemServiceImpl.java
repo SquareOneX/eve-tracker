@@ -23,9 +23,7 @@ public class ItemServiceImpl implements ItemService {
      */
     @Override
     public Set<Item> findAll() {
-        Set<Item> set = new HashSet<>();
-        itemRepository.findAll().forEach(set::add);
-        return set;
+        return new HashSet<>(itemRepository.findAll());
     }
 
     @Override

@@ -40,6 +40,7 @@
         <td th:text="${j.isInternal}"></td>
     </tr>
 </table>
+<div th:replace="~{fragments/pagination :: pagination (${jobs}, ${pageNumbers}, 'jobs')}"></div>
 
 <script th:inline="javascript">
     let durationsMap = [[${jobDurations}]];
