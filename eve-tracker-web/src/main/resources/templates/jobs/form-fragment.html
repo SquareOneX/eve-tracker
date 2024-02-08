@@ -10,14 +10,13 @@
         <label class="col-md-2">
             Activity
             <select id="activitySelect" class="form-control"
-                    th:field="*{activity}"
+                    th:field="*{activity.id}"
                     th:readonly="*{id} != null">
-                <!--/*@thymesVar id="activity" type="squareonex.evetrackerdata.model.Activity"*/-->
                 <option class="form-control"
-                        th:each="activity: ${activities}"
-                        th:text="${activity.name}"
-                        th:value="${activity.id }"
-                        th:selected="${activity.id} == ${jobCommand.activity.id}"
+                        th:each="act: ${activities}"
+                        th:text="${act.name}"
+                        th:value="${act.id}"
+                        th:selected="${act} == ${jobCommand.activity}"
                 ></option>
             </select>
         </label>
