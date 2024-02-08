@@ -13,7 +13,7 @@
             <th>Blueprint Name</th>
             <th>Blueprint Activity</th>
         </tr>
-        <tr th:each="i: ${items}">
+        <tr th:each="i: ${itemPage}">
             <td th:text="${i.id}"></td>
             <td th:text="${i.name}"></td>
             <td>
@@ -24,5 +24,6 @@
             </td>
         </tr>
     </table>
+    <div th:replace="~{fragments/pagination :: pagination (${itemPage}, ${pageNumbers}, 'items')}"></div>
 </body>
 </html>

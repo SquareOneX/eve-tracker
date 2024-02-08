@@ -10,3 +10,6 @@ server:
   error:
     whitelabel:
       enabled: false
+eve-tracker:
+  pagination:
+    max-items-per-page: 25

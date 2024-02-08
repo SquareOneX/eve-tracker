@@ -1,0 +1,13 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<body>
+<!--/*@thymesVar id="page" type="org.springframework.data.domain.Page"*/-->
+    <ul class="pagination"
+         th:fragment="pagination (page, pageNumbers, callbackLink)"
+         th:if="${page.totalPages > 0}"
+         th:each="pagenumber : ${pageNumbers}">
+        <li th:class="${pagenumber == page.number + 1} ? active">
+            <a th:href="@{|${callbackLink}?size=${page.size}&page=${pagenumber}|}"
+               th:text="${pagenumber}"></a>
+        </li>
+    </ul>
+</body>
