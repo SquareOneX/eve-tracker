@@ -25,7 +25,7 @@
         <th>Duration</th>
         <th>isInternal</th>
     </tr>
-    <tr th:each="j: ${jobs}">
+    <tr th:each="j: ${data}">
         <td th:text="${j.id}"></td>
         <td th:text="${j.product.name}"></td>
         <td th:text="${j.activity.name}"></td>
@@ -40,7 +40,7 @@
         <td th:text="${j.isInternal}"></td>
     </tr>
 </table>
-<div th:replace="~{fragments/pagination :: pagination (${jobs}, ${pageNumbers}, 'jobs')}"></div>
+<div th:replace="~{fragments/pagination :: pagination (${data}, ${pageNumbers}, 'jobs')}"></div>
 
 <script th:inline="javascript">
     let durationsMap = [[${jobDurations}]];

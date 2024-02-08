@@ -30,7 +30,7 @@ class JobControllerIT {
         Page<Job> expected = jobService.findPaginated(PageRequest.of(pageNumber - 1, pageSize)); //backend paging is 0-indexed
         mockMvc.perform(get("/jobs?page=" + pageNumber + "&size=" + pageSize))
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("jobs", expected));
+                .andExpect(model().attribute("data", expected));
     }
 
     @Test

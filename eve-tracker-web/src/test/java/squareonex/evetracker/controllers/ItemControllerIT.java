@@ -31,6 +31,6 @@ class ItemControllerIT {
         Page<Item> expected = itemService.findPaginated(PageRequest.of(pageNumber - 1, pageSize)); //internally 0-indexed
         mockMvc.perform(get("/items?page=" + pageNumber + "&size=" + pageSize))
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("itemPage", expected));
+                .andExpect(model().attribute("data", expected));
     }
 }

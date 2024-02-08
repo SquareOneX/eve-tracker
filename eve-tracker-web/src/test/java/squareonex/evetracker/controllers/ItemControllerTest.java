@@ -38,6 +38,6 @@ class ItemControllerTest {
         String templateStr = itemController.list(model, Optional.empty(), Optional.empty());
 
         assertEquals("items/list", templateStr);
-        verify(model, times(1)).addAttribute("itemPage", expectedPage);
+        verify(model, times(1)).addAttribute("data", expectedPage);
     }
 }

@@ -46,7 +46,7 @@ class JobControllerTest {
         String templateString = jobController.list(modelMock, Optional.empty(), Optional.empty());
 
         assertEquals("jobs/list", templateString);
-        verify(modelMock, times(1)).addAttribute("jobs", expectedPage);
+        verify(modelMock, times(1)).addAttribute("data", expectedPage);
     }
 
     @Test

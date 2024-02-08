@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import squareonex.evetracker.services.ItemService;
+import squareonex.evetracker.services.PagingUtilities;
 import squareonex.evetrackerdata.model.Item;
 
 import java.util.List;
@@ -30,20 +31,10 @@ public class ItemController {
             @RequestParam("page") Optional<Integer> page,
             @RequestParam("size") Optional<Integer> size
     ){
-        int currentPage = page.orElse(1) - 1;
+        int currentPage = page.orElse(1);
         int pageSize = size.orElse(maxItemsPerPage);
 
-        PageRequest requestedPage = PageRequest.of(currentPage, pageSize);
-        Page<Item> itemPage = itemService.findPaginated(requestedPage);
-        model.addAttribute("itemPage", itemPage);
-
-        int totalPages = itemPage.getTotalPages();
-        if (totalPages > 0) {
-            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
-                    .boxed()
-                    .toList();
-            model.addAttribute("pageNumbers", pageNumbers);
-        }
+        PagingUtilities.addPageableDataToModel(model, itemService, currentPage, pageSize);
 
         return "items/list";
     }

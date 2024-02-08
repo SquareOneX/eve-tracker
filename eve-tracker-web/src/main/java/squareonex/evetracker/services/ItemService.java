@@ -6,7 +6,7 @@ import squareonex.evetrackerdata.model.Item;
 
 import java.util.Set;
 
-public interface ItemService {
+public interface ItemService extends PageableService<Item> {
     Set<Item> findAll();
     Page<Item> findPaginated(Pageable pageable);
 }

@@ -11,6 +11,7 @@ import squareonex.evetracker.controllers.exception.InvalidJobException;
 import squareonex.evetracker.services.ActivityService;
 import squareonex.evetracker.services.BlueprintService;
 import squareonex.evetracker.services.JobService;
+import squareonex.evetracker.services.PagingUtilities;
 import squareonex.evetrackerdata.model.BlueprintCopy;
 import squareonex.evetrackerdata.model.Job;
 
@@ -45,22 +46,13 @@ public class JobController {
             @RequestParam("page") Optional<Integer> page,
             @RequestParam("size") Optional<Integer> size
     ) {
-        int currentPage = page.orElse(1) - 1;
+        int currentPage = page.orElse(1);
         int pageSize = size.orElse(maxItemsPerPage);
 
-        PageRequest requestedPage = PageRequest.of(currentPage, pageSize);
-        Page<Job> jobPage = jobService.findPaginated(requestedPage);
-        model.addAttribute("jobs", jobPage);
-
-        int totalPages = jobPage.getTotalPages();
-        if (totalPages > 0) {
-            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
-                    .boxed()
-                    .toList();
-            model.addAttribute("pageNumbers", pageNumbers);
-        }
+        PagingUtilities.addPageableDataToModel(model, jobService, currentPage, pageSize);
 
         Map<Long, Long> jobDurations = new HashMap<>();
+        Page<Job> jobPage = jobService.findPaginated(PageRequest.of(currentPage - 1, pageSize));
         jobPage.forEach(val -> {
             if (val.getStartedTime() != null && val.getFinishedTime().isAfter(LocalDateTime.now()))
                 jobDurations.put(val.getId(), LocalDateTime.now().until(val.getFinishedTime(), ChronoUnit.MILLIS));
