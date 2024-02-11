@@ -1,6 +1,8 @@
 package squareonex.evetracker.services;
 
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import squareonex.evetracker.commands.TransactionCommand;
 import squareonex.evetracker.converters.TransactionCommandToTransaction;
@@ -34,9 +36,7 @@ public class TransactionServiceImpl implements TransactionService {
      */
     @Override
     public Set<Transaction> findAll() {
-        Set<Transaction> set = new HashSet<>();
-        transactionRepository.findAll().forEach(set::add);
-        return set;
+        return new HashSet<>(transactionRepository.findAll());
     }
 
     /**
@@ -63,5 +63,10 @@ public class TransactionServiceImpl implements TransactionService {
     @Transactional
     public Transaction saveOrUpdate(Transaction transaction) {
         return transactionRepository.save(transaction);
+    }
+
+    @Override
+    public Page<Transaction> findPaginated(Pageable pageable) {
+        return transactionRepository.findAll(pageable);
     }
 }

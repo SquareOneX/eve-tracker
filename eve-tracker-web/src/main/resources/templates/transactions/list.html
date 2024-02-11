@@ -15,7 +15,7 @@
             <th>Price</th>
             <th>Is Buy</th>
         </tr>
-        <tr th:each="t: ${transactions}">
+        <tr th:each="t: ${data}">
             <td th:text="${t.id}"></td>
             <td th:text="${t.item.name}"></td>
             <td th:text="${t.quantity}"></td>
@@ -24,5 +24,6 @@
             <td th:text="${t.isBuy}"></td>
         </tr>
     </table>
+    <div th:replace="~{fragments/pagination :: pagination (${data}, ${pageNumbers}, 'transactions')}"></div>
 </body>
 </html>

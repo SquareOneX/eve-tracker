@@ -10,7 +10,7 @@ import squareonex.evetrackerdata.model.Item;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-public interface BlueprintService {
+public interface BlueprintService extends PageableService<Blueprint>{
     Set<Blueprint> getBlueprints();
     Set<BlueprintAction> getBlueprintActions();
     Blueprint findById(Long blueprintId);

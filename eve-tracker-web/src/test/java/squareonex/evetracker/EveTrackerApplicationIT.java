@@ -9,7 +9,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @SpringBootTest
 @ActiveProfiles({"simpleBootstrapData", "jpa"})
 @ExtendWith(SpringExtension.class)
-class EveTrackerApplicationTest {
+class EveTrackerApplicationIT {
     @Test
     public void contextLoads() {
 

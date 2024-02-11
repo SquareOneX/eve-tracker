@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'Blueprint Index')}">
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout (~{::body},'Blueprint Index')}">
 <head>
     <meta charset="UTF-8">
     <title>List of Blueprints</title>
@@ -7,19 +8,24 @@
 <body>
 <h2 th:text="'List of Blueprints'">List of Blueprints</h2>
 <table class="table table-striped">
+    <!--/*@thymesVar id="blueprint" type="squareonex.evetrackerdata.model.Blueprint"*/-->
     <tr>
         <th>Id</th>
         <th>Name</th>
         <th>Activity</th>
         <th></th>
     </tr>
-    <!--/*@thymesVar id="blueprint" type="squareonex.evetrackerdata.model.BlueprintAction"*/-->
-    <tr th:each="action: ${blueprintActions}">
-        <td th:text="${action.blueprint.id}"></td>
-        <td th:text="${action.blueprint.name}"></td>
-        <td th:text="${action.activity.name}"></td>
-        <td><a href="#" th:href="@{'/blueprints/' + ${action.blueprint.id} + '/' + ${action.activity.id} + '/show'}">View</a></td>
-    </tr>
+    <span th:each="blueprint : ${data}">
+        <tr th:each="action : ${blueprint.actions}">
+            <td th:text="${action.blueprint.id}"></td>
+            <td th:text="${action.blueprint.name}"></td>
+            <td th:text="${action.activity.name}"></td>
+            <td><a href="#"
+                   th:href="@{'/blueprints/' + ${action.blueprint.id} + '/' + ${action.activity.id} + '/show'}">View</a>
+            </td>
+        </tr>
+    </span>
 </table>
+<div th:replace="~{fragments/pagination :: pagination (${data}, ${pageNumbers}, 'blueprints')}"></div>
 </body>
 </html>

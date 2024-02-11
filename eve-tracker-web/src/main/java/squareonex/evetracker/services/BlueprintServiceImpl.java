@@ -1,5 +1,7 @@
 package squareonex.evetracker.services;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import squareonex.evetracker.commands.BlueprintCopyCommand;
@@ -117,5 +119,10 @@ public class BlueprintServiceImpl implements BlueprintService {
         Set<BlueprintCopyCommand> bpcs = new HashSet<>();
         findBlueprintCopiesByItem(item).forEach((val) -> bpcs.add(bpcToBpcCommand.convert(val)));
         return bpcs;
+    }
+
+    @Override
+    public Page<Blueprint> findPaginated(Pageable pageable) {
+        return blueprintRepository.findAll(pageable);
     }
 }
