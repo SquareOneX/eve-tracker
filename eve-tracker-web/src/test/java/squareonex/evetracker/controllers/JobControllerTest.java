@@ -2,9 +2,12 @@ package squareonex.evetracker.controllers;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.ui.Model;
 import squareonex.evetracker.commands.JobCommand;
@@ -15,14 +18,20 @@ import squareonex.evetrackerdata.model.BlueprintCopy;
 import squareonex.evetrackerdata.model.Item;
 import squareonex.evetrackerdata.model.Job;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class JobControllerTest {
+    private final int maxItemsPerPage = 10;
     JobController jobController;
     @Mock
     JobService jobServiceMock;
@@ -30,8 +39,10 @@ class JobControllerTest {
     Model modelMock;
     @Mock
     BlueprintService blueprintService;
-    @Mock ActivityService activityService;
-    private final int maxItemsPerPage = 10;
+    @Mock
+    ActivityService activityService;
+    @Captor
+    ArgumentCaptor<Map<Long, Long>> jobDurationsArgCaptor;
 
     @BeforeEach
     void setUp() {
@@ -47,6 +58,32 @@ class JobControllerTest {
 
         assertEquals("jobs/list", templateString);
         verify(modelMock, times(1)).addAttribute("data", expectedPage);
+    }
+
+    @Test
+    void listShouldPopulateJobDurationData() {
+        final Long jobId = 0L;
+        final long jobDuration = 2L;        // Hours
+
+        Job job = new Job();
+        job.setId(jobId);
+        job.setStartedTime(LocalDateTime.now());
+        job.setFinishedTime(job.getStartedTime().plusHours(jobDuration));
+        Page<Job> expectedPage = new PageImpl<>(List.of(job));
+
+        when(jobServiceMock.findPaginated(any(Pageable.class))).thenReturn(expectedPage);
+        jobController.list(modelMock, Optional.empty(), Optional.empty());
+
+        verify(modelMock).addAttribute(eq("jobDurations"), jobDurationsArgCaptor.capture());
+
+        long expectedDuration = Duration.ofHours(jobDuration).toMillis();
+        long tolerance = Duration.ofSeconds(1).toMillis();
+
+        Map<Long, Long> value = jobDurationsArgCaptor.getValue();
+        assertTrue(
+                expectedDuration - tolerance < value.get(jobId) &&
+                        expectedDuration + tolerance > value.get(jobId)
+        );
     }
 
     @Test
@@ -79,7 +116,7 @@ class JobControllerTest {
         String template = jobController.view(jobId, modelMock);
 
         assertEquals("jobs/view", template);
-        verify( modelMock, times(1)).addAttribute(eq("blueprintCopies"), any());
+        verify(modelMock, times(1)).addAttribute(eq("blueprintCopies"), any());
         verify(modelMock, times(1)).addAttribute(eq("jobCommand"), any(JobCommand.class));
         verify(modelMock, times(1)).addAttribute(eq("activities"), any());
     }

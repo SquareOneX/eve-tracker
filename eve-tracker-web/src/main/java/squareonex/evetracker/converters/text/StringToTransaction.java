@@ -49,14 +49,6 @@ public class StringToTransaction implements Converter<String, Transaction> {
 
         final String location = scanner.next().trim();
 
-        System.out.println(localDateTime);
-        System.out.println(quantity);
-        System.out.println(itemName);
-        System.out.println(pricePerItemValue);
-        System.out.println(totalPriceValue);
-        System.out.println(playerName);
-        System.out.println(location);
-
         final Transaction transaction = new Transaction();
         transaction.setDate(localDateTime);
         transaction.setQuantity(quantity);
