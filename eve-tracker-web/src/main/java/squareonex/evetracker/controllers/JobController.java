@@ -1,5 +1,6 @@
 package squareonex.evetracker.controllers;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -8,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import squareonex.evetracker.commands.JobCommand;
 import squareonex.evetracker.controllers.exception.InvalidJobException;
+import squareonex.evetracker.converters.JobCommandToJob;
+import squareonex.evetracker.converters.JobToJobCommand;
 import squareonex.evetracker.services.ActivityService;
 import squareonex.evetracker.services.BlueprintService;
 import squareonex.evetracker.services.JobService;
@@ -18,25 +21,31 @@ import squareonex.evetrackerdata.model.Job;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.stream.IntStream;
 
 @RequestMapping("jobs")
 @Controller
+@Slf4j
 public class JobController {
     private final JobService jobService;
     private final BlueprintService blueprintService;
     private final ActivityService activityService;
+    private final JobToJobCommand jobToJobCommand;
+    private final JobCommandToJob jobCommandToJob;
     private final int maxItemsPerPage;
 
     public JobController(
             JobService jobService,
             BlueprintService blueprintService,
             ActivityService activityService,
+            JobToJobCommand jobToJobCommand,
+            JobCommandToJob jobCommandToJob,
             @Value("${eve-tracker.pagination.max-items-per-page}") int maxItemsPerPage
     ) {
         this.jobService = jobService;
         this.blueprintService = blueprintService;
         this.activityService = activityService;
+        this.jobToJobCommand = jobToJobCommand;
+        this.jobCommandToJob = jobCommandToJob;
         this.maxItemsPerPage = maxItemsPerPage;
     }
 
@@ -71,14 +80,25 @@ public class JobController {
         return "jobs/new";
     }
 
-    @PostMapping("save")
+    @PostMapping(value = "save", params = "action=save")
     public String saveJobCommand(@ModelAttribute(name = "jobCommand") JobCommand command) {
         try {
             JobCommand saved = jobService.saveOrUpdateCommand(command);
+            log.debug("Saving Job(id=" + saved.getId() + ")");
             return "redirect:/jobs";
         } catch (IllegalArgumentException | NullPointerException e) {
             throw new InvalidJobException(e);
         }
+    }
+
+    @PostMapping(value = "save", params = "action=start")
+    public String startJob(@ModelAttribute(name = "jobCommand") JobCommand command) {
+        Job converted = jobCommandToJob.convert(command);
+        Objects.requireNonNull(converted.getBlueprintCopy());
+
+        Job startedJob = jobService.startJob(converted.getBlueprintCopy(), converted.getActivity(), converted);
+        log.debug("Starting Job(id=" + startedJob.getId() + ")");
+        return "redirect:/jobs";
     }
 
     @RequestMapping("{id}/view")

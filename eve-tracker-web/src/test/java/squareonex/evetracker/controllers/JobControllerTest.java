@@ -11,6 +11,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.ui.Model;
 import squareonex.evetracker.commands.JobCommand;
+import squareonex.evetracker.converters.JobCommandToJob;
+import squareonex.evetracker.converters.JobToJobCommand;
 import squareonex.evetracker.services.ActivityService;
 import squareonex.evetracker.services.BlueprintService;
 import squareonex.evetracker.services.JobService;
@@ -41,13 +43,17 @@ class JobControllerTest {
     BlueprintService blueprintService;
     @Mock
     ActivityService activityService;
+    @Mock
+    JobCommandToJob jobCommandToJobMock;
+    @Mock
+    JobToJobCommand jobToJobCommandMock;
     @Captor
     ArgumentCaptor<Map<Long, Long>> jobDurationsArgCaptor;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        this.jobController = new JobController(jobServiceMock, blueprintService, activityService, maxItemsPerPage);
+        this.jobController = new JobController(jobServiceMock, blueprintService, activityService, jobToJobCommandMock, jobCommandToJobMock, maxItemsPerPage);
     }
 
     @Test
@@ -97,6 +103,8 @@ class JobControllerTest {
 
     @Test
     void createJob() {
+        when(jobServiceMock.saveOrUpdateCommand(any())).thenAnswer(inv -> inv.getArgument(0));
+
         JobCommand jobCommand = new JobCommand();
         String templateStr = jobController.saveJobCommand(jobCommand);
 
