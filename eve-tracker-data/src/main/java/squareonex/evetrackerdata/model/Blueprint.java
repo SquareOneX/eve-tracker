@@ -1,75 +1,34 @@
 package squareonex.evetrackerdata.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
-import squareonex.evetrackerdata.model.ids.BlueprintId;
 
-import java.time.Duration;
 import java.util.HashSet;
 import java.util.Set;
 
 @Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString(exclude = {"products", "materials", "copies", "originals"})
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
+@NoArgsConstructor
 @Entity
 @Table(name = "blueprints")
-public class Blueprint {
-    @EqualsAndHashCode.Include
-    @EmbeddedId
-    private BlueprintId id = new BlueprintId();
+public class Blueprint extends Item {
     @OneToMany(mappedBy = "id.blueprint", cascade = CascadeType.ALL)
-    private Set<BlueprintProduct> products = new HashSet<>();
-    @OneToMany(mappedBy = "id.blueprint", cascade = CascadeType.ALL)
-    private Set<BlueprintMaterial> materials = new HashSet<>();
+    @ToString.Exclude
+    private Set<BlueprintAction> actions = new HashSet<>();
     @OneToMany(mappedBy = "blueprint", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private Set<BlueprintCopy> copies = new HashSet<>();
     @OneToMany(mappedBy = "blueprint", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private Set<BlueprintOriginal> originals = new HashSet<>();
-    @Column(name = "duration")
-    private Duration duration;
-    public Blueprint() {
-        this.id.setItemInfo(new Item());
-        this.id.setActivity(new Activity());
-    }
-
-    /**
-     * Convenience method to return this objects key
-     * @return instance of the id class for this object
-     */
-    public BlueprintId getKey(){
-        return this.id;
-    }
-
-    public Item getItemInfo() {
-        return this.id.getItemInfo();
-    }
-
-    public Activity getActivity() {
-        return this.id.getActivity();
-    }
-
-    public void setItemInfo(Item object) {
-        this.id.setItemInfo(object);
-    }
-
-    public void setActivity(Activity object) {
-        this.id.setActivity(object);
-    }
-
-    public void setProducts(Set<BlueprintProduct> products) {
-        for (BlueprintProduct product : products) {
-            product.setBlueprint(this);
-        }
-        this.products = products;
-    }
-
-    public void setMaterials(Set<BlueprintMaterial> materials) {
-        for (BlueprintMaterial material : materials) {
-            material.setBlueprint(this);
-        }
-        this.materials = materials;
+    public Blueprint(Long id, String name) {
+        super(id, name);
     }
 
     public void setCopies(Set<BlueprintCopy> copies) {
@@ -84,5 +43,22 @@ public class Blueprint {
             original.setBlueprint(this);
         }
         this.originals = originals;
+    }
+
+    public void setActions(Set<BlueprintAction> actions) {
+        for (BlueprintAction action : actions) {
+            action.setBlueprint(this);
+        }
+        this.actions = actions;
+    }
+
+    @Override
+    public String toString() {
+        return "Blueprint{" +
+                "id=" + this.getId() +
+                ", name='" + this.getName() + '\'' +
+                ", published=" + this.getPublished() +
+                ", avgCost=" + this.getAvgCost() +
+                '}';
     }
 }

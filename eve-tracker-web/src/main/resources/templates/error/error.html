@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body}, ('Whoops'))}">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>Oops</title>
+</head>
+    <body>
+        <div class="container-fluid">
+            <div class="panel-group">
+                <div class="panel panel-danger">
+                    <div class="panel-heading" th:text="${errorName}">Error</div>
+                    <div class="panel-body" th:text="${errorMessage}">Message</div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

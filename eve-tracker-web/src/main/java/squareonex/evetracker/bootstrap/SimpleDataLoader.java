@@ -12,6 +12,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -20,19 +21,17 @@ import java.util.Set;
 public class SimpleDataLoader implements BootstrapLoader {
     private final ActivityRepository activityService;
     private final BlueprintRepository blueprintService;
-    private final ItemRepository productService;
+    private final ItemRepository itemService;
     private final TransactionRepository transactionService;
     private final UserRepository userService;
     private final JobRepository jobService;
     private final BlueprintCopyRepository blueprintCopyService;
     private final BlueprintOriginalRepository blueprintOriginalService;
 
-    public SimpleDataLoader(ActivityRepository activityService, BlueprintRepository blueprintService, ItemRepository productService,
-                            TransactionRepository transactionService, UserRepository userService, JobRepository jobService,
-                            BlueprintCopyRepository blueprintCopyService, BlueprintOriginalRepository blueprintOriginalService) {
+    public SimpleDataLoader(ActivityRepository activityService, BlueprintRepository blueprintService, ItemRepository itemService, TransactionRepository transactionService, UserRepository userService, JobRepository jobService, BlueprintCopyRepository blueprintCopyService, BlueprintOriginalRepository blueprintOriginalService) {
         this.activityService = activityService;
         this.blueprintService = blueprintService;
-        this.productService = productService;
+        this.itemService = itemService;
         this.transactionService = transactionService;
         this.userService = userService;
         this.jobService = jobService;
@@ -43,9 +42,58 @@ public class SimpleDataLoader implements BootstrapLoader {
     @Transactional
     @Override
     public void run(String... args) throws Exception {
-        /*
-            Activities
-         */
+        loadData();
+
+        int[] activityIds = new int[]{1, 5, 8};
+        for (int id : activityIds) {
+            Optional<Activity> activity = activityService.findById(id);
+            if (activity.isEmpty()) {
+                throw new RuntimeException("Expected Activity with id=" + id);
+            }
+        }
+
+        if (userService.findByNameIgnoreCase("Sonni Cooper").isEmpty())
+            throw new RuntimeException("Expected User with name='Sonni Cooper");
+
+        long[] itemIds = new long[]{34L, 35L, 36L, 37L, 585L, 608L, 689L, 995L, 11197L, 11198L, 20172L, 20411L};
+        for (long id : itemIds) {
+            Optional<Item> item = itemService.findById(id);
+            if (item.isEmpty())
+                throw new RuntimeException("Expected Item with id=" + id);
+
+            if (item.get().getName() == null)
+                throw new RuntimeException("Expected non-null name for Item with id=" + id);
+        }
+
+        long[][] blueprintActions = new long[][]{
+                new long[]{689L, 1, 5, 8},  //Slasher (Manufacturing, Copying, Invention)
+                new long[]{995L, 1},        //Atron (Manufacturing)
+                new long[]{11197L, 1}       //Stiletto (Manufacturing)
+        };
+        for (long[] blueprintAction : blueprintActions) {
+            Optional<Blueprint> optionalBlueprint = blueprintService.findById(blueprintAction[0]);
+            if (optionalBlueprint.isEmpty())
+                throw new RuntimeException("Expected Blueprint with id=" + blueprintAction[0]);
+
+            Blueprint blueprint = optionalBlueprint.get();
+
+            if (blueprint.getActions().size() != blueprintAction.length - 1)
+                throw new RuntimeException(
+                        "Expected Blueprint with id=" + blueprintAction[0] + " to have " + (blueprintAction.length - 1)
+                                + " actions, but was" + blueprint.getActions().size());
+        }
+
+        Item slasher = itemService.findById(585L).orElseThrow();
+        if (slasher.getBlueprints().isEmpty())
+            throw new RuntimeException("Expected Item with id=" + 689L + " to have a BlueprintProduct");
+
+        log.info("Bootstrap data loaded");
+    }
+
+    private void loadData() {
+    /*
+        Activities
+     */
         Activity manufacturing = new Activity();
         manufacturing.setId(1);
         manufacturing.setName("Manufacturing");
@@ -62,146 +110,137 @@ public class SimpleDataLoader implements BootstrapLoader {
         copying = activityService.save(copying);
         invention = activityService.save(invention);
 
-        log.info(String.format("%d Activity entities loaded", activityService.count()));
-
         /*
             Users
          */
 
-        User user1 = userService.save(new User("Sonni Cooper"));
-
-        log.info(String.format("%d User entities loaded", userService.count()));
-
-        /*
-            Blueprints
-         */
-
-        Item blueprintItem1 = new Item();
-        blueprintItem1.setId(689L);
-        blueprintItem1.setName("Slasher Blueprint");
-        blueprintItem1.setPublished(true);
-
-        Item blueprintItem2 = new Item();
-        blueprintItem2.setId(955L);
-        blueprintItem2.setName("Atron Blueprint");
-        blueprintItem2.setPublished(true);
-
-        Item item = new Item();
-        item.setId(11197L);
-        item.setName("Stiletto Blueprint");
-        item.setPublished(true);
-
-        blueprintItem1 = productService.save(blueprintItem1);
-        blueprintItem2 = productService.save(blueprintItem2);
-        item = productService.save(item);
-
-        Blueprint blueprint1 = new Blueprint();
-        Blueprint blueprint2 = new Blueprint();
-        Blueprint blueprint3 = new Blueprint();
-        Blueprint blueprint4 = new Blueprint();
-
-        blueprint1.setItemInfo(blueprintItem1);
-        blueprint1.setActivity(manufacturing);
-        blueprint1.setDuration(Duration.ofSeconds(6000));
-
-        blueprint2.setItemInfo(blueprintItem2);
-        blueprint2.setActivity(manufacturing);
-        blueprint2.setDuration(Duration.ofSeconds(6000));
-
-        blueprint3.setItemInfo(blueprintItem1);
-        blueprint3.setActivity(copying);
-        blueprint3.setDuration(Duration.ofSeconds(4800));
-
-        blueprint4.setItemInfo(blueprintItem1);
-        blueprint4.setActivity(invention);
-        blueprint4.setDuration(Duration.ofSeconds(63900));
-
-        blueprint1 = blueprintService.save(blueprint1);
-        blueprint2 = blueprintService.save(blueprint2);
-        blueprint3 = blueprintService.save(blueprint3);
-        blueprint4 = blueprintService.save(blueprint4);
-
-        BlueprintOriginal blueprintOriginal = blueprintOriginalService.save(new BlueprintOriginal(blueprint3, 5.0E07f));
-        blueprintOriginal.setTimeModifier(1F);
-        blueprintOriginal.setMaterialModifier(1F);
-
-        BlueprintCopy blueprintCopy1 = blueprintCopyService.save(new BlueprintCopy(blueprint1, 100, 60_000F));
-        blueprintCopy1.setMaterialModifier(0.9F);
-        BlueprintCopy blueprintCopy2 = blueprintCopyService.save(new BlueprintCopy(blueprint1, 100, 50_000F));
-        blueprintCopy2.setMaterialModifier(0.95F);
-
-        log.info(String.format("%d Blueprint entities loaded", blueprintService.count()));
+        User user = userService.save(new User("Sonni Cooper"));
 
         /*
             Items
         */
 
-        Item item1 = new Item();
-        item1.setId(585L);
-        item1.setName("Slasher");
-        item1.setPublished(true);
+        Item slasher = new Item(585L, "Slasher");
+        Item atron = new Item(608L, "Atron");
+        Item stiletto = new Item(11198L, "Stiletto");
 
-        Item item2 = new Item();
-        item2.setId(608L);
-        item2.setName("Atron");
-        item2.setPublished(true);
+        slasher = itemService.save(slasher);
+        atron = itemService.save(atron);
+        stiletto = itemService.save(stiletto);
 
-        item1 = productService.save(item1);
-        item2 = productService.save(item2);
+        Item tritanium = new Item(34L, "Tritanium");
+        Item pyerite = new Item(35L, "Pyerite");
+        Item mexallon = new Item(36L, "Mexallon");
+        Item isogen = new Item(37L, "Isogen");
+        Item datacore1 = new Item(20172L, "Datacore - Minmatar Starship Engineering");
+        Item datacore2 = new Item(20411L, "Datacore - High Energy Physics");
 
-        BlueprintProduct bpProduct1 = new BlueprintProduct(blueprint1, item1, 1);
-        BlueprintProduct bpProduct2 = new BlueprintProduct(blueprint2, item2, 1);
-        BlueprintProduct bpProduct3 = new BlueprintProduct(blueprint4, item, 1, 0.3F);
-        item1.setBlueprints(Set.of(bpProduct1));
-        item2.setBlueprints(Set.of(bpProduct2));
-        item.setBlueprints(Set.of(bpProduct3));
+        tritanium = itemService.save(tritanium);
+        pyerite = itemService.save(pyerite);
+        mexallon = itemService.save(mexallon);
+        isogen = itemService.save(isogen);
+        datacore1 = itemService.save(datacore1);
+        datacore2 = itemService.save(datacore2);
 
-        blueprint1.setProducts(Set.of(bpProduct1));
-        blueprint2.setProducts(Set.of(bpProduct2));
-        blueprint4.setProducts(Set.of(bpProduct3));
+        /*
+            Blueprints
+         */
 
-        Set<BlueprintMaterial> materialSet1 = new HashSet<>();
-        Set<BlueprintMaterial> materialSet2 = new HashSet<>();
-        Set<BlueprintMaterial> materialSet3 = new HashSet<>();
+        Blueprint slasherBP = new Blueprint(689L, "Slasher Blueprint");
+        Blueprint atronBP = new Blueprint(995L, "Atron Blueprint");
+        Blueprint stilettoBP = new Blueprint(11197L, "Stiletto Blueprint");
 
-        Item material1 = new Item(34L, "Tritanium");
-        material1.setPublished(true);
-        Item material2 = new Item(35L, "Pyerite");
-        material2.setPublished(true);
-        Item material3 = new Item(36L, "Mexallon");
-        material3.setPublished(true);
-        Item material4 = new Item(37L, "Isogen");
-        material4.setPublished(true);
-        Item material5 = new Item(20172L, "Datacore - Minmatar Starship Engineering");
-        material5.setPublished(true);
-        Item material6 = new Item(20411L, "Datacore - High Energy Physics");
-        material6.setPublished(true);
+        BlueprintAction slasherBPManufacturing = new BlueprintAction();
+        BlueprintAction atronBPManufactuing = new BlueprintAction();
+        BlueprintAction slasherBPCopying = new BlueprintAction();
+        BlueprintAction slasherBPInvention = new BlueprintAction();
+        BlueprintAction stilettoBPManufacturing = new BlueprintAction();
 
-        materialSet1.add(new BlueprintMaterial(blueprint1, material1, 32_000));
-        materialSet1.add(new BlueprintMaterial(blueprint1, material2, 6_000));
-        materialSet1.add(new BlueprintMaterial(blueprint1, material3, 2_500));
-        materialSet1.add(new BlueprintMaterial(blueprint1, material4, 500));
+        slasherBPManufacturing.setBlueprint(slasherBP);
+        slasherBPManufacturing.setActivity(manufacturing);
+        slasherBPManufacturing.setDuration(Duration.ofSeconds(6_000));
 
-        materialSet2.add(new BlueprintMaterial(blueprint2, material1, 32_000));
-        materialSet2.add(new BlueprintMaterial(blueprint2, material2, 6_000));
-        materialSet2.add(new BlueprintMaterial(blueprint2, material3, 2_500));
-        materialSet2.add(new BlueprintMaterial(blueprint2, material4, 500));
+        atronBPManufactuing.setActivity(manufacturing);
+        atronBPManufactuing.setBlueprint(atronBP);
+        atronBPManufactuing.setDuration(Duration.ofSeconds(6_000));
 
-        materialSet3.add(new BlueprintMaterial(blueprint4, material5, 2));
-        materialSet3.add(new BlueprintMaterial(blueprint4, material6, 2));
+        slasherBPCopying.setBlueprint(slasherBP);
+        slasherBPCopying.setActivity(copying);
+        slasherBPCopying.setDuration(Duration.ofSeconds(4_800));
 
-        blueprint1.setMaterials(materialSet1);
-        blueprint2.setMaterials(materialSet2);
-        blueprint4.setMaterials(materialSet3);
+        slasherBPInvention.setBlueprint(slasherBP);
+        slasherBPInvention.setActivity(invention);
+        slasherBPInvention.setDuration(Duration.ofSeconds(63_900));
 
-        material1 = productService.save(material1);
-        material2 = productService.save(material2);
-        material3 = productService.save(material3);
-        material4 = productService.save(material4);
-        material5 = productService.save(material5);
-        material6 = productService.save(material6);
+        stilettoBPManufacturing.setBlueprint(stilettoBP);
+        stilettoBPManufacturing.setActivity(manufacturing);
+        stilettoBPManufacturing.setDuration(Duration.ofSeconds(120_000));
 
-        log.info(String.format("%d Item entities loaded", productService.count()));
+        slasherBP.getActions().add(slasherBPManufacturing);
+        slasherBP.getActions().add(slasherBPCopying);
+        slasherBP.getActions().add(slasherBPInvention);
+        atronBP.getActions().add(atronBPManufactuing);
+        stilettoBP.getActions().add(stilettoBPManufacturing);
+
+        // Materials
+
+        Set<BlueprintMaterial> slasherManufacturingMats = new HashSet<>();
+        Set<BlueprintMaterial> atronManufacturingMats = new HashSet<>();
+        Set<BlueprintMaterial> slasherInventionMats = new HashSet<>();
+        Set<BlueprintMaterial> stilettoManufacturingMats = new HashSet<>(); //TODO Add materials
+
+        slasherManufacturingMats.add(new BlueprintMaterial(slasherBPManufacturing, tritanium, 32_000));
+        slasherManufacturingMats.add(new BlueprintMaterial(slasherBPManufacturing, pyerite, 6_000));
+        slasherManufacturingMats.add(new BlueprintMaterial(slasherBPManufacturing, mexallon, 2_500));
+        slasherManufacturingMats.add(new BlueprintMaterial(slasherBPManufacturing, isogen, 500));
+
+        atronManufacturingMats.add(new BlueprintMaterial(atronBPManufactuing, tritanium, 32_000));
+        atronManufacturingMats.add(new BlueprintMaterial(atronBPManufactuing, pyerite, 6_000));
+        atronManufacturingMats.add(new BlueprintMaterial(atronBPManufactuing, mexallon, 2_500));
+        atronManufacturingMats.add(new BlueprintMaterial(atronBPManufactuing, isogen, 500));
+
+        slasherInventionMats.add(new BlueprintMaterial(slasherBPInvention, datacore1, 2));
+        slasherInventionMats.add(new BlueprintMaterial(slasherBPInvention, datacore2, 2));
+
+        slasherBPManufacturing.setMaterials(slasherManufacturingMats);
+        atronBPManufactuing.setMaterials(atronManufacturingMats);
+        slasherBPInvention.setMaterials(slasherInventionMats);
+
+        //Saving
+
+        slasherBP = blueprintService.save(slasherBP);
+        atronBP = blueprintService.save(atronBP);
+        stilettoBP = blueprintService.save(stilettoBP);
+
+        // Products
+        BlueprintProduct slasherBPProduct = new BlueprintProduct();
+        slasherBPProduct.setBlueprintAction(slasherBPManufacturing);
+        slasherBPProduct.setProduct(slasher);
+        slasherBPProduct.setQuantity(1);
+        BlueprintProduct atronBPProduct = new BlueprintProduct();
+        atronBPProduct.setBlueprintAction(atronBPManufactuing);
+        atronBPProduct.setProduct(atron);
+        atronBPProduct.setQuantity(1);
+        BlueprintProduct stilettoBPInventionProduct = new BlueprintProduct();
+        stilettoBPInventionProduct.setBlueprintAction(slasherBPInvention);
+        stilettoBPInventionProduct.setProduct(stilettoBP);
+        stilettoBPInventionProduct.setQuantity(1);
+        stilettoBPInventionProduct.setProbability(0.3F);
+        BlueprintProduct stilettoBPManufacturingProduct = new BlueprintProduct();
+        stilettoBPManufacturingProduct.setBlueprintAction(stilettoBPManufacturing);
+        stilettoBPManufacturingProduct.setProduct(stiletto);
+        stilettoBPManufacturingProduct.setQuantity(1);
+
+
+        BlueprintOriginal slasherBPO = blueprintOriginalService.save(new BlueprintOriginal(slasherBP, 5.0E07f));
+        slasherBPO.setTimeModifier(1F);
+        slasherBPO.setMaterialModifier(1F);
+
+        BlueprintCopy slasherBPC1 = blueprintCopyService.save(new BlueprintCopy(slasherBP, 100, 60_000F));
+        slasherBPC1.setMaterialModifier(0.9F);
+        BlueprintCopy slasherBPC2 = blueprintCopyService.save(new BlueprintCopy(slasherBP, 100, 50_000F));
+        slasherBPC2.setMaterialModifier(0.95F);
+        BlueprintCopy stilettoBPC = blueprintCopyService.save(new BlueprintCopy(stilettoBP, 10, 750_000F));
 
         /*
             Transactions
@@ -209,31 +248,39 @@ public class SimpleDataLoader implements BootstrapLoader {
 
         LocalDateTime time = LocalDateTime.of(2023, Month.OCTOBER, 5, 13, 8);
 
-        Transaction transaction1 = transactionService.save(new Transaction(time, true, 64_000, material1, 273_280.0f));
-        Transaction transaction2 = transactionService.save(new Transaction(time, true, 12_000, material2, 124_320.0f));
-        Transaction transaction3 = transactionService.save(new Transaction(time, true, 5_000, material3, 245_000.0f));
-        Transaction transaction4 = transactionService.save(new Transaction(time, true, 1_000, material4, 465_000.0f));
+        Transaction transaction1 = transactionService.save(new Transaction(time, true, 64_000, tritanium, 273_280.0f));
+        Transaction transaction2 = transactionService.save(new Transaction(time, true, 12_000, pyerite, 124_320.0f));
+        Transaction transaction3 = transactionService.save(new Transaction(time, true, 5_000, mexallon, 245_000.0f));
+        Transaction transaction4 = transactionService.save(new Transaction(time, true, 1_000, isogen, 465_000.0f));
 
-        material1.setTransactions(Set.of(transaction1));
-        material2.setTransactions(Set.of(transaction2));
-        material3.setTransactions(Set.of(transaction3));
-        material4.setTransactions(Set.of(transaction4));
-
-        log.info(String.format("%d Transaction entities loaded", transactionService.count()));
+        tritanium.setTransactions(Set.of(transaction1));
+        pyerite.setTransactions(Set.of(transaction2));
+        mexallon.setTransactions(Set.of(transaction3));
+        isogen.setTransactions(Set.of(transaction4));
 
         /*
             Jobs
          */
 
-        Job job1 = new Job(item1, 10L, user1, false);
+        Job job1 = new Job(slasher, 10L, user, false);
+        job1.setActivity(manufacturing);
         job1.setStartedTime(LocalDateTime.of(2023, Month.SEPTEMBER, 20, 13, 28));
         job1.setFinishedTime(LocalDateTime.now().plusHours(2));
 
-        Job job2 = new Job(item2, 10L, user1, false);
+        Job job2 = new Job(atron, 10L, user, false);
+        job2.setActivity(manufacturing);
+
+        Job job3 = new Job(slasher, 5L, user, false);
+        job3.setActivity(manufacturing);
+
+        Job job4 = new Job(slasherBP, 1L, user, true);
+        job4.setActivity(invention);
 
         job1 = jobService.save(job1);
         job2 = jobService.save(job2);
+        job3 = jobService.save(job3);
+        job4 = jobService.save(job4);
 
-        log.info(String.format("%d Job entities loaded", jobService.count()));
-    }
+        itemService.save(slasher);
+        }
 }

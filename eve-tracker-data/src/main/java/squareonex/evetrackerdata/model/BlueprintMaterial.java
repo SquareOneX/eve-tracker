@@ -19,17 +19,22 @@ public class BlueprintMaterial {
     private BlueprintMaterialId id = new BlueprintMaterialId();
     private Integer quantity;
 
-    public BlueprintMaterial(Blueprint blueprint, Item material, Integer quantity) {
+    public BlueprintMaterial(BlueprintAction blueprint, Item material, Integer quantity) {
         this.id = new BlueprintMaterialId(blueprint, material);
         this.quantity = quantity;
     }
 
-    public Blueprint getBlueprint() {
+    public BlueprintAction getBlueprint() {
         return this.id.getBlueprint();
     }
 
-    public void setBlueprint(Blueprint blueprint) {
-        this.id.setBlueprint(blueprint);
+    public void setBlueprint(BlueprintAction blueprintAction) {
+        if (blueprintAction != null) {
+            blueprintAction.getMaterials().add(this);
+        } else if (this.getBlueprint() != null) {
+            this.getBlueprint().getMaterials().remove(this);
+        }
+        this.id.setBlueprint(blueprintAction);
     }
 
     public Item getMaterial() {

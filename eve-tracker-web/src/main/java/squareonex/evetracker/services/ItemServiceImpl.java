@@ -1,5 +1,7 @@
 package squareonex.evetracker.services;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import squareonex.evetrackerdata.model.Item;
 import squareonex.evetrackerdata.repositories.ItemRepository;
@@ -14,10 +16,18 @@ public class ItemServiceImpl implements ItemService {
         this.itemRepository = itemRepository;
     }
 
+    /**
+     * Retrieves all items from the item repository.
+     *
+     * @return a set of Item objects containing all the items
+     */
     @Override
     public Set<Item> findAll() {
-        Set<Item> set = new HashSet<>();
-        itemRepository.findAll().forEach(set::add);
-        return set;
+        return new HashSet<>(itemRepository.findAll());
+    }
+
+    @Override
+    public Page<Item> findPaginated(Pageable pageable) {
+        return itemRepository.findAll(pageable);
     }
 }

@@ -37,6 +37,14 @@ public class Transaction {
         this.price = price;
     }
 
+    public void setItem(Item item) {
+        if (item != null)
+            item.getTransactions().add(this);
+        else if (this.getItem() != null)
+            this.getItem().getTransactions().remove(this);
+        this.item = item;
+    }
+
     @PostPersist
     void postPersist() {
         this.item.calcAvgCost();

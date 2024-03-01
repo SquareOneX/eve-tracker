@@ -1,0 +1,52 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<body>
+<!--/*@thymesVar id="jobCommand" type="squareonex.evetracker.commands.JobCommand"*/-->
+<div th:fragment="form (jobCommand, activities)" class="panel panel-primary" th:object="${jobCommand}">
+    <input type="hidden" th:field="*{id}" th:value="*{id}">
+    <div class="panel-heading">
+        Enter the Job Specifics
+    </div>
+    <div class="panel-body">
+        <label class="col-md-2">
+            Activity
+            <select id="activitySelect" class="form-control"
+                    th:field="*{activity.id}"
+                    th:readonly="*{id} != null">
+                <option class="form-control"
+                        th:each="act: ${activities}"
+                        th:text="${act.name}"
+                        th:value="${act.id}"
+                        th:selected="${act} == ${jobCommand.activity}"
+                ></option>
+            </select>
+        </label>
+        <label class="col-md-4">
+            Product
+            <input type="text" class="form-control"
+                   th:value="*{itemCommand}"
+                   th:field="*{itemCommand.name}"
+                   th:readonly="*{itemCommand} != null">
+        </label>
+        <label class="col-md-2">
+            Runs
+            <input type="number" class="form-control" th:field="*{quantity}"
+                   th:readonly="*{quantity} != null">
+        </label>
+        <label class="col-md-3">
+            User
+            <input type="search" class="form-control" th:field="*{userCommand.name}"
+                   th:readonly="*{userCommand} != null">
+        </label>
+        <label class="col-md-1">
+            Internal
+            <input type="checkbox" class="form-control checkbox-inline" th:field="*{isInternal}"
+                   th:disabled="${jobCommand.id} != null">
+            <input type="hidden"  class="form-control checkbox-inline"
+                   th:if="${jobCommand.id != null}"
+                   th:field="*{isInternal}"
+                   th:value="${jobCommand.isInternal}">
+        </label>
+    </div>
+</div>
+</body>
+</html>

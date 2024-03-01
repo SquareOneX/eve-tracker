@@ -15,12 +15,13 @@ public class BlueprintCopyToBlueprintCopyCommand implements Converter<BlueprintC
     public BlueprintCopyCommand convert(BlueprintCopy source) {
         if (source == null)
             return null;
-        final BlueprintCopyCommand target = new BlueprintCopyCommand();
-        target.setId(source.getId());
-        target.setMaxRuns(source.getMaxRuns());
+
+        final BlueprintCopyCommand target = new BlueprintCopyCommand(source.getId(), source.getBlueprint().getId(), source.getBlueprint().getName());
         target.setTimeModifier(source.getTimeModifier());
         target.setMaterialModifier(source.getMaterialModifier());
         target.setBlueprintCost(source.getBlueprintCost());
+        target.setMaxRuns(source.getMaxRuns());
+
         return target;
     }
 }

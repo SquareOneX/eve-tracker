@@ -1,30 +1,82 @@
 <!doctype html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'jobs')}">
+<html lang="en" xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'Job Index')}">
 <head>
     <meta charset="UTF-8">
     <title>Job Index</title>
 </head>
 <body>
-<h2 th:text="'List of Jobs'">List of Jobs</h2>
+<div class="row">
+    <div class="col-md-10">
+        <h2 th:text="'List of Jobs'">List of Jobs</h2>
+    </div>
+    <div class="col-md-2">
+        <h2><a href="/jobs/new" class="ui-button">Create New</a></h2>
+    </div>
+</div>
 <table class="table table-striped">
     <tr>
         <th>Id</th>
         <th>Product</th>
+        <th>Activity</th>
         <th>Quantity</th>
         <th>User</th>
         <th>Started</th>
         <th>Finished</th>
+        <th>Duration</th>
         <th>isInternal</th>
     </tr>
-    <tr th:each="j: ${jobs}">
+    <tr th:each="j: ${data}">
         <td th:text="${j.id}"></td>
         <td th:text="${j.product.name}"></td>
+        <td th:text="${j.activity.name}"></td>
         <td th:text="${j.quantity}"></td>
         <td th:text="${j.user.name}"></td>
         <td th:text="${#temporals.format(j.startedTime)} ?: 'planned'"></td>
         <td th:text="${#temporals.format(j.finishedTime)} ?: 'planned'"></td>
+        <td th:if="${j.startedTime != null}" th:id="${'duration' + j.id}"></td>
+        <td th:if="${j.startedTime == null}">
+            <a href="#" th:href="@{'/jobs/' + ${j.id} + '/view'}">View</a>
+        </td>
         <td th:text="${j.isInternal}"></td>
     </tr>
 </table>
+<div th:replace="~{fragments/pagination :: pagination (${data}, ${pageNumbers}, 'jobs')}"></div>
+
+<script th:inline="javascript">
+    let durationsMap = [[${jobDurations}]];
+
+    function formatDuration(milliseconds) {
+        let seconds = Math.floor(milliseconds / 1000);
+        let minutes = Math.floor(seconds / 60);
+        let hours = Math.floor(minutes / 60);
+        let days = Math.floor(hours / 24);
+
+        return {
+            days: days,
+            hours: hours % 24,
+            minutes: minutes % 60,
+            seconds: seconds % 60
+        };
+    }
+    function updateDurations() {
+        Object.entries(durationsMap).forEach(([id, val]) => {
+            let durationElem = document.getElementById('duration' + id);
+            if (durationElem) {
+                let currentDuration = val;
+                if (currentDuration > 0) {
+                    durationsMap[id] = currentDuration - 1000;
+                    let conv = formatDuration(currentDuration - 1000);
+                    let dayStr = conv.days > 0 ? (conv.days + ':').padStart(3, '0') : '00:';
+                    let hourStr = conv.hours > 0 ? (conv.hours + ':').padStart(3, '0') : '00:';
+                    let minStr = conv.minutes > 0 ? (conv.minutes + ':').padStart(3, '0') : '00:';
+                    let secStr = conv.seconds > 0 ? (conv.seconds + '').padStart(2, '0') : '00'
+                    durationElem.textContent = dayStr + hourStr + minStr + secStr;
+                }
+            }
+        });
+    }
+
+    setInterval(updateDurations, 1000);
+</script>
 </body>
 </html>

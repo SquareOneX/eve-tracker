@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'Item Index')}">
+<head>
+    <meta charset="UTF-8">
+    <title>Item Index</title>
+</head>
+<body>
+    <h2 th:text="'List of Items'">List of Items</h2>
+    <table class="table table-striped">
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Blueprint Name</th>
+            <th>Blueprint Activity</th>
+        </tr>
+        <tr th:each="i: ${data}">
+            <td th:text="${i.id}"></td>
+            <td th:text="${i.name}"></td>
+            <td>
+                <div th:each="bp: ${i.blueprints}" th:text="${bp.blueprintAction?.blueprint.name}"></div>
+            </td>
+            <td>
+                <div th:each="bp: ${i.blueprints}" th:text="${bp.blueprintAction?.activity.name}"></div>
+            </td>
+        </tr>
+    </table>
+    <div th:replace="~{fragments/pagination :: pagination (${data}, ${pageNumbers}, 'items')}"></div>
+</body>
+</html>

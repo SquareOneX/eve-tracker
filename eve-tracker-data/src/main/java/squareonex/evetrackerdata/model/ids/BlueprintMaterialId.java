@@ -2,7 +2,7 @@ package squareonex.evetrackerdata.model.ids;
 
 import jakarta.persistence.*;
 import lombok.*;
-import squareonex.evetrackerdata.model.Blueprint;
+import squareonex.evetrackerdata.model.BlueprintAction;
 import squareonex.evetrackerdata.model.Item;
 
 import java.io.Serializable;
@@ -21,9 +21,9 @@ public class BlueprintMaterialId implements Serializable {
             @JoinColumn(name = "blueprint_id", referencedColumnName = "blueprint_id"),
             @JoinColumn(name = "activity_id", referencedColumnName = "activity_id")
     },
-            foreignKey = @ForeignKey(name = "fk_blueprintmaterials_blueprints")
+            foreignKey = @ForeignKey(name = "fk_blueprintmaterials_blueprintactions")
     )
-    Blueprint blueprint;
+    BlueprintAction blueprint;
     @EqualsAndHashCode.Include
     @ManyToOne
     @JoinColumn(name = "material_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_blueprintmaterials_items"))

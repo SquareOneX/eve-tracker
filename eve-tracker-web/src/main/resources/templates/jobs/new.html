@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'startJob')}">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Job</title>
+</head>
+<body>
+<form th:fragment="form (jobCommand, activities, blueprintCopies, submitAction)" th:object="${jobCommand}"
+      th:action="@{save}" method="post">
+    <!--/*@thymesVar id="jobCommand" type="squareonex.evetracker.commands.JobCommand"*/-->
+    <div class="container-fluid container">
+        <div class="row">
+            <div th:replace="~{jobs/form-fragment :: form (${jobCommand}, ${activities})}"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary form-control" name="action" value="save">Submit</button>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-danger form-control" onclick="" th:if="*{id} != null">Delete
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+</body>
+</html>

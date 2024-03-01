@@ -17,16 +17,23 @@ public class Job {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_jobs_items"))
-    private Item product;
     private Long quantity;
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_jobs_users"))
-    private User user;
     private LocalDateTime startedTime;
     private LocalDateTime finishedTime;
     private Boolean isInternal;
+    private Double jobCost;
+    @ManyToOne
+    @JoinColumn(name = "activity_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_jobs_activities"))
+    private Activity activity;
+    @ManyToOne
+    @JoinColumn(name = "bpc_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_jobs_blueprintcopies"))
+    private BlueprintCopy blueprintCopy;
+    @ManyToOne
+    @JoinColumn(name = "product_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_jobs_items"))
+    private Item product;
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_jobs_users"))
+    private User user;
 
     public Job(Item product, Long quantity, User user, Boolean isInternal) {
         this.product = product;

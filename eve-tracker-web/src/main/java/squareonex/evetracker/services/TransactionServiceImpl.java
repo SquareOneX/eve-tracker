@@ -1,6 +1,8 @@
 package squareonex.evetracker.services;
 
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import squareonex.evetracker.commands.TransactionCommand;
 import squareonex.evetracker.converters.TransactionCommandToTransaction;
@@ -27,25 +29,44 @@ public class TransactionServiceImpl implements TransactionService {
         this.transactionCommandToTransaction = transactionCommandToTransaction;
     }
 
+    /**
+     * This method retrieves all transactions from the transaction repository and returns them as a Set.
+     *
+     * @return A Set of Transaction objects representing all transactions in the repository.
+     */
     @Override
     public Set<Transaction> findAll() {
-        Set<Transaction> set = new HashSet<>();
-        transactionRepository.findAll().forEach(set::add);
-        return set;
+        return new HashSet<>(transactionRepository.findAll());
     }
 
+    /**
+     * Saves or updates a TransactionCommand object.
+     *
+     * @param transactionCommand The TransactionCommand object to be saved or updated.
+     * @return The saved or updated TransactionCommand object.
+     */
     @Override
     @Transactional
     public TransactionCommand saveOrUpdateCommand(TransactionCommand transactionCommand) {
         Transaction transaction = transactionCommandToTransaction.convert(transactionCommand);
         transaction = saveOrUpdate(transaction);
-        TransactionCommand converted = transactionToTransactionCommand.convert(transaction);
-        return converted;
+        return transactionToTransactionCommand.convert(transaction);
     }
 
+    /**
+     * Saves or updates a Transaction object.
+     *
+     * @param transaction The Transaction object to be saved or updated.
+     * @return The saved or updated Transaction object.
+     */
     @Override
     @Transactional
     public Transaction saveOrUpdate(Transaction transaction) {
         return transactionRepository.save(transaction);
+    }
+
+    @Override
+    public Page<Transaction> findPaginated(Pageable pageable) {
+        return transactionRepository.findAll(pageable);
     }
 }

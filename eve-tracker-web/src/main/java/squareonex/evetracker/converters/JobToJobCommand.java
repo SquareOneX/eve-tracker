@@ -4,9 +4,11 @@ import jakarta.annotation.Nullable;
 import lombok.Synchronized;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
+import squareonex.evetracker.commands.BlueprintCopyCommand;
 import squareonex.evetracker.commands.ItemCommand;
 import squareonex.evetracker.commands.JobCommand;
 import squareonex.evetracker.commands.UserCommand;
+import squareonex.evetrackerdata.model.BlueprintCopy;
 import squareonex.evetrackerdata.model.Item;
 import squareonex.evetrackerdata.model.Job;
 import squareonex.evetrackerdata.model.User;
@@ -15,10 +17,12 @@ import squareonex.evetrackerdata.model.User;
 public class JobToJobCommand implements Converter<Job, JobCommand> {
     private final Converter<User, UserCommand> userToUserCommand;
     private final Converter<Item, ItemCommand> itemToItemCommand;
+    private final Converter<BlueprintCopy, BlueprintCopyCommand> blueprintCopyToBlueprintCopyCommand;
 
-    public JobToJobCommand(Converter<User, UserCommand> userToUserCommand, Converter<Item, ItemCommand> itemToItemCommand) {
+    public JobToJobCommand(Converter<User, UserCommand> userToUserCommand, Converter<Item, ItemCommand> itemToItemCommand, Converter<BlueprintCopy, BlueprintCopyCommand> blueprintCopyToBlueprintCopyCommand) {
         this.userToUserCommand = userToUserCommand;
         this.itemToItemCommand = itemToItemCommand;
+        this.blueprintCopyToBlueprintCopyCommand = blueprintCopyToBlueprintCopyCommand;
     }
 
     @Nullable
@@ -35,6 +39,8 @@ public class JobToJobCommand implements Converter<Job, JobCommand> {
         target.setItemCommand(itemToItemCommand.convert(source.getProduct()));
         target.setUserCommand(userToUserCommand.convert(source.getUser()));
         target.setQuantity(source.getQuantity());
+        target.setActivity(source.getActivity());
+        target.setBlueprintCopy(source.getBlueprintCopy());
         return target;
     }
 }

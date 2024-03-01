@@ -14,9 +14,9 @@ import java.util.Set;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
-@ToString(exclude = {"transactions", "blueprints"})
 @Entity
 @Table(name = "items")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Item {
     @EqualsAndHashCode.Include
     @Id
@@ -24,8 +24,10 @@ public class Item {
     private String name;
     private Boolean published;
     @OneToMany(mappedBy = "id.product", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private Set<BlueprintProduct> blueprints = new HashSet<>();
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private Set<Transaction> transactions = new HashSet<>();
     private Float avgCost;
 
@@ -57,5 +59,15 @@ public class Item {
             this.avgCost = (float) (price / qty);
             log.debug("Updating Item avgCost");
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", published=" + published +
+                ", avgCost=" + avgCost +
+                '}';
     }
 }

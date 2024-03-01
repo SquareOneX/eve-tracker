@@ -5,33 +5,41 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import squareonex.evetrackerdata.model.Activity;
-import squareonex.evetrackerdata.model.Blueprint;
-import squareonex.evetrackerdata.model.Item;
-import squareonex.evetrackerdata.model.ids.BlueprintId;
+import squareonex.evetracker.commands.ItemCommand;
+import squareonex.evetracker.converters.BlueprintCopyToBlueprintCopyCommand;
+import squareonex.evetracker.converters.ItemCommandToItem;
+import squareonex.evetrackerdata.model.*;
+import squareonex.evetrackerdata.model.ids.BlueprintActionId;
 import squareonex.evetrackerdata.repositories.ActivityRepository;
 import squareonex.evetrackerdata.repositories.BlueprintRepository;
 import squareonex.evetrackerdata.repositories.ItemRepository;
 
 import java.util.Optional;
+import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class BlueprintServiceImplTest {
     private static final Long BLUEPRINT_ID = 0L;
     private static final Integer ACTIVITY_ID = 1;
-    @InjectMocks BlueprintServiceImpl blueprintService;
+    BlueprintServiceImpl blueprintService;
     @Mock
     BlueprintRepository blueprintRepositoryMock;
     @Mock
-    ItemRepository itemRepositoryMock;
-    @Mock
     ActivityRepository activityRepositoryMock;
+    @Mock
+    ItemRepository itemRepositoryMock;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        this.blueprintService = new BlueprintServiceImpl(
+                blueprintRepositoryMock,
+                itemRepositoryMock,
+                new ItemCommandToItem(),
+                new BlueprintCopyToBlueprintCopyCommand()
+        );
     }
 
     @Test
@@ -43,26 +51,72 @@ class BlueprintServiceImplTest {
 
     @Test
     void findByBlueprintIdAndActivityIdShouldReturnExpectedValue() {
-        Item item = new Item(BLUEPRINT_ID, null);
+        Blueprint blueprint = new Blueprint(BLUEPRINT_ID, null);
         Activity activity = new Activity();
         activity.setId(ACTIVITY_ID);
+        BlueprintAction action = new BlueprintAction(new BlueprintActionId(blueprint, activity));
+        blueprint.getActions().add(action);
 
-        when(itemRepositoryMock.findById(BLUEPRINT_ID)).thenReturn(Optional.of(item));
-        when(activityRepositoryMock.findById(ACTIVITY_ID)).thenReturn(Optional.of(activity));
+        when(blueprintRepositoryMock.findById(BLUEPRINT_ID)).thenReturn(Optional.of(blueprint));
 
-        Blueprint blueprintIdAndActivityId = blueprintService.findByBlueprintIdAndActivityId(BLUEPRINT_ID, ACTIVITY_ID);
+        BlueprintAction blueprintIdAndActivityId = blueprintService.findByBlueprintIdAndActivityId(BLUEPRINT_ID, ACTIVITY_ID);
 
-        BlueprintId blueprintId = new BlueprintId(item, activity);
-        verify(activityRepositoryMock, times(1)).findById(ACTIVITY_ID);
-        verify(itemRepositoryMock, times(1)).findById(BLUEPRINT_ID);
-        verify(blueprintRepositoryMock, times(1)).findById(blueprintId);
+        verify(blueprintRepositoryMock, times(1)).findById(BLUEPRINT_ID);
+        assertEquals(action, blueprintIdAndActivityId);
     }
 
     @Test
     void findByIdShouldReturnBlueprintOrNull() {
-        BlueprintId id = new BlueprintId();
-        assertNull(blueprintService.findById(id));
+        assertNull(blueprintService.findById(BLUEPRINT_ID));
 
-        verify(blueprintRepositoryMock, times(1)).findById(any(BlueprintId.class));
+        verify(blueprintRepositoryMock, times(1)).findById(anyLong());
+    }
+
+    @Test
+    void getBlueprintActions() {
+        assertNotNull(blueprintService.getBlueprintActions());
+
+        verify(blueprintRepositoryMock, times(1)).findAll();
+    }
+
+    @Test
+    void findBlueprintCopiesByProduct() {
+        Blueprint blueprint = new Blueprint();
+        BlueprintCopy bpc1 = new BlueprintCopy(blueprint, 100, 50_000F);
+        bpc1.setId(0L);
+        BlueprintCopy bpc2 = new BlueprintCopy(blueprint, 100, 50_000F);
+        bpc2.setId(1L);
+        blueprint.getCopies().add(bpc1);
+        blueprint.getCopies().add(bpc2);
+        BlueprintAction blueprintAction = new BlueprintAction();
+        blueprintAction.setBlueprint(blueprint);
+        BlueprintProduct blueprintProduct = new BlueprintProduct();
+        blueprintProduct.setBlueprintAction(blueprintAction);
+        blueprintAction.getProducts().add(blueprintProduct);
+
+        Item item = new Item(0L, "Item");
+        blueprintProduct.setProduct(item);
+        item.getBlueprints().add(blueprintProduct);
+
+        Set<BlueprintCopy> copies = blueprintService.findBlueprintCopiesByItem(item);
+
+        assertTrue(copies.contains(bpc1));
+        assertTrue(copies.contains(bpc2));
+    }
+
+    @Test
+    void findBlueprintCopyCommandsByItemCommand() {
+        final long itemId = 0L;
+        ItemCommand itemCommand = new ItemCommand();
+        itemCommand.setId(itemId);
+
+        when(itemRepositoryMock.findById(eq(itemId))).thenReturn(Optional.of(new Item(itemId, null)));
+
+        blueprintService.findBlueprintCopyCommandsByItemCommand(itemCommand);
+        verify(itemRepositoryMock).findById(eq(itemId));
+    }
+
+    @Test
+    void findPaginated() {
     }
 }

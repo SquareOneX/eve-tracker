@@ -2,57 +2,65 @@ package squareonex.evetracker.converters;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import squareonex.evetracker.commands.BlueprintCopyCommand;
+import squareonex.evetrackerdata.model.Blueprint;
 import squareonex.evetrackerdata.model.BlueprintCopy;
+import squareonex.evetrackerdata.repositories.BlueprintCopyRepository;
+import squareonex.evetrackerdata.repositories.BlueprintRepository;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-class BlueprintCopyCommandToBlueprintCopyTest extends ConverterTestTemplate{
+class BlueprintCopyCommandToBlueprintCopyTest {
     private static final Long BPC_ID = 0L;
-    private static final Float BPC_COST = 0.0F;
-    private static final Float BPC_MATERIAL_MOD = 1.0F;
-    private static final Float BPC_TIME_MOD = 1.0F;
-    private static final Integer BPC_MAX_RUNS = 10;
+    private static final Long BLUEPRINT_ID = 1L;
+    private static final String BLUEPRINT_NAME = "Blueprint";
+    private static final Float BPC_COST = 50_000F;
+    private static final Integer BPC_MAXRUNS = 100;
+    private static final Float BPC_MATMOD = .95F;
+    private static final Float BPC_TIMEMOD = 1.0F;
     BlueprintCopyCommandToBlueprintCopy converter;
+    @Mock
+    BlueprintCopyRepository blueprintCopyRepositoryMock;
+    @Mock
+    BlueprintRepository blueprintRepositoryMock;
+
     @BeforeEach
-    protected void setUp() {
-        this.converter = new BlueprintCopyCommandToBlueprintCopy();
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        this.converter = new BlueprintCopyCommandToBlueprintCopy(blueprintCopyRepositoryMock, blueprintRepositoryMock);
     }
 
     @Test
-    @Override
-    protected void convertingNullShouldReturnNull() {
+    void convertingNullShouldReturnNull() {
         assertNull(converter.convert(null));
     }
-
     @Test
-    @Override
-    protected void convertingEmptyObjectShouldReturnEmptyObject() {
-        assertEquals(new BlueprintCopy(), converter.convert(new BlueprintCopyCommand()));
-    }
+    void convertingShouldReturnCorrectObject() {
+        BlueprintCopyCommand command = new BlueprintCopyCommand(BPC_ID, BLUEPRINT_ID, BLUEPRINT_NAME);
+        command.setBlueprintCost(BPC_COST);
+        command.setMaxRuns(BPC_MAXRUNS);
+        command.setMaterialModifier(BPC_MATMOD);
+        command.setTimeModifier(BPC_TIMEMOD);
 
-    @Test
-    @Override
-    protected void convertShouldReturnValidTarget() {
-        BlueprintCopyCommand source = createSource();
+        when(blueprintRepositoryMock.findById(BLUEPRINT_ID)).thenReturn(Optional.of(new Blueprint(BLUEPRINT_ID, BLUEPRINT_NAME)));
 
-        BlueprintCopy converted = converter.convert(source);
+        BlueprintCopy converted = converter.convert(command);
+
+        verify(blueprintRepositoryMock).findById(BLUEPRINT_ID);
 
         assertEquals(BPC_ID, converted.getId());
         assertEquals(BPC_COST, converted.getBlueprintCost());
-        assertEquals(BPC_MATERIAL_MOD, converted.getMaterialModifier());
-        assertEquals(BPC_TIME_MOD, converted.getTimeModifier());
-        assertEquals(BPC_MAX_RUNS, converted.getMaxRuns());
-    }
-
-    private BlueprintCopyCommand createSource() {
-        BlueprintCopyCommand source = new BlueprintCopyCommand();
-        source.setId(BPC_ID);
-        source.setMaterialModifier(BPC_MATERIAL_MOD);
-        source.setTimeModifier(BPC_TIME_MOD);
-        source.setMaxRuns(BPC_MAX_RUNS);
-        source.setBlueprintCost(BPC_COST);
-        return source;
+        assertEquals(BPC_MATMOD, converted.getMaterialModifier());
+        assertEquals(BPC_TIMEMOD, converted.getTimeModifier());
+        assertEquals(BPC_MAXRUNS, converted.getMaxRuns());
+        assertEquals(BLUEPRINT_ID, converted.getBlueprint().getId());
+        assertEquals(BLUEPRINT_NAME, converted.getBlueprint().getName());
     }
 }
