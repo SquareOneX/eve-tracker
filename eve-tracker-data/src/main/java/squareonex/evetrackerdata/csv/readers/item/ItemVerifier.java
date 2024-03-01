@@ -4,9 +4,9 @@ import com.opencsv.bean.BeanVerifier;
 import com.opencsv.exceptions.CsvConstraintViolationException;
 import squareonex.evetrackerdata.model.Item;
 
-public class ItemVerifier implements BeanVerifier<Item> {
+public class ItemVerifier implements BeanVerifier<ItemDTO> {
     @Override
-    public boolean verifyBean(Item item) throws CsvConstraintViolationException {
+    public boolean verifyBean(ItemDTO item) throws CsvConstraintViolationException {
         return item.getPublished();
     }
 }

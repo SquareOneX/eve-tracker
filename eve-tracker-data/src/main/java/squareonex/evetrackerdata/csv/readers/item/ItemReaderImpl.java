@@ -19,7 +19,7 @@ public class ItemReaderImpl implements ItemReader {
         CsvToBean<ItemDTO> csvToBean = new CsvToBeanBuilder<ItemDTO>(reader)
                 .withType(ItemDTO.class)
                 .withIgnoreLeadingWhiteSpace(true)
-                .withVerifier(new ItemDTO.Verifier())
+                .withVerifier(new ItemVerifier())
                 .build();
 
         List<Item> items = new LinkedList<>();
@@ -27,7 +27,7 @@ public class ItemReaderImpl implements ItemReader {
             Item item = new Item();
             item.setId(dto.getId());
             item.setName(dto.getName());
-            item.setPublished(dto.isPublished());
+            item.setPublished(dto.getPublished());
 
             items.add(item);
         }
