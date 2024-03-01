@@ -28,7 +28,7 @@ public class ActivityReaderImpl implements ActivityReader {
             Activity activity = new Activity();
             activity.setId(dto.getId());
             activity.setName(dto.getName());
-            activity.setPublished(dto.isPublished());
+            activity.setPublished(dto.getPublished());
             activities.add(activity);
         }
         return activities;
