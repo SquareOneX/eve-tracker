@@ -4,4 +4,4 @@ logging:
     squareonex.evetrackerdata: DEBUG
 spring:
   jpa:
-    show-sql: true
+    show-sql: false

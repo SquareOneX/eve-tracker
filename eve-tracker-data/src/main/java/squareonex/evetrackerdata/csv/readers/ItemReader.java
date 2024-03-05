@@ -2,5 +2,9 @@ package squareonex.evetrackerdata.csv.readers;
 
 import squareonex.evetrackerdata.model.Item;
 
-public interface ItemReader extends Reader<Item>{
+import java.io.FileNotFoundException;
+import java.util.Map;
+
+public interface ItemReader {
+    Map<Long, Item> readAll() throws FileNotFoundException;
 }

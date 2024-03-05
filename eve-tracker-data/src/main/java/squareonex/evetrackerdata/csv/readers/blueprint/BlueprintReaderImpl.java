@@ -2,103 +2,83 @@ package squareonex.evetrackerdata.csv.readers.blueprint;
 
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
+import lombok.extern.slf4j.Slf4j;
 import squareonex.evetrackerdata.csv.readers.BlueprintReader;
 import squareonex.evetrackerdata.model.*;
+import squareonex.evetrackerdata.model.ids.BlueprintActionId;
 import squareonex.evetrackerdata.repositories.ActivityRepository;
 import squareonex.evetrackerdata.repositories.ItemRepository;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.time.Duration;
 import java.util.*;
 
 public class BlueprintReaderImpl implements BlueprintReader {
-    private final ActivityRepository activityRepository;
-    private final ItemRepository itemRepository;
-
-    public BlueprintReaderImpl(ActivityRepository activityRepository, ItemRepository itemRepository) {
-        this.activityRepository = activityRepository;
-        this.itemRepository = itemRepository;
-    }
-
     @Override
-    public List<Blueprint> readAll() throws FileNotFoundException {
+    public Map<Long, Blueprint> readAll(Map<Long, Item> items, Map<Integer, Activity> activities) throws FileNotFoundException {
         Map<BlueprintKey, BlueprintDTO> blueprints = readBlueprintsToMap();
         Map<BlueprintKey, List<BlueprintMaterialDTO>> materials = readMaterialsToMap();
         Map<BlueprintKey, Set<BlueprintProductDTO>> products = readProductsToMap();
 
-        Map<Integer, Activity> activities = new HashMap<>();
-        activityRepository.findAll().forEach((a) -> activities.put(a.getId(), a));
+        Map<Long, Blueprint> result = new HashMap<>();
 
-        Map<Long, Item> items = new HashMap<>();
-        itemRepository.findAll().forEach((i) -> items.put(i.getId(), i));
+        for (Map.Entry<BlueprintKey, BlueprintDTO> bpEntry : blueprints.entrySet()) {
+            BlueprintKey key = bpEntry.getKey();
+            BlueprintDTO value = bpEntry.getValue();
 
-        Map<BlueprintKey, Blueprint> result = new HashMap<>();
+            Blueprint blueprint;
+            if (result.containsKey(key.id)){
+                blueprint = result.get(key.id);
+            } else {
+                Item itemInfo = items.get(key.id);
+                if (itemInfo == null) continue; // Invalid Blueprint
 
-        for (Map.Entry<BlueprintKey, BlueprintDTO> entry : blueprints.entrySet()) {
-            BlueprintKey blueprintKey = entry.getKey();
-            Blueprint blueprint = new Blueprint();
+                blueprint = new Blueprint(key.id, itemInfo.getName());
+                blueprint.setPublished(itemInfo.getPublished());
+            }
 
-            /*
-             * Blueprints
-             */
-            Item item = items.get(blueprintKey.id);
-            if (item == null)
-                continue;
+            Activity activity = activities.get(key.activityId);
+            BlueprintAction action = new BlueprintAction(new BlueprintActionId(blueprint, activity));
+            action.setDuration(Duration.ofSeconds(value.getTime()));
 
-            blueprint.setId(item.getId());
-            blueprint.setName(item.getName());
-            blueprint.setPublished(item.getPublished());
-
-            /*
-             * BlueprintActions
-             */
-
-            BlueprintAction blueprintAction = new BlueprintAction();
-            blueprintAction.setBlueprint(blueprint);
-
-            Activity activity = activities.get(blueprintKey.activityId);
-            if (activity == null)
-                continue;
-
-            blueprintAction.setActivity(activity);
-
-            List<BlueprintMaterialDTO> mats = materials.get(blueprintKey);
             boolean valid = true;
-            if (mats != null) {
-                for (BlueprintMaterialDTO dto : mats) {
+
+            if (materials.containsKey(key)) {
+                for (BlueprintMaterialDTO dto : materials.get(key)) {
                     Item material = items.get(dto.getMaterialId());
-                    if (material == null) {
+                    if (material == null){
                         valid = false;
-                        blueprintAction.getMaterials().clear();
                         break;
                     } else {
-                        blueprintAction.getMaterials().add(new BlueprintMaterial(blueprintAction, material, dto.getQuantity()));
+                        action.getMaterials().add(new BlueprintMaterial(action, material, dto.getQuantity()));
                     }
                 }
             }
 
-            Set<BlueprintProductDTO> prods = products.get(blueprintKey);
-            if (prods != null) {
-                for (BlueprintProductDTO dto : prods) {
+            if (!valid)
+                continue;
+
+            if (products.containsKey(key)) {
+                for (BlueprintProductDTO dto : products.get(key)) {
                     Item product = items.get(dto.getProductId());
                     if (product == null) {
                         valid = false;
-                        blueprintAction.getProducts().clear();
                         break;
-                    } else {
-                        BlueprintProduct blueprintProduct = new BlueprintProduct();
-                        blueprintProduct.setBlueprintAction(blueprintAction);
-                        blueprintProduct.setProduct(product);
-                        blueprintProduct.setQuantity(dto.getQuantity());
-                        blueprintProduct.setProbability(dto.getProbability());
-                        blueprintAction.getProducts().add(blueprintProduct);
                     }
+
+                    action.getProducts().add(new BlueprintProduct(action, product, dto.getQuantity(), dto.getProbability()));
                 }
             }
 
-            if (valid) result.put(blueprintKey, blueprint);
+            if (!valid)
+                continue;
+
+            blueprint.getActions().add(action);
+            result.put(key.id, blueprint);
         }
-        return new LinkedList<>(result.values());
+
+        return result;
     }
 
     private Map<BlueprintKey, BlueprintDTO> readBlueprintsToMap() throws FileNotFoundException {

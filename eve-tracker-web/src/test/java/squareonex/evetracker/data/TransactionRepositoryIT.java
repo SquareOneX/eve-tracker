@@ -1,29 +1,19 @@
-package squareonex.evetracker.repositories;
+package squareonex.evetracker.data;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import squareonex.evetracker.bootstrap.SimpleDataLoader;
 import squareonex.evetracker.config.EveTrackerConfig;
-import squareonex.evetracker.services.StorageServiceImpl;
 import squareonex.evetrackerdata.model.Item;
 import squareonex.evetrackerdata.model.Transaction;
 import squareonex.evetrackerdata.repositories.ItemRepository;
 import squareonex.evetrackerdata.repositories.TransactionRepository;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;

@@ -1,6 +1,7 @@
 package squareonex.evetrackerdata.config;
 
 import jakarta.persistence.EntityManager;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -25,8 +26,8 @@ public class FullDataConfig {
     }
 
     @Bean
-    BlueprintReader blueprintReader(EntityManager entityManager, ActivityRepository activityRepository, ItemRepository itemRepository) {
-        return new BlueprintReaderImpl(activityRepository, itemRepository);
+    BlueprintReader blueprintReader() {
+        return new BlueprintReaderImpl();
     }
 
     @Bean

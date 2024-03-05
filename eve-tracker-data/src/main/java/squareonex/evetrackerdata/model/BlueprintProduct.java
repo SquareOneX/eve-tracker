@@ -20,6 +20,12 @@ public class BlueprintProduct {
     private Integer quantity;
     private Float probability = 1F;
 
+    public BlueprintProduct(BlueprintAction action, Item product, Integer quantity, Float probability) {
+        this.id = new BlueprintProductId(action, product);
+        this.quantity = quantity;
+        this.probability = probability;
+    }
+
     public BlueprintAction getBlueprintAction() {
         return this.id.getBlueprint();
     }

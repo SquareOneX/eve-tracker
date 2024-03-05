@@ -6,6 +6,7 @@ import org.mockito.MockitoAnnotations;
 import squareonex.evetrackerdata.model.Activity;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,7 +21,7 @@ class ActivityReaderImplTest {
 
     @Test
     void readAllShouldNotThrowExceptions() {
-        List<Activity> activities = assertDoesNotThrow(() -> reader.readAll());
+        Map<Integer, Activity> activities = assertDoesNotThrow(() -> reader.readAll());
         assertFalse(activities.isEmpty());
     }
 }

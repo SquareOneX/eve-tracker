@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import squareonex.evetrackerdata.model.Item;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,7 +19,7 @@ class ItemReaderImplTest {
 
     @Test
     void readdAllShouldNotThrowExceptions() {
-        List<Item> items = assertDoesNotThrow(() -> reader.readAll());
+        Map<Long, Item> items = assertDoesNotThrow(() -> reader.readAll());
         assertFalse(items.isEmpty());
     }
 }

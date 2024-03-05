@@ -5,11 +5,11 @@ spring:
   datasource:
     url: jdbc:h2:mem:testdb
   profiles:
-    active: jpa,simpleBootstrapData,dev
+    active: jpa,fullBootstrapData,dev
 server:
   error:
     whitelabel:
       enabled: false
 eve-tracker:
   pagination:
-    max-items-per-page: 25
+    max-items-per-page: 50
